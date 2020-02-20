@@ -10,10 +10,22 @@
     "start": "cross-env NODE_ENV=production node server/index.js",
     "generate": "nuxt generate"
   },
+  "engines": {
+    "node": "11.x"
+  },
+  "browserslist": [
+    " >= 0.3%"
+  ],
   "dependencies": {
-    "nuxt": "^2.0.0",
+    "@nuxtjs/axios": "^5.9.5",
+    "@nuxtjs/recaptcha": "^0.6.2",
+    "@nuxtjs/style-resources": "^1.0.0",
     "cross-env": "^5.2.0",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "nuxt": "^2.0.0",
+    "nuxt-lazy-load": "^1.0.9",
+    "nuxt-vuex-localstorage": "^1.2.6",
+    "smart-grid": "^2.1.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",

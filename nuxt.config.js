@@ -30,7 +30,13 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~plugins/axios.js'
   ],
+  styleResources: {
+    sass: [
+     '~/assets/smart-grid.sass', // путь к вашему файлу
+    ],
+   },
   /*
   ** Nuxt.js dev-modules
   */
@@ -41,11 +47,26 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/style-resources',
+    '@nuxtjs/recaptcha',
+    'nuxt-vuex-localstorage'
   ],
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
   */
+  recaptcha: {
+    // hideBadge: false, 
+    language: 'ru',
+    // siteKey: process.env.SITE_KEY, 
+    siteKey: '6LdjR9cUAAAAAHKeibDYlciyXLwHG1XG9yeU-LVB', 
+    version: 2,
+    size: 'normal'
+  },
+  axios: {
+    baseURL: process.env.BASE_URL || 'http://localhost:3000'
+  },
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
