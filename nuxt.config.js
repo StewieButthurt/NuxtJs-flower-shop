@@ -30,7 +30,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~plugins/axios.js'
+    '~plugins/axios.js',
+    `~plugins/click-outside.js`,
   ],
   styleResources: {
     sass: [
@@ -50,7 +51,41 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     '@nuxtjs/recaptcha',
-    'nuxt-vuex-localstorage'
+    'nuxt-vuex-localstorage',
+    ['nuxt-seo-module', {
+      robots: {
+        // ROBOTS.TXT options
+        UserAgent: '*',
+        CrawlDelay: '',
+        Disallow: ['/admin', '/login'],
+        Allow: ''
+      },
+      sitemap: [{
+        generate: true
+      }]
+    }],
+    [
+      "nuxt-compress",
+      {
+        gzip: {
+          cache: true
+        },
+        brotli: {
+          threshold: 10240
+        }
+      }
+    ],
+    [
+      '@nuxtjs/yandex-metrika',
+      {
+        id: '',
+        webvisor: true,
+        // clickmap:true,
+        // useCDN:false,
+        // trackLinks:true,
+        // accurateTrackBounce:true,
+      }
+    ]
   ],
   /*
   ** vuetify module configuration
