@@ -1,5 +1,5 @@
 {
-  "name": "flower-shop",
+  "name": "Flower-Shop",
   "version": "1.0.0",
   "description": "My world-class Nuxt.js project",
   "author": "StewieButthurt",
@@ -46,6 +46,7 @@
     "validator": "^12.2.0"
   },
   "devDependencies": {
+    "@mdi/font": "^4.9.95",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/vuetify": "^1.0.0",
     "node-sass": "^4.13.1",

@@ -87,6 +87,13 @@ export default {
   components: {
     Logo,
     VuetifyLogo
+  },
+  head: {
+    title: 'Цветочный магазин | Главная',
+    meta: [
+      {hid: 'homepage-description', name: 'description', content: 'Лучший интернет-магазин в котором вы найдете нужные товары по низким ценам. Купите цветы и инструменты для дачи и дома.'},
+      {hid: 'homepage-keywords', name: 'keywords', content: 'цветы, цветочный магазин, интернет магазин, аксессуары, саженцы'}
+    ]
   }
 }
 </script>
