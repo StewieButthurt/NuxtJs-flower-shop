@@ -50,70 +50,52 @@
       <nuxt-link class="layout-default__link ml-10" no-prefetch to="/">
         Каталог товаров
       </nuxt-link>
-      <v-combobox
-        :hide-no-data="!search"
-        :search-input.sync="search"
-        hide-selected
+      <v-autocomplete
+        v-model="select"
+        :items="searchResult"
+        prepend-inner-icon="mdi-magnify"
         class="layout-default__combox-search ml-10"
-        label="Поиск..."
-        small-chips
+        :search-input.sync="search"
+        :menu-props="{value: disabledMenu}"
+        item-text="name"
+        item-value="name"
+        outlined
+        dense
         solo
-        light
-        height="35px"
-        :deletable-chips="true"
+        eager
+        flat
+        chips
+        no-data-text="Совпадения не найдены"
+        small-chips
+        label="Поиск..."
       >
-        <template v-slot:no-data>
-          <v-list-item
-            v-for="item in searchResult"
-            id="layout-default__id-v-chip"
-            :key="item"
+        <template v-slot:selection="data">
+          <v-chip
+            v-bind="data.attrs"
+            :input-value="data.selected"
+            close
+            @click="data.select"
+            @click:close="select = ''"
           >
-            <v-chip
-              label
-              small
-              @click.native="search = item"
-            >
-              {{ item }}
-            </v-chip>
-          </v-list-item>
+            <v-avatar left>
+              <v-img :src="data.item.avatar"></v-img>
+            </v-avatar>
+            {{ data.item.name }}
+          </v-chip>
         </template>
-      </v-combobox>
-      <!-- <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn> -->
-      <!-- <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn> -->
-      <!-- <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" /> -->
+        <template v-slot:item="data">
+          <template>
+            <v-list-item-avatar>
+              <img :src="data.item.avatar">
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="data.item.name"></v-list-item-title>
+              <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
+            </v-list-item-content>
+          </template>
+        </template>
+      </v-autocomplete>
       <v-spacer />
-    </v-app-bar>
-    <v-app-bar
-      light
-      style="position: relative"
-      app
-      color="#bcd48b"
-    >
-      <nuxt-link class="layout-default__link ml-10 black--text" no-prefetch to="/">
-        Каталог товаров
-      </nuxt-link>
-      <nuxt-link class="layout-default__link ml-10 black--text" no-prefetch to="/">
-        Каталог товаров
-      </nuxt-link>
-      <nuxt-link class="layout-default__link ml-10 black--text" no-prefetch to="/">
-        Каталог товаров
-      </nuxt-link>
     </v-app-bar>
     <v-content>
       <v-container>
@@ -134,17 +116,21 @@ export default {
     return {
       clipped: false,
       drawer: false,
+      select: '',
       fixed: false,
       searchResult: [
-        'Для дома',
-        'Для сада',
-        'Аксессуары',
-        'Для взлома жеппы',
-        'Для страданий',
-        'Тупо',
-        'Минус',
-        'Запас',
-        'Слов'
+        {header: 'Категории'}, 
+        {name: 'Для дома', group: 'Категории', avatar: require('~/assets/1.png')},
+        {name: 'Для сада', group: 'Категории', avatar: require('~/assets/1.png')},
+        {name: 'Аксессуары', group: 'Категории', avatar: require('~/assets/1.png')},
+        {name: 'Для взлома жеппы', group: 'Категории', avatar: require('~/assets/1.png')},
+        { divider: true },
+        { header: 'Товары' },
+        {name: 'Для страданий', group: 'Товары', avatar: require('~/assets/1.png')},
+        {name: 'Тупо', group: 'Товары', avatar: require('~/assets/1.png')},
+        {name: 'Минус', group: 'Товары', avatar: require('~/assets/1.png')},
+        {name: 'Запас', group: 'Товары', avatar: require('~/assets/1.png')},
+        {name: 'Слов', group: 'Товары', avatar: require('~/assets/1.png')}
       ],
       links: [
         {
@@ -165,41 +151,38 @@ export default {
       index: -1,
       nonce: 1,
       menu: false,
+      statusMenu: true,
       x: 0,
       search: null,
       y: 0,
     }
   },
     methods: {
-      edit (index, item) {
-        if (!this.editing) {
-          this.editing = item
-          this.index = index
+      
+  },
+  computed: {
+    disabledMenu() {
+      if(this.search) {
+        if(this.search.length > 1 && this.statusMenu === true) {
+          return true
         } else {
-          this.editing = null
-          this.index = -1
+          return false
         }
+      } else {
+        return false
       }
+    }
   },
   watch: {
-      model (val, prev) {
-        if (val.length === prev.length) return
-
-        this.model = val.map(v => {
-          if (typeof v === 'string') {
-            v = {
-              text: v,
-              color: this.colors[this.nonce - 1],
-            }
-
-            this.items.push(v)
-
-            this.nonce++
-          }
-
-          return v
-        })
+    select (val) {
+      if(!val) {
+        this.statusMenu = true
       }
+
+      if(val) {
+        this.statusMenu = true
+      }
+    }
   }
 }
 </script>
@@ -230,6 +213,6 @@ export default {
   #layout-default__id-v-chip .v-chip
     cursor: pointer
     color: black
-    background-color: white
+    // background-color: white
     font-weight: 500
 </style>

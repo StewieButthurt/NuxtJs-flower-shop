@@ -76,7 +76,7 @@
 
     export default {
         head: {
-            title: 'Панель администратора | Добавление пользователя'
+            title: 'Панель администратора | Добавление администратора'
         },
         async validate({ store, redirect, $axios }) {
             try {

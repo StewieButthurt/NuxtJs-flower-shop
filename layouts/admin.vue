@@ -26,6 +26,16 @@
                             </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item nuxt to="/admin/products">
+                    <v-list-item-action>
+                        <v-icon>mdi-cart</v-icon>
+                    </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>
+                                    Добавление товара
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
                     <v-list-item nuxt to="/admin/create-user">
                     <v-list-item-action>
                         <v-icon>mdi-account-plus</v-icon>
