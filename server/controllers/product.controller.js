@@ -1,4 +1,4 @@
-const City = require('../models/city.model')
+const City = require('../models/product.model')
 const request = require('request');
 const fs = require('fs');
 const Axios = require('axios').default;

@@ -42,7 +42,7 @@
                     </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>
-                                    Добавление администратора
+                                    Администраторы
                             </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
@@ -85,6 +85,7 @@
                 </v-content>
                 <v-footer
                 color="#0E1D28"
+                style="position: relative"
                 app
                 >
                 <span class="white--text">&copy; Developed by Vyacheslav Nosov 2020</span>

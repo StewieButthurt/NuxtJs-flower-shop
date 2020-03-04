@@ -15,7 +15,7 @@ const router = Router()
 const { Nuxt, Builder } = require('nuxt')
 
 const authRoutes = require('./routes/auth.routes');
-const cityRoutes = require('./routes/city.routes');
+const productRoutes = require('./routes/product.routes');
 const formRoutes = require('./routes/form.routes');
 
 const app = express()
@@ -50,7 +50,7 @@ const apiLimiter = new RateLimit({
 // использование ограничителя запросов на одном IP
 app.use(apiLimiter)
 app.use('/api/auth', authRoutes)
-app.use('/api/city', cityRoutes)
+app.use('/api/city', productRoutes)
 app.use('/api/form', formRoutes)
 
 
