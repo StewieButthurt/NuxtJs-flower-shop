@@ -4,10 +4,10 @@ const ctr = require('../controllers/product.controller')
 const router = Router()
 
 //Admin
-// /api/city
+// /api/product
 
 router.post(
-    '/admin/create-city',
+    '/create',
     passport.authenticate('jwt', { session: false }),
     ctr.create
 )

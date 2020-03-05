@@ -4,7 +4,15 @@ export const state = () => ({
         descr: '',
         price: '',
         article: '',
+        images: [
+            {
+                file: null,
+                previewImg: null,
+                statusButton: true
+            }
+        ],
         other: [],
+        newFields: [],
         expire: 1
     }
 })
@@ -23,7 +31,6 @@ export const mutations = {
         state.data.article = article
     },
     setOtherTitle(state, info) {
-        console.log(info.index)
         state.data.other[info.index].title = info.title
     },
     setOtherDescr(state, info) {
@@ -42,7 +49,46 @@ export const mutations = {
         state.data.descr = '',
         state.data.price = '',
         state.data.article = '',
-        state.data.other = []
+        state.data.newFields = [],
+        state.data.other = [],
+        state.data.images = [
+            {
+                file: null,
+                previewImg: null,
+                statusButton: true
+            }
+        ]
+    },
+    setImagesFile(state, info) {
+        state.data.images[info.index].file = info.file
+    },
+    setImagesPreview(state, info) {
+        state.data.images[info.index].previewImg = info.previewImg
+    },
+    setImageField(state, data) {
+        let arr = state.data.images
+        arr.push(data)
+    },
+    removeImageField(state, index) {
+        let arr = state.data.images
+        arr.splice(index, 1)
+    },
+    changeButtonAddImage(state, info) {
+        state.data.images[info.index].statusButton = info.key
+    },
+    setNewFields(state, data) {
+        let arr = state.data.newFields
+        arr.push(data)
+    },
+    updateNewFieldDescr(state, info) {
+        state.data.newFields[info.index].descr = info.val
+    },
+    removeNewField(state, index) {
+        let arr = state.data.newFields
+        arr.splice(index, 1)
+    },
+    updateNewFieldTitle(state, data) {
+        state.data.newFields[data.index].title = data.title
     }
 }
 
@@ -75,27 +121,71 @@ export const actions = {
         commit('clearFields')
     },
     async addProduct({commit, state}) {
+
+        let arr = state.data;
+
         let data = {
-            title: state.data.title,
-            descr: state.data.descr,
-            price: state.data.price,
-            article: state.data.article,
+            title: arr.title,
+            descr: arr.descr,
+            price: arr.price,
+            article: arr.article,
         }
 
-        if(state.data.other.length > 0) {
-            data.other = state.data.other
+        if(arr.other.length > 0) {
+
+            for(let i = 0; i === arr.other.length; i++) {
+                if(arr.other[i].title === '') {
+                    arr.splice(i, 1)
+                } else if(arr.other[i].descr === '') {
+                    arr.splice(i, 1)
+                }
+            }
+
+            if(arr.other.length > 0) {
+                data.other = arr.other
+            }
         }
 
         try {
-			return await this.$axios.$post('/api/product', data)
+			return await this.$axios.$post('/api/product/create', data)
         } catch (e) {
             throw e
         }
     },
+    async setImagesFile({commit}, info) {
+        commit('setImagesFile', info)
+    },
+    async setImagesPreview({commit}, info) {
+        commit('setImagesPreview', info)
+    },
+    async setImageField({commit}, data) {
+        commit('setImageField', data)
+    },
+    async removeImageField({commit}, index) {
+        commit('removeImageField', index)
+    },
+    async changeButtonAddImage({commit}, info) {
+        commit('changeButtonAddImage', info)
+    },
+    async setNewFields({commit}, data) {
+        commit('setNewFields', data)
+    },
+    async updateNewFieldDescr({commit}, info) {
+        commit('updateNewFieldDescr', info)
+    },
+    async removeNewField({commit}, index) {
+        commit('removeNewField', index)
+    },
+    updateNewFieldTitle({commit}, data) {
+        commit('updateNewFieldTitle', data)
+    }
 }
 
 export const getters = {
+    data: state => state.data,
+    newFields: state => state.data.newFields,
     title: state => state.data.title,
+    images: state => state.data.images,
     descr: state => state.data.descr,
     price: state => state.data.price,
     article: state => state.data.article,

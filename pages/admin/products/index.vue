@@ -9,8 +9,9 @@
                 </v-col>
             </v-row>
             <v-row align="center" justify="center">
-                <v-col cols="12" sm="6" md="6">
-                    <v-text-field 
+                <v-col cols="12" sm="9" md="7">
+                    <v-text-field
+                    style="max-width: 700px" 
                     prepend-inner-icon="mdi-format-title"
                     label="Название товара"
                     v-model="localTitle"
@@ -18,8 +19,9 @@
                 </v-col>
             </v-row>
             <v-row align="center" justify="center">
-                <v-col cols="12" sm="6" md="6">
-                    <v-text-field 
+                <v-col cols="12" sm="9" md="7">
+                    <v-text-field
+                    style="max-width: 700px"  
                     prepend-inner-icon="mdi-currency-rub"
                     label="Цена товара (Пример: 2000)"
                     v-model="localPrice"
@@ -27,9 +29,10 @@
                 </v-col>
             </v-row>
             <v-row align="center" justify="center">
-                <v-col cols="12" sm="6" md="6">
+                <v-col cols="12" sm="9" md="7">
                     <v-textarea
                         name="input-7-1"
+                        style="max-width: 700px" 
                         :auto-grow="true"
                         :dense="true"
                         prepend-inner-icon="mdi-grease-pencil"
@@ -40,8 +43,9 @@
                 </v-col>
             </v-row>
             <v-row align="center" justify="center">
-                <v-col cols="12" sm="6" md="6">
+                <v-col cols="12" sm="9" md="7">
                     <v-text-field 
+                    style="max-width: 700px" 
                     prepend-inner-icon="mdi-file-document"
                     label="Артикул (Например: 7623BJ7)"
                     v-model="localArticle"
@@ -49,9 +53,70 @@
                 </v-col>
             </v-row>
             <v-row align="center" justify="center">
+                <v-col align="center" justify="center" cols="12" sm="9" md="7" >
+                        <app-product-add-image 
+                            v-for="(item, index) in images"
+                            :key="index"
+                            :previewImageLocal="item.previewImg"
+                            :fileLocal="item.file"
+                            :index="index"
+                            :statusButton="item.statusButton"
+                        />
+                </v-col>
+            </v-row>
+            <v-row align="center" justify="center">
+                <v-col align="center" justify="center">
+                    <v-row align="center" justify="center" class="font-weight-bold title">
+                        Дополнительные поля
+                    </v-row>
+                    <v-row align="center" justify="center" class="font-weight-medium subtitle-1 mt-2 font-italic">
+                        Пример:
+                    </v-row>
+                    <client-only>
+                        <v-row align="center" justify="center" id="products__example-select">
+                            <v-col align="center" justify="center" cols="12" sm="9" md="7">
+                                <v-row align="center" justify="center">
+                                    <span>Керамика</span>
+                                    <v-overflow-btn
+                                            height="40px"
+                                            style="max-width: 220px; width: 100%"
+                                            class="my-2 ml-10"
+                                            eager
+                                            solo
+                                            flat
+                                            light
+                                            single-line
+                                            :items="exampleItems"
+                                            label="Выбрать опцию"
+                                            dense
+                                    ></v-overflow-btn>
+                                    <v-btn v-if="newFields.length === 0" class="mx-2 mb-1 ml-6" fab small color="indigo" @click="addNewField()">
+                                        <v-icon>mdi-plus</v-icon>
+                                    </v-btn>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </client-only>
+                    <client-only>
+                        <v-row align="center" justify="center" v-if="newFields.length > 0">
+                            <v-col align="center" justify="center" cols="12" sm="9" md="7" >
+                                    <app-product-add-new-field 
+                                        v-for="(item, index) in newFields"
+                                        :key="index"
+                                        :title="item.title"
+                                        :descr="item.descr"
+                                        :index="index"
+                                        :statusButton="item.statusButton"
+                                    />
+                            </v-col>
+                        </v-row>
+                    </client-only>
+                </v-col>
+            </v-row>
+            <v-row align="center" justify="center">
                 <v-col align="center" justify="center">
                     <div class="font-weight-bold title">
-                        Характеристики товара
+                        Описание товара (свойства)
                     </div>
                     <div class="font-weight-medium subtitle-1 mt-2 font-italic">
                         Пример:
@@ -105,9 +170,15 @@
                     />
                 </v-col>
             </v-row>
-            <v-row class="align-center" align="center" justify="center">
+            <v-row align="center" justify="center">
                 <v-btn class="mx-2 mt-5" fab color="indigo" @click="addField()">
                     <v-icon>mdi-plus</v-icon>
+                </v-btn>
+            </v-row>
+            <v-row align="center" justify="center">
+                <v-btn nuxt to="/admin/products/preview" class="mx-2 mt-5" color="teal" :disabled="checkFields">
+                    <v-icon class="mr-2">mdi-folder-image</v-icon>
+                    Предпросмотр
                 </v-btn>
                 <v-btn class="mx-2 mt-5" color="teal" :disabled="checkFields">
                     <v-icon class="mr-2">mdi-content-save</v-icon>
@@ -123,21 +194,32 @@
 </template>
 
 <script>
+
     const AppProductCharacteristics = () => import('~/components/admin/product-characteristics/index.vue')
+    const AppProductAddImage = () => import('~/components/admin/product-add-image/index.vue')
+    const AppProductAddNewField = () => import('~/components/admin/product-add-new-field/index.vue')
+
     export default {
         layout: 'admin',
         head: {
             title: 'Панель администратора | Добавление товара'
         },
         components: {
-            AppProductCharacteristics
+            AppProductCharacteristics,
+            AppProductAddImage,
+            AppProductAddNewField
         },
         data() {
             return {
                 localTitle: '',
                 localPrice: '',
                 localDescr: '',
-                localArticle: ''
+                localArticle: '',
+                exampleItems: [
+                    'Черная',
+                    'Белая'
+                ],
+                localNewFields: []
                 
             }
         },
@@ -150,6 +232,12 @@
         computed: {
             other() {
                 return this.$store.getters['localStorage/other']
+            },
+            dataStorage() {
+                return this.$store.getters['localStorage/data']
+            },
+            images() {
+                return this.$store.getters['localStorage/images']
             },
             title() {
                 return this.$store.getters['localStorage/title']
@@ -164,16 +252,20 @@
                 return this.$store.getters['localStorage/article']
             },
             checkFields() {
-                if( this.localTitle !== '' &&
-                    this.localPrice !== '' &&
-                    this.localDescr !== '' &&
-                    this.localArticle !== ''
+                if( this.dataStorage.title !== '' &&
+                    this.dataStorage.price !== '' &&
+                    this.dataStorage.descr !== '' &&
+                    this.dataStorage.article !== '' &&
+                    this.dataStorage.images[0].file
                 ) 
                 {
                     return false
                 } else {
                     return true
                 }
+            },
+            newFields() {
+                return this.$store.getters['localStorage/newFields']
             }
 
         },
@@ -187,11 +279,18 @@
                 this.$store.dispatch('localStorage/setField', data)
             },
             async clearFields() {
-                this.localTitle = '',
-                this.localPrice = '',
-                this.localDescr = '',
-                this.localArticle = '',
-                this.$store.dispatch('localStorage/clearFields')
+                await this.$store.dispatch('localStorage/clearFields')
+                location.reload()
+            },
+            async addNewField() {
+
+                let data = {
+                    statusButton: true,
+                    title: '',
+                    descr: []
+                }
+
+                this.$store.dispatch('localStorage/setNewFields', data)
             }
         },
         watch: {
@@ -232,4 +331,16 @@
     
     .admin-products__list_grey
         background-color: #e8e8e8
+    
+    #products__example-select .v-text-field__details
+        display: none
+        border-color: white
+    
+    #products__example-select .v-input__slot
+        border-color: white
+        border: 1px solid #8b9620
+    
+    #products__example-select .v-application
+        margin-top: 0px
+    
 </style>

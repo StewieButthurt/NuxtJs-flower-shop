@@ -50,7 +50,7 @@ const apiLimiter = new RateLimit({
 // использование ограничителя запросов на одном IP
 app.use(apiLimiter)
 app.use('/api/auth', authRoutes)
-app.use('/api/city', productRoutes)
+app.use('/api/product', productRoutes)
 app.use('/api/form', formRoutes)
 
 
