@@ -4,13 +4,6 @@ export const state = () => ({
         descr: '',
         price: '',
         article: '',
-        images: [
-            {
-                file: null,
-                previewImg: null,
-                statusButton: true
-            }
-        ],
         other: [],
         newFields: [],
         expire: 1
@@ -60,6 +53,7 @@ export const mutations = {
         ]
     },
     setImagesFile(state, info) {
+        console.log(1)
         state.data.images[info.index].file = info.file
     },
     setImagesPreview(state, info) {
@@ -72,9 +66,6 @@ export const mutations = {
     removeImageField(state, index) {
         let arr = state.data.images
         arr.splice(index, 1)
-    },
-    changeButtonAddImage(state, info) {
-        state.data.images[info.index].statusButton = info.key
     },
     setNewFields(state, data) {
         let arr = state.data.newFields
@@ -120,38 +111,6 @@ export const actions = {
     async clearFields({commit}, index) {
         commit('clearFields')
     },
-    async addProduct({commit, state}) {
-
-        let arr = state.data;
-
-        let data = {
-            title: arr.title,
-            descr: arr.descr,
-            price: arr.price,
-            article: arr.article,
-        }
-
-        if(arr.other.length > 0) {
-
-            for(let i = 0; i === arr.other.length; i++) {
-                if(arr.other[i].title === '') {
-                    arr.splice(i, 1)
-                } else if(arr.other[i].descr === '') {
-                    arr.splice(i, 1)
-                }
-            }
-
-            if(arr.other.length > 0) {
-                data.other = arr.other
-            }
-        }
-
-        try {
-			return await this.$axios.$post('/api/product/create', data)
-        } catch (e) {
-            throw e
-        }
-    },
     async setImagesFile({commit}, info) {
         commit('setImagesFile', info)
     },
@@ -161,12 +120,13 @@ export const actions = {
     async setImageField({commit}, data) {
         commit('setImageField', data)
     },
+    async setDataImage({commit}, data) {
+        return api.saveImage(data)
+    },
     async removeImageField({commit}, index) {
         commit('removeImageField', index)
     },
-    async changeButtonAddImage({commit}, info) {
-        commit('changeButtonAddImage', info)
-    },
+    
     async setNewFields({commit}, data) {
         commit('setNewFields', data)
     },
@@ -185,7 +145,6 @@ export const getters = {
     data: state => state.data,
     newFields: state => state.data.newFields,
     title: state => state.data.title,
-    images: state => state.data.images,
     descr: state => state.data.descr,
     price: state => state.data.price,
     article: state => state.data.article,

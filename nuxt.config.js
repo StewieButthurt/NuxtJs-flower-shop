@@ -53,6 +53,7 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/pwa',
     '@nuxtjs/style-resources',
     '@nuxtjs/recaptcha',
     'nuxt-vuex-localstorage',

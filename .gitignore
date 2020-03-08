@@ -103,5 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
+# Keys
 server/keys/keys.dev.js
 
+# Service worker
+
+sw.*

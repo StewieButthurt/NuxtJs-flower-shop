@@ -12,10 +12,10 @@
             >
             </v-file-input>
         </v-col>
-        <v-btn v-if="index !== 0" class="mx-2 ml-5" dark color="indigo" small @click="changeButton(index - 1, true); removeImageField(index)" max-width="50px">
+        <v-btn v-if="index !== 0" class="mx-2 ml-5" dark color="indigo" small @click="removeImageField()" max-width="50px">
             <v-icon dark>mdi-delete-forever</v-icon>
         </v-btn>
-        <v-btn v-if="statusButton" class="mx-2" fab small color="indigo" @click="addImageField(); changeButton(index, false)">
+        <v-btn v-if="images.length - 1 === index" class="mx-2" fab small color="indigo" @click="addImageField()">
             <v-icon>mdi-plus</v-icon>
         </v-btn>
     </v-row>
@@ -36,23 +36,11 @@
             'index',
             'previewImageLocal',
             'fileLocal',
-            'statusButton'
+            'id'
         ],
         mounted() {
             this.file = this.fileLocal,
             this.previewImg = this.previewImageLocal
-        },
-        watch: {
-            file(val) {
-                let index = this.index
-                let file = this.file
-                this.$store.dispatch('localStorage/setImagesFile', {index, file})
-            },
-            previewImg(val) {
-                let index = this.index
-                let previewImg = this.previewImg
-                this.$store.dispatch('localStorage/setImagesPreview', {index, previewImg})
-            }
         },
         methods: {
             async updateImg() {
@@ -65,46 +53,41 @@
 
                     readerPreview.onload = async function(e) {
                         vm.previewImg = e.target.result
+
+                        let data = {
+                            file: vm.file,
+                            previewImg: vm.previewImg
+                        }
+
+                        let id = vm.id
+
+                        await vm.$store.dispatch('image-preview/updateDataImage', {data, id})
+                        await vm.$store.dispatch('image-preview/getImage')
                     }
 
                     await readerPreview.readAsDataURL(this.file);
                 }
 
             },
-            async removeImageField(index) {
-                this.$store.dispatch('localStorage/removeImageField', index)
+            async removeImageField() {
+                let id = this.id
+                await this.$store.dispatch('image-preview/deleteImage', id)
+                await this.$store.dispatch('image-preview/getImage')
             },
             async addImageField() {
                 let data = {
                     file: null,
-                    previewImg: null,
-                    statusButton: true
+                    previewImg: null
                 }
 
-                this.$store.dispatch('localStorage/setImageField', data)
+                await this.$store.dispatch('image-preview/setDataImage', data)
+                await this.$store.dispatch('image-preview/getImage')
 
-            },
-            async changeButton(index, key) {
-                if(key === true) {
-                        if(this.images.length - index === 2) {
-                            this.$store.dispatch('localStorage/changeButtonAddImage', {index, key})
-                        } else {
-                            key = false
-                            this.$store.dispatch('localStorage/changeButtonAddImage', {index, key})
-                        }
-                }
-
-                if(key === false) {
-
-                    this.$store.dispatch('localStorage/changeButtonAddImage', {index, key})
-
-                }
-                
             }
         },
         computed: {
             images() {
-                return this.$store.getters['localStorage/images']
+                return this.$store.getters['image-preview/images']
             }
         }
     }

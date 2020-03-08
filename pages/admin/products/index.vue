@@ -15,6 +15,7 @@
                     prepend-inner-icon="mdi-format-title"
                     label="Название товара"
                     v-model="localTitle"
+                    @blur="updateTitle(localTitle)"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -25,6 +26,7 @@
                     prepend-inner-icon="mdi-currency-rub"
                     label="Цена товара (Пример: 2000)"
                     v-model="localPrice"
+                    @blur="updatePrice(localPrice)"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -39,6 +41,7 @@
                         label="Описание товара"
                         value=""
                         v-model="localDescr"
+                        @blur="updateDescr(localDescr)"
                     ></v-textarea>
                 </v-col>
             </v-row>
@@ -49,6 +52,7 @@
                     prepend-inner-icon="mdi-file-document"
                     label="Артикул (Например: 7623BJ7)"
                     v-model="localArticle"
+                    @blur="updateArticle(localArticle)"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -59,8 +63,8 @@
                             :key="index"
                             :previewImageLocal="item.previewImg"
                             :fileLocal="item.file"
+                            :id="item.id"
                             :index="index"
-                            :statusButton="item.statusButton"
                         />
                 </v-col>
             </v-row>
@@ -223,11 +227,25 @@
                 
             }
         },
-        mounted() {
-            this.localTitle = this.title,
-            this.localPrice = this.price,
-            this.localDescr = this.descr,
+        async mounted() {
+            this.localTitle = this.title
+            this.localPrice = this.price
+            this.localDescr = this.descr
             this.localArticle = this.article
+
+            await this.getImages()
+
+            if(this.images.length === 0) {
+
+                let data = {
+                    file: null,
+                    previewImg: null
+                }
+
+                await this.$store.dispatch('image-preview/setDataImage', data)
+                await this.getImages()
+            }
+
         },
         computed: {
             other() {
@@ -237,7 +255,7 @@
                 return this.$store.getters['localStorage/data']
             },
             images() {
-                return this.$store.getters['localStorage/images']
+                return this.$store.getters['image-preview/images']
             },
             title() {
                 return this.$store.getters['localStorage/title']
@@ -256,7 +274,7 @@
                     this.dataStorage.price !== '' &&
                     this.dataStorage.descr !== '' &&
                     this.dataStorage.article !== '' &&
-                    this.dataStorage.images[0].file
+                    this.images[0].previewImg
                 ) 
                 {
                     return false
@@ -291,20 +309,21 @@
                 }
 
                 this.$store.dispatch('localStorage/setNewFields', data)
-            }
-        },
-        watch: {
-            localTitle(val) {
-                this.$store.dispatch('localStorage/setTitle', val)
             },
-            localPrice(val) {
-                this.$store.dispatch('localStorage/setPrice', val)
+            async getImages() {
+                await this.$store.dispatch('image-preview/getImage')
             },
-            localDescr(val) {
-                this.$store.dispatch('localStorage/setDescr', val)
+            async updateTitle(title) {
+                this.$store.dispatch('localStorage/setTitle', title)
             },
-            localArticle(val) {
-                this.$store.dispatch('localStorage/setArticle', val)
+            async updatePrice(price) {
+                this.$store.dispatch('localStorage/setPrice', price)
+            },
+            async updateDescr(descr) {
+                this.$store.dispatch('localStorage/setDescr', descr)
+            },
+            async updateArticle(article) {
+                this.$store.dispatch('localStorage/setArticle', article)
             }
         }
     }
