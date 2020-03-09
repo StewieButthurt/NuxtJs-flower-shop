@@ -61,7 +61,6 @@ export default {
         resolve()
       }
       let store = trans.objectStore(STORAGE_NAME)
-      console.log(data.data, data.id)
       store.put({
           id: data.id,
           file: data.data.file,

@@ -20,7 +20,6 @@ export const actions = {
         }
 	},
 	async setDataImage({commit}, data) {
-		console.log(1)
 		try {
 			await api.saveImage(data)
 		} catch(e) {
@@ -28,7 +27,6 @@ export const actions = {
 		}
 	},
 	async updateDataImage({commit}, data) {
-		console.log(2)
 		try {
 			await api.updateImage(data)
 		} catch(e) {
