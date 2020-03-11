@@ -1,0 +1,15 @@
+@font-face {
+ font-family: 'Montserrat-Medium';
+ src: url('./Montserrat-Medium.ttf');
+ src: url('./Montserrat-Medium.ttf') format('truetype');
+ font-weight: 500;
+ font-style: normal;
+}
+
+@font-face {
+ font-family: 'Montserrat-SemiBold';
+ src: url('./Montserrat-SemiBold.ttf');
+ src: url('./Montserrat-SemiBold.ttf') format('truetype');
+ font-weight: 600;
+ font-style: normal;
+}

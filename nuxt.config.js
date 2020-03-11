@@ -25,7 +25,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
-
+    { src: '~assets/fonts/montserrat.css' },
   ],
   /*
   ** Plugins to load before mounting the App

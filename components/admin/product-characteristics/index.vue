@@ -32,12 +32,12 @@
             title(val) {
                 let index = this.index
                 let title = this.title
-                this.$store.dispatch('localStorage/setOtherTitle', {index, title})
+                this.$store.dispatch('add-product/setOtherTitle', {index, title})
             },
             descr(val) {
                 let index = this.index
                 let descr = this.descr
-                this.$store.dispatch('localStorage/setOtherDescr', {index, descr})
+                this.$store.dispatch('add-product/setOtherDescr', {index, descr})
             }
         },
         props: [
@@ -52,7 +52,7 @@
         methods: {
             async removeField() {
                 let index = this.index
-                this.$store.dispatch('localStorage/removeField', index)
+                this.$store.dispatch('add-product/removeField', index)
             }
         }
     }

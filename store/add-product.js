@@ -1,93 +1,94 @@
 export const state = () => ({
-    data: {
-        title: '',
-        descr: '',
-        price: '',
-        article: '',
-        discountStatus: false,
-        sizeDiscount: 0,
-        other: [],
-        newFields: [],
-        expire: 1
-    }
+	images: [],
+    title: '',
+    descr: '',
+    price: '',
+    article: '',
+    discountStatus: false,
+    sizeDiscount: 0,
+    other: [],
+    newFields: []
 })
 
 export const mutations = {
-    setTitle(state, title) {
-        state.data.title = title
+	setTitle(state, title) {
+        state.title = title
     },
     setDescr(state, descr) {
-        state.data.descr = descr
+        state.descr = descr
     },
     setPrice(state, price) {
-        state.data.price = price
+        state.price = price
     },
     setArticle(state, article) {
-        state.data.article = article
+        state.article = article
     },
     setDiscount(state, discount) {
-        state.data.sizeDiscount = discount
+        state.sizeDiscount = discount
     },
     setDiscountStatus(state, discountStatus) {
-        state.data.discountStatus = discountStatus
+        state.discountStatus = discountStatus
     },
     setOtherTitle(state, info) {
-        state.data.other[info.index].title = info.title
+        state.other[info.index].title = info.title
     },
     setOtherDescr(state, info) {
-        state.data.other[info.index].descr = info.descr
+        state.other[info.index].descr = info.descr
     },
     setField(state, data) {
-        let arr = state.data.other
+        let arr = state.other
         arr.push(data)
     },
     removeField(state, index) {
-        let arr = state.data.other
+        let arr = state.other
         arr.splice(index, 1)
     },
     clearFields(state) {
-        state.data.title = '',
-        state.data.descr = '',
-        state.data.price = '',
-        state.data.article = '',
-        state.data.newFields = [],
-        state.data.other = [],
-        state.data.images = [
+        state.title = '',
+        state.descr = '',
+        state.price = '',
+        state.article = '',
+        state.newFields = [],
+        state.other = [],
+        this.discountStatus = false,
+        this.sizeDiscount = 0
+        state.images = [
             {
                 file: null,
-                previewImg: null,
-                statusButton: true
+                previewImg: null
             }
         ]
     },
     setImagesFile(state, info) {
-        console.log(1)
-        state.data.images[info.index].file = info.file
+        state.images[info.index].file = info.file
     },
     setImagesPreview(state, info) {
-        state.data.images[info.index].previewImg = info.previewImg
+        state.images[info.index].previewImg = info.previewImg
+    },
+    updateDataImage(state, data) {
+        state.images[data.index] = data.data
     },
     setImageField(state, data) {
-        let arr = state.data.images
+        let arr = state.images
         arr.push(data)
     },
     removeImageField(state, index) {
-        let arr = state.data.images
+        let arr = state.images
         arr.splice(index, 1)
     },
     setNewFields(state, data) {
-        let arr = state.data.newFields
+        let arr = state.newFields
         arr.push(data)
     },
     updateNewFieldDescr(state, info) {
-        state.data.newFields[info.index].descr = info.val
+        state.newFields[info.index].descr = info.val
     },
     removeNewField(state, index) {
-        let arr = state.data.newFields
+        let arr = state.newFields
         arr.splice(index, 1)
     },
     updateNewFieldTitle(state, data) {
-        state.data.newFields[data.index].title = data.title
+        state.newFields[data.index].title = data.title
     }
 }
 
@@ -134,6 +135,9 @@ export const actions = {
     async setImageField({commit}, data) {
         commit('setImageField', data)
     },
+    async updateDataImage({commit}, data) {
+        commit('updateDataImage', data)
+    },
     async removeImageField({commit}, index) {
         commit('removeImageField', index)
     },
@@ -147,19 +151,20 @@ export const actions = {
     async removeNewField({commit}, index) {
         commit('removeNewField', index)
     },
-    updateNewFieldTitle({commit}, data) {
+    async updateNewFieldTitle({commit}, data) {
         commit('updateNewFieldTitle', data)
     }
 }
 
 export const getters = {
-    data: state => state.data,
-    newFields: state => state.data.newFields,
-    title: state => state.data.title,
-    descr: state => state.data.descr,
-    price: state => state.data.price,
-    article: state => state.data.article,
-    discountStatus: state => state.data.discountStatus,
-    sizeDiscount: state => state.data.sizeDiscount,
-    other: state => state.data.other,
+	data: state => state,
+    newFields: state => state.newFields,
+    title: state => state.title,
+    descr: state => state.descr,
+    price: state => state.price,
+    images: state => state.images,
+    article: state => state.article,
+    discountStatus: state => state.discountStatus,
+    sizeDiscount: state => state.sizeDiscount,
+    other: state => state.other
 }

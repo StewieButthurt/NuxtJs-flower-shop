@@ -53,12 +53,12 @@
         watch: {
             localDescr(val) {
                 let index = this.index
-                this.$store.dispatch('localStorage/updateNewFieldDescr', {val, index})
+                this.$store.dispatch('add-product/updateNewFieldDescr', {val, index})
             },
             localTitle(val) {
                 let title = this.localTitle
                 let index = this.index
-                this.$store.dispatch('localStorage/updateNewFieldTitle', {title, index})
+                this.$store.dispatch('add-product/updateNewFieldTitle', {title, index})
             }
         },
         methods: {
@@ -67,7 +67,7 @@
             },
             async removeField() {
                 let index = this.index
-                this.$store.dispatch('localStorage/removeNewField', index)
+                this.$store.dispatch('add-product/removeNewField', index)
             },
             async addNewField() {
 
@@ -77,7 +77,7 @@
                     descr: []
                 }
 
-                this.$store.dispatch('localStorage/setNewFields', data)
+                this.$store.dispatch('add-product/setNewFields', data)
             }
         },
         computed: {
@@ -89,7 +89,7 @@
                 }
             },
             newFields() {
-                return this.$store.getters['localStorage/newFields']
+                return this.$store.getters['add-product/newFields']
             },
             items() {
                 return this.localDescr

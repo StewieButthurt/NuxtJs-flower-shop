@@ -10,8 +10,8 @@
                                 :key="index"
                                 :style="`background-image: url('${item.previewImg}'); padding-top: 100%`"
                             ></swiper-slide>
-                            <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
-                            <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
+                            <div class="swiper-button-next" slot="button-next"></div>
+                            <div class="swiper-button-prev" slot="button-prev"></div>
                         </swiper>
                         <!-- swiper2 Thumbs -->
                         <swiper :options="swiperOptionThumbs" class="gallery-thumbs" ref="swiperThumbs">
@@ -38,8 +38,13 @@
                         <span style="margin-left: 20px">(Отзывов еще нет)</span>
                     </div>
                     <div class="preview__descr-line">
-
                     </div>
+                    <div class="preview__descr-price">
+                        <app-product-price 
+                            :price="price"
+                        />
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -48,15 +53,19 @@
 </template>
 
 <script>
+    const AppProductPrice = () => import('~/components/admin/product-price/index.vue')
+
     export default {
         layout: 'admin',
         head: {
             title: 'Панель администратора | Предпросмотр'
         },
+        components: {
+            AppProductPrice
+        },
         async mounted() {
-            await this.getImages()
 
-            this.arr = this.$store.getters['image-preview/images']
+            this.arr = this.$store.getters['add-product/images']
 
             this.$nextTick(() => {
                 const swiperTop = this.$refs.swiperTop.swiper
@@ -81,18 +90,13 @@
             return {
                 mainImg: '',
                 rating: 0,
-                settings: {
-                    "centerMode": true,
-                    "centerPadding": "20px",
-                    "focusOnSelect": true,
-                    "infinite": true,
-                    "slidesToShow": 3,
-                    "speed": 500
-                },
                 resultImages: [],
                 arr: [],
                 swiperOptionTop: {
                     initialSlide: 1,
+                    speed: 300,
+                    effect: 'slide',
+                    observer: true,
                     spaceBetween: 20,
                     navigation: {
                         nextEl: '.swiper-button-next',
@@ -102,6 +106,9 @@
                 swiperOptionThumbs: {
                     initialSlide: 1,
                     spaceBetween: 20,
+                    observer: true,
+                    autoplay: true,
+                    effect: 'slide',
                     centeredSlides: true,
                     slidesPerView: "auto",
                     touchRatio: 0.2,
@@ -111,19 +118,19 @@
         },
         computed: {
             images() {
-                return this.$store.getters['image-preview/images']
+                return this.$store.getters['add-product/images']
             },
             title() {
-                return this.$store.getters['localStorage/title']
+                return this.$store.getters['add-product/title']
             },
             price() {
-                return this.$store.getters['localStorage/price']
+                return this.$store.getters['add-product/price']
             },
             descr() {
-                return this.$store.getters['localStorage/descr']
+                return this.$store.getters['add-product/descr']
             },
             article() {
-                return this.$store.getters['localStorage/article']
+                return this.$store.getters['add-product/article']
             },
             img1() {
                 if(this.images.length > 0) {
@@ -211,23 +218,24 @@
         margin-top: 10px
     
     .gallery-thumbs .swiper-slide
-        width: 100px
+        +size(5)
         opacity: 0.4
     
     .gallery-thumbs .swiper-slide-active
         opacity: 1
 
-    .swiper-button-prev 
-        background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'><path d='M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z' fill='#E78127'/></svg>") !important
+    // .swiper-button-prev 
+    //     background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'><path d='M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z' fill='#E78127'/></svg>") !important
     
 
-    .swiper-button-next 
-        background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'><path d='M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z' fill='#E78127'/></svg>") !important
+    // .swiper-button-next 
+    //     background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'><path d='M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z' fill='#E78127'/></svg>") !important
     
     .preview-container
         width: 100%
         display: flex
         justify-content: center
+        font-family: 'Montserrat-Medium'
 
     .preview-wrapper
         max-width: 1920px
@@ -239,6 +247,8 @@
         width: 100%
         display: flex
         flex-wrap: wrap
+        +md-block
+            justify-content: center
     
     .preview__swiper
         display: flex
@@ -252,8 +262,12 @@
         display: flex
         flex-direction: column
         margin-left: 10px
+        +md-block
+            margin-top: 50px
 
     .preview__descr-title
+        font-family: 'Montserrat-SemiBold'
+        font-weight: 600
         font-size: 28px
         margin: 0.5rem
     
@@ -268,4 +282,7 @@
         background-color: black
         margin: 0.8rem
         margin-top: 20px
+    
+    .preview__descr-price
+        margin: 0.8rem
 </style>

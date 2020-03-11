@@ -7,7 +7,7 @@
             label="Изображение товара"
             accept="image/png, image/jpeg"
             v-model="file"
-            @click:clear="file = null, previewImg = null"
+            @click:clear="clearImage()"
             @change="updateImg()"
             >
             </v-file-input>
@@ -35,8 +35,7 @@
         props: [
             'index',
             'previewImageLocal',
-            'fileLocal',
-            'id'
+            'fileLocal'
         ],
         mounted() {
             this.file = this.fileLocal,
@@ -59,10 +58,10 @@
                             previewImg: vm.previewImg
                         }
 
-                        let id = vm.id
+                        let index = vm.index
 
-                        await vm.$store.dispatch('image-preview/updateDataImage', {data, id})
-                        await vm.$store.dispatch('image-preview/getImage')
+
+                        await vm.$store.dispatch('add-product/updateDataImage', {data, index})
                     }
 
                     await readerPreview.readAsDataURL(this.file);
@@ -70,9 +69,8 @@
 
             },
             async removeImageField() {
-                let id = this.id
-                await this.$store.dispatch('image-preview/deleteImage', id)
-                await this.$store.dispatch('image-preview/getImage')
+                let index = this.index
+                await this.$store.dispatch('add-product/removeImageField', index)
             },
             async addImageField() {
                 let data = {
@@ -80,14 +78,24 @@
                     previewImg: null
                 }
 
-                await this.$store.dispatch('image-preview/setDataImage', data)
-                await this.$store.dispatch('image-preview/getImage')
+                await this.$store.dispatch('add-product/setImageField', data)
+
+            },
+            async clearImage() {
+                let data = {
+                    file: null,
+                    previewImg: null
+                }
+
+                let index = this.index
+                
+                 await this.$store.dispatch('add-product/updateDataImage', {data, index})
 
             }
         },
         computed: {
             images() {
-                return this.$store.getters['image-preview/images']
+                return this.$store.getters['add-product/images']
             }
         }
     }

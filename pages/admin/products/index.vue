@@ -26,7 +26,8 @@
                     prepend-inner-icon="mdi-currency-rub"
                     label="Цена товара (Пример: 2000)"
                     v-model="localPrice"
-                    @blur="updatePrice(localPrice)"
+                    type="number"
+                    @blur="updatePrice()"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -57,13 +58,28 @@
                 </v-col>
             </v-row>
             <v-row align="center" justify="center">
+                <v-col cols="12" sm="9" md="7" align="center" justify="center" style="max-width: 700px" >
+                        <v-text-field 
+                            :disabled="!localDiscountStatus"
+                            prepend-inner-icon="mdi-percent"
+                            label="Скидка % (Например: 10)"
+                            v-model="localDiscount"
+                            @blur="updateDiscount()"
+                        ></v-text-field>
+                        <v-switch
+                            v-model="localDiscountStatus"
+                            class="mt-5 mr-5"
+                            label="Скидка"
+                        ></v-switch>
+                </v-col>
+            </v-row>
+            <v-row align="center" justify="center">
                 <v-col align="center" justify="center" cols="12" sm="9" md="7" >
                         <app-product-add-image 
                             v-for="(item, index) in images"
                             :key="index"
                             :previewImageLocal="item.previewImg"
                             :fileLocal="item.file"
-                            :id="item.id"
                             :index="index"
                         />
                 </v-col>
@@ -219,6 +235,8 @@
                 localPrice: '',
                 localDescr: '',
                 localArticle: '',
+                localDiscountStatus: false,
+                localDiscount: '',
                 exampleItems: [
                     'Черная',
                     'Белая'
@@ -227,53 +245,66 @@
                 
             }
         },
+        watch: {
+            localDiscountStatus(val) {
+                this.$store.dispatch('add-product/setDiscountStatus', val)
+            }
+            // localPrice(val) {
+            //     this.localPrice = ''
+            //     // let newPrice = val
+            //     // this.localPrice = val.replace(/[^\d]/g, '')
+            //     // console.log(this.localPrice)
+            // }
+        },
         async mounted() {
             this.localTitle = this.title
             this.localPrice = this.price
             this.localDescr = this.descr
             this.localArticle = this.article
-
-            await this.getImages()
+            this.localDiscountStatus = this.discountStatus
+            this.localDiscount = this.sizeDiscount
+            
 
             if(this.images.length === 0) {
-
                 let data = {
                     file: null,
                     previewImg: null
                 }
 
-                await this.$store.dispatch('image-preview/setDataImage', data)
-                await this.getImages()
+                await this.setImageField(data)
             }
 
         },
         computed: {
             other() {
-                return this.$store.getters['localStorage/other']
-            },
-            dataStorage() {
-                return this.$store.getters['localStorage/data']
+                return this.$store.getters['add-product/other']
             },
             images() {
-                return this.$store.getters['image-preview/images']
+                return this.$store.getters['add-product/images']
             },
             title() {
-                return this.$store.getters['localStorage/title']
+                return this.$store.getters['add-product/title']
             },
             price() {
-                return this.$store.getters['localStorage/price']
+                return this.$store.getters['add-product/price']
             },
             descr() {
-                return this.$store.getters['localStorage/descr']
+                return this.$store.getters['add-product/descr']
             },
             article() {
-                return this.$store.getters['localStorage/article']
+                return this.$store.getters['add-product/article']
+            },
+            discountStatus() {
+                return this.$store.getters['add-product/discountStatus']
+            },
+            sizeDiscount() {
+                return this.$store.getters['add-product/sizeDiscount']
             },
             checkFields() {
-                if( this.dataStorage.title !== '' &&
-                    this.dataStorage.price !== '' &&
-                    this.dataStorage.descr !== '' &&
-                    this.dataStorage.article !== '' &&
+                if( this.title !== '' &&
+                    this.price !== '' &&
+                    this.descr !== '' &&
+                    this.article !== '' &&
                     this.images[0].previewImg
                 ) 
                 {
@@ -283,7 +314,7 @@
                 }
             },
             newFields() {
-                return this.$store.getters['localStorage/newFields']
+                return this.$store.getters['add-product/newFields']
             }
 
         },
@@ -294,11 +325,13 @@
                     descr: ''
                 }
 
-                this.$store.dispatch('localStorage/setField', data)
+                this.$store.dispatch('add-product/setField', data)
+            },
+            async setImageField(data) {
+                await this.$store.dispatch('add-product/setImageField', data)
             },
             async clearFields() {
-                await this.$store.dispatch('localStorage/clearFields')
-                location.reload()
+                await this.$store.dispatch('add-product/clearFields')
             },
             async addNewField() {
 
@@ -308,22 +341,24 @@
                     descr: []
                 }
 
-                this.$store.dispatch('localStorage/setNewFields', data)
-            },
-            async getImages() {
-                await this.$store.dispatch('image-preview/getImage')
+                this.$store.dispatch('add-product/setNewFields', data)
             },
             async updateTitle(title) {
-                this.$store.dispatch('localStorage/setTitle', title)
+                this.$store.dispatch('add-product/setTitle', title)
             },
-            async updatePrice(price) {
-                this.$store.dispatch('localStorage/setPrice', price)
+            async updatePrice() {
+                this.localPrice = parseInt(this.localPrice)
+                this.$store.dispatch('add-product/setPrice', this.localPrice)
             },
             async updateDescr(descr) {
-                this.$store.dispatch('localStorage/setDescr', descr)
+                this.$store.dispatch('add-product/setDescr', descr)
             },
             async updateArticle(article) {
-                this.$store.dispatch('localStorage/setArticle', article)
+                this.$store.dispatch('add-product/setArticle', article)
+            },
+            async updateDiscount() {
+                this.localDiscount = this.localDiscount.replace(/[^\d]/g, '')
+                this.$store.dispatch('add-product/setDiscount', this.localDiscount)
             }
         }
     }
