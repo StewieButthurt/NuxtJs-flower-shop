@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export const state = () => ({
 	images: [],
     title: '',
@@ -59,14 +61,8 @@ export const mutations = {
             }
         ]
     },
-    setImagesFile(state, info) {
-        state.images[info.index].file = info.file
-    },
-    setImagesPreview(state, info) {
-        state.images[info.index].previewImg = info.previewImg
-    },
     updateDataImage(state, data) {
-        state.images[data.index] = data.data
+        state.images.splice(data.index, 1, data.data)
     },
     setImageField(state, data) {
         let arr = state.images

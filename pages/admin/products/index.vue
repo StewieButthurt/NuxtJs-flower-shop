@@ -119,7 +119,7 @@
                     </client-only>
                     <client-only>
                         <v-row align="center" justify="center" v-if="newFields.length > 0">
-                            <v-col align="center" justify="center" cols="12" sm="9" md="7" >
+                            <v-col align="center" justify="center" cols="12" sm="9" md="7" style="max-width: 700px">
                                     <app-product-add-new-field 
                                         v-for="(item, index) in newFields"
                                         :key="index"
@@ -196,11 +196,11 @@
                 </v-btn>
             </v-row>
             <v-row align="center" justify="center">
-                <v-btn nuxt to="/admin/products/preview" class="mx-2 mt-5" color="teal" :disabled="checkFields">
+                <v-btn nuxt to="/admin/products/preview" class="mx-2 mt-5" color="teal" :disabled="!checkFields">
                     <v-icon class="mr-2">mdi-folder-image</v-icon>
                     Предпросмотр
                 </v-btn>
-                <v-btn class="mx-2 mt-5" color="teal" :disabled="checkFields">
+                <v-btn class="mx-2 mt-5" color="teal" :disabled="!checkFields">
                     <v-icon class="mr-2">mdi-content-save</v-icon>
                     Сохранить
                 </v-btn>
@@ -300,17 +300,32 @@
             sizeDiscount() {
                 return this.$store.getters['add-product/sizeDiscount']
             },
+            statusImage() {
+                    if(this.images[0].previewImg !== null) {
+                        return true
+                    } else {
+                        return false
+                    }
+            },
             checkFields() {
                 if( this.title !== '' &&
                     this.price !== '' &&
                     this.descr !== '' &&
-                    this.article !== '' &&
-                    this.images[0].previewImg
+                    this.article !== '' && 
+                    this.statusImage 
                 ) 
                 {
-                    return false
-                } else {
+                    // if(this.images.length > 0) {
+                    //     if(this.images[0].previewImg) {
+                    //         console.log(this.images)
+                    //         return true
+                    //     }
+                    // } else {
+                    //     return false
+                    // }
                     return true
+                } else {
+                    return false
                 }
             },
             newFields() {

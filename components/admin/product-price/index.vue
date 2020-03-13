@@ -3,7 +3,7 @@
         <div class="product-price__default" v-show="!discountStatus">
             {{localPrice}} руб.
         </div>
-        <div class="product-price__discount-wrapper">
+        <div class="product-price__discount-wrapper" v-show="discountStatus">
             <div class="product-price__price-old">
                 {{localPrice}} руб.
                 <div class="product-price__price-old-line">
@@ -74,6 +74,7 @@
     .product-price__discount-wrapper
         display: flex
         align-items: center
+        flex-wrap: wrap
     
     .product-price__price-old
         font-family: 'Montserrat-SemiBold'

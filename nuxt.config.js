@@ -34,7 +34,6 @@ module.exports = {
     '~plugins/axios.js',
     `~plugins/click-outside.js`,
     `~plugins/materialDesign.js`,
-    {src: `~plugins/slider.js`, mode: 'client'}
   ],
   styleResources: {
     sass: [
