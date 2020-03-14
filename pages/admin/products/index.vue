@@ -73,6 +73,33 @@
                         ></v-switch>
                 </v-col>
             </v-row>
+            <v-row align="center" justify="center" id="products__discount">
+                <v-col cols="12" sm="9" md="7" align="center" justify="center" style="max-width: 700px" >
+                    <v-switch
+                        v-model="localStock"
+                        class="mr-5"
+                        label="Добавить метку 'Акция'"
+                    ></v-switch>
+                </v-col>
+            </v-row>
+            <v-row align="center" justify="center" id="products__discount">
+                <v-col cols="12" sm="9" md="7" align="center" justify="center" style="max-width: 700px" >
+                    <v-switch
+                        v-model="localBestseller"
+                        class="mr-5"
+                        label="Добавить метку 'Хит продаж'"
+                    ></v-switch>
+                </v-col>
+            </v-row>
+            <v-row align="center" justify="center" id="products__discount">
+                <v-col cols="12" sm="9" md="7" align="center" justify="center" style="max-width: 700px" >
+                    <v-switch
+                        v-model="localWeekPrice"
+                        class="mr-5"
+                        label="Добавить метку 'Цена недели'"
+                    ></v-switch>
+                </v-col>
+            </v-row>
             <v-row align="center" justify="center">
                 <v-col align="center" justify="center" cols="12" sm="9" md="7" >
                         <app-product-add-image 
@@ -235,7 +262,10 @@
                 localPrice: '',
                 localDescr: '',
                 localArticle: '',
+                localStock: false,
+                localWeekPrice: false,
                 localDiscountStatus: false,
+                localBestseller: false,
                 localDiscount: '',
                 exampleItems: [
                     'Черная',
@@ -248,13 +278,16 @@
         watch: {
             localDiscountStatus(val) {
                 this.$store.dispatch('add-product/setDiscountStatus', val)
+            },
+            localStock(val) {
+                this.$store.dispatch('add-product/setStock', val)
+            },
+            localBestseller(val) {
+                this.$store.dispatch('add-product/setBestseller', val)
+            },
+            localWeekPrice(val) {
+                this.$store.dispatch('add-product/setWeekPrice', val)
             }
-            // localPrice(val) {
-            //     this.localPrice = ''
-            //     // let newPrice = val
-            //     // this.localPrice = val.replace(/[^\d]/g, '')
-            //     // console.log(this.localPrice)
-            // }
         },
         async mounted() {
             this.localTitle = this.title
@@ -263,6 +296,9 @@
             this.localArticle = this.article
             this.localDiscountStatus = this.discountStatus
             this.localDiscount = this.sizeDiscount
+            this.localStock = this.stock
+            this.localWeekPrice = this.weekPrice
+            this.localBestseller = this.bestseller
             
 
             if(this.images.length === 0) {
@@ -300,6 +336,15 @@
             sizeDiscount() {
                 return this.$store.getters['add-product/sizeDiscount']
             },
+            stock() {
+                return this.$store.getters['add-product/stock']
+            },
+            weekPrice() {
+                return this.$store.getters['add-product/weekPrice']
+            },
+            bestseller() {
+                return this.$store.getters['add-product/bestseller']
+            },
             statusImage() {
                     if(this.images[0].previewImg !== null) {
                         return true
@@ -315,14 +360,6 @@
                     this.statusImage 
                 ) 
                 {
-                    // if(this.images.length > 0) {
-                    //     if(this.images[0].previewImg) {
-                    //         console.log(this.images)
-                    //         return true
-                    //     }
-                    // } else {
-                    //     return false
-                    // }
                     return true
                 } else {
                     return false
@@ -410,6 +447,9 @@
         border: 1px solid #8b9620
     
     #products__example-select .v-application
+        margin-top: 0px
+    
+    #products__discount .v-input--selection-controls
         margin-top: 0px
     
 </style>

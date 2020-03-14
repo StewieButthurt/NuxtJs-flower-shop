@@ -9,7 +9,10 @@ export const state = () => ({
     discountStatus: false,
     sizeDiscount: 0,
     other: [],
-    newFields: []
+    newFields: [],
+    stock: false,
+    bestseller: false,
+    weekPrice: false
 })
 
 export const mutations = {
@@ -85,6 +88,15 @@ export const mutations = {
     },
     updateNewFieldTitle(state, data) {
         state.newFields[data.index].title = data.title
+    },
+    setStock(state, stock) {
+        state.stock = stock
+    },
+    setBestseller(state, bestseller) {
+        state.bestseller = bestseller
+    },
+    setWeekPrice(state, weekPrice) {
+        state.weekPrice = weekPrice
     }
 }
 
@@ -149,6 +161,15 @@ export const actions = {
     },
     async updateNewFieldTitle({commit}, data) {
         commit('updateNewFieldTitle', data)
+    },
+    async setStock({commit}, stock) {
+        commit('setStock', stock)
+    },
+    async setBestseller({commit}, bestseller) {
+        commit('setBestseller', bestseller)
+    },
+    async setWeekPrice({commit}, weekPrice) {
+        commit('setWeekPrice', weekPrice)
     }
 }
 
@@ -162,5 +183,8 @@ export const getters = {
     article: state => state.article,
     discountStatus: state => state.discountStatus,
     sizeDiscount: state => state.sizeDiscount,
-    other: state => state.other
+    other: state => state.other,
+    stock: state => state.stock,
+    bestseller: state => state.bestseller,
+    weekPrice: state => state.weekPrice
 }

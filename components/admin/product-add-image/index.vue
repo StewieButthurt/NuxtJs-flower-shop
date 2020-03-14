@@ -15,7 +15,7 @@
         <v-btn v-if="index !== 0" class="mx-2 ml-5" dark color="indigo" small @click="removeImageField()" max-width="50px">
             <v-icon dark>mdi-delete-forever</v-icon>
         </v-btn>
-        <v-btn v-if="images.length - 1 === index" class="mx-2" fab small color="indigo" @click="addImageField()">
+        <v-btn v-if="images.length - 1 === index && images.length < 6" class="mx-2" fab small color="indigo" @click="addImageField()">
             <v-icon>mdi-plus</v-icon>
         </v-btn>
     </v-row>

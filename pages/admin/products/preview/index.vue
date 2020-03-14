@@ -14,6 +14,20 @@
                                 :class="{'preview__swiper-image-mouseenter' : zoomStatus}"
                                 >
                             </div>
+                            <div class="preview__swiper-discount-price" v-if="discountStatus">
+                                <span>{{sizeDiscount}}%</span>
+                            </div>
+                            <div class="preview__swiper-info">
+                                <div class="preview__swiper-info-stock" v-if="stock">
+                                    Акция
+                                </div>
+                                <div class="preview__swiper-info-stock preview__swiper-info-bestseller" v-if="bestseller">
+                                    Хит продаж
+                                </div>
+                                <div class="preview__swiper-info-stock preview__swiper-info-week-price" v-if="weekPrice">
+                                    Цена недели
+                                </div>
+                            </div>
                         </div>
                         <div class="preview__swiper-images-wrapper">
                             <app-product-preview-images 
@@ -25,17 +39,6 @@
                                 @changeImg="changeImg"
 
                             />
-                            <!-- <div class="preview__swiper-image-item"
-                                v-for="(item, index) in images"
-                                :key="index"
-                                @click="mainImg = item.previewImg"
-                                @mouseenter="mouseEnterImage()"
-                            >
-                                <div 
-                                    class="preview__swiper-image " 
-                                    :style="{ backgroundImage: `url(${item.previewImg})`, backgroundPosition: 'center center', backgroundSize: 'cover' }">
-                                </div>
-                            </div> -->
                         </div>
                     </client-only>
                 </div>
@@ -161,6 +164,21 @@
             },
             newFields() {
                 return this.$store.getters['add-product/newFields']
+            },
+            sizeDiscount() {
+                return this.$store.getters['add-product/sizeDiscount']
+            },
+            discountStatus() {
+                return this.$store.getters['add-product/discountStatus']
+            },
+            bestseller() {
+                return this.$store.getters['add-product/bestseller']
+            },
+            stock() {
+                return this.$store.getters['add-product/stock']
+            },
+            weekPrice() {
+                return this.$store.getters['add-product/weekPrice']
             }
 
         },
@@ -217,11 +235,13 @@
         width: 100%
         flex-direction: column
         align-items: center
+        display: flex
     
     .preview__swiper-descr
         width: 100%
         display: flex
         flex-wrap: wrap
+        +size(11)
         +md-block
             justify-content: center
     
@@ -229,16 +249,19 @@
         display: flex
         flex-direction: column
         align-items: center
-        max-width: 673px
+        max-width: 450px
+        margin-top: 15px
         +size(5)
+        +lgX-block
+            margin-top: 2%
         +size-md(6)
         +size-xs(11)
     
     .preview__descr
-        +size(7)
+        +size(6)
         display: flex
         flex-direction: column
-        margin-left: 20px
+        margin-left: 40px
         +md-block
             margin-top: 50px
             margin-left: 0px
@@ -357,7 +380,51 @@
     .preview__swiper-image-container
         overflow: hidden
         width: 100%
+        position: relative
     
     .preview__swiper-image-mouseenter
         transform: scale(2)
+    
+    .preview__swiper-discount-price
+        width: 42px
+        height: 42px
+        color: white
+        display: flex
+        justify-content: center
+        position: absolute
+        align-items: center
+        font-size: 16px
+        background-color: rgba(255, 0, 0, 0.7)
+        border-radius: 100%
+        top: 3px
+        right: 3px
+        cursor: pointer
+    
+    .preview__swiper-info
+        display: flex
+        flex-direction: column
+        position: absolute
+        top: 0px
+        left: 0px
+        padding-left: 10px
+        padding-right: 10px
+        cursor: pointer
+    
+    .preview__swiper-info-stock
+        width: 130px
+        height: 22px
+        margin-top: 10px
+        color: white
+        display: flex
+        justify-content: center
+        align-items: center
+        text-transform: uppercase
+        background-color: rgba(255, 0, 0, 0.7)
+        font-size: 12px
+
+    .preview__swiper-info-bestseller
+        background-color: rgba(255, 168, 0, 0.7)
+    
+    .preview__swiper-info-week-price
+        background-color: rgba(0, 194, 255, 0.7)
 </style>
