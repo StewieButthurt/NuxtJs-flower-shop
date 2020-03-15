@@ -121,6 +121,61 @@
                     </v-row>
                     <client-only>
                         <v-row align="center" justify="center" id="products__example-select">
+                            <v-col align="center" justify="center" cols="12" sm="9" md="7" style="max-width: 700px">
+                                <v-row style="padding: 12px">
+                                    <span>Цвет:</span>
+                                    <span class="ml-5 font-italic">{{colorExample}}</span>
+                                </v-row>
+                                <v-row style="padding: 12px">
+                                    <app-product-other-field-example-image 
+                                        v-for="(item, index) in arrImageExample"
+                                        :key="index"
+                                        :index="index"
+                                        :checkIndex="indexExampleHoverImage"
+                                        :image="item.img"
+                                        :color="item.color"
+                                        @disabledHoverImage="disabledHoverImage"
+                                    />
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </client-only>
+                    <client-only>
+                        <v-row align="center" justify="center" v-if="otherFieldImage.length > 0">
+                            <v-col align="center" justify="center" cols="12" sm="9" md="7" style="max-width: 700px">
+                                    <app-product-other-field-with-image 
+                                        v-for="(item, index) in otherFieldImage"
+                                        :key="item.type"
+                                        :type="item.type"
+                                        :info="item.info"
+                                        :index="index"
+                                    />
+                                    <!-- <app-product-add-new-field 
+                                        v-for="(item, index) in newFields"
+                                        :key="index"
+                                        :title="item.title"
+                                        :descr="item.descr"
+                                        :index="index"
+                                        :statusButton="item.statusButton"
+                                    /> -->
+                            </v-col>
+                        </v-row>
+                        <v-btn v-if="newFields.length === 0" class="mx-2 mt-5 mb-1 ml-6" fab small color="indigo" @click="addNewFieldWithImage()">
+                            <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                    </client-only>
+                </v-col>
+            </v-row>
+            <v-row align="center" justify="center">
+                <v-col align="center" justify="center">
+                    <v-row align="center" justify="center" class="font-weight-bold title">
+                        Дополнительные поля
+                    </v-row>
+                    <v-row align="center" justify="center" class="font-weight-medium subtitle-1 mt-2 font-italic">
+                        Пример:
+                    </v-row>
+                    <client-only>
+                        <v-row align="center" justify="center" id="products__example-select">
                             <v-col align="center" justify="center" cols="12" sm="9" md="7">
                                 <v-row align="center" justify="center">
                                     <span>Керамика</span>
@@ -245,6 +300,8 @@
     const AppProductCharacteristics = () => import('~/components/admin/product-characteristics/index.vue')
     const AppProductAddImage = () => import('~/components/admin/product-add-image/index.vue')
     const AppProductAddNewField = () => import('~/components/admin/product-add-new-field/index.vue')
+    const AppProductOtherFieldExampleImage = () => import('~/components/admin/product-other-field-example-image/index.vue')
+    const AppProductOtherFieldWithImage = () => import('~/components/admin/product-other-field-with-image/index.vue')
 
     export default {
         layout: 'admin',
@@ -254,7 +311,9 @@
         components: {
             AppProductCharacteristics,
             AppProductAddImage,
-            AppProductAddNewField
+            AppProductAddNewField,
+            AppProductOtherFieldExampleImage,
+            AppProductOtherFieldWithImage
         },
         data() {
             return {
@@ -271,7 +330,27 @@
                     'Черная',
                     'Белая'
                 ],
-                localNewFields: []
+                localNewFields: [],
+                colorExample: 'Синий',
+                arrImageExample: [
+                    {
+                        color: 'Синий',
+                        img: 'other-fields-image-blue.jpg'
+                    },
+                    {
+                        color: 'Красный',
+                        img: 'other-fields-image-red.jpg'
+                    },
+                    {
+                        color: 'Оранжевый',
+                        img: 'other-fields-image-orange.jpg'
+                    },
+                    {
+                        color: 'Золотой',
+                        img: 'other-fields-image-gold.jpg'
+                    }
+                ],
+                indexExampleHoverImage: false
                 
             }
         },
@@ -367,6 +446,9 @@
             },
             newFields() {
                 return this.$store.getters['add-product/newFields']
+            },
+            otherFieldImage() {
+                return this.$store.getters['add-product/otherFieldImage']
             }
 
         },
@@ -411,6 +493,26 @@
             async updateDiscount() {
                 this.localDiscount = this.localDiscount.replace(/[^\d]/g, '')
                 this.$store.dispatch('add-product/setDiscount', this.localDiscount)
+            },
+            async disabledHoverImage({index, color}) {
+                this.indexExampleHoverImage = index
+                this.colorExample = color
+            },
+            async addNewFieldWithImage() {
+                let data = {
+                    type: '',
+                    info: [
+                        {
+                            title: '',
+                            image: {
+                                file: null,
+                                previewImg: null
+                            }
+                        }
+                    ]
+                }
+
+                this.$store.dispatch('add-product/addNewFieldWithImage', data)
             }
         }
     }
@@ -451,5 +553,4 @@
     
     #products__discount .v-input--selection-controls
         margin-top: 0px
-    
 </style>

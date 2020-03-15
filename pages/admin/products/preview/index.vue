@@ -15,7 +15,7 @@
                                 >
                             </div>
                             <div class="preview__swiper-discount-price" v-if="discountStatus">
-                                <span>{{sizeDiscount}}%</span>
+                                <span>-{{sizeDiscount}}%</span>
                             </div>
                             <div class="preview__swiper-info">
                                 <div class="preview__swiper-info-stock" v-if="stock">
@@ -49,6 +49,7 @@
                     <div class="preview__descr__descr-rating">
                         <v-rating 
                             v-model="rating"
+                            readonly
                             background-color="orange lighten-3"
                             color="orange"
                             hover
@@ -93,7 +94,6 @@
                             <span class="preview__descr__buttons-plus-vert"></span>   
                         </div>
                         <v-btn
-                            :disabled="counterProducts === 0"
                             color="#7CAA1A"
                             class="ml-5 white--text preview__descr__buttons-card"
                         >
@@ -101,8 +101,19 @@
                             В корзину
                         </v-btn>
                     </div>
-                    <div class="preview__descr-big-line">
+                </div>
+            </div>
+            <div class="preview__specifications">
+                <div class="preview__specifications-tabs">
+                    <v-tabs
+                        color="black"
+                    >
+                        <v-tab>Описание</v-tab>
+                        <v-tab>Отзывы</v-tab>
+                    </v-tabs>
+                    <div class="preview__specifications-tabs-line">
                     </div>
+
                 </div>
             </div>
         </div>
@@ -132,7 +143,7 @@
         data() {
             return {
                 rating: 0,
-                counterProducts: 0,
+                counterProducts: 1,
                 mainImg: '',
                 mainIndex: '',
                 zoomStatus: false,
@@ -192,7 +203,7 @@
                 }
             },
             async counterMinus() {
-                if(this.counterProducts > 0) {
+                if(this.counterProducts > 1) {
                     this.counterProducts--
                 }
             },
@@ -307,12 +318,6 @@
         display: flex
         flex-direction: column
     
-    .preview__descr-big-line
-        height: 1px
-        background-color: #C8C8C8
-        margin-top: 20px
-        margin: 0.8rem
-    
     .preview__descr__buttons
         display: flex
         align-items: center
@@ -386,8 +391,8 @@
         transform: scale(2)
     
     .preview__swiper-discount-price
-        width: 42px
-        height: 42px
+        width: 50px
+        height: 50px
         color: white
         display: flex
         justify-content: center
@@ -427,4 +432,23 @@
     
     .preview__swiper-info-week-price
         background-color: rgba(0, 194, 255, 0.7)
+    
+    .preview__specifications
+        +size(11)
+        +size-md(10)
+        +md-block
+            padding: 0.8rem
+        display: flex
+        flex-direction: column
+    
+    .preview__specifications-tabs
+        position: relative
+        margin-top: 70px
+    
+    .preview__specifications-tabs-line
+        position: absolute
+        top: 48px
+        height: 1px
+        background-color: #C8C8C8
+        width: 100%
 </style>

@@ -12,7 +12,8 @@ export const state = () => ({
     newFields: [],
     stock: false,
     bestseller: false,
-    weekPrice: false
+    weekPrice: false,
+    otherFieldImage: []
 })
 
 export const mutations = {
@@ -97,6 +98,28 @@ export const mutations = {
     },
     setWeekPrice(state, weekPrice) {
         state.weekPrice = weekPrice
+    },
+    addNewFieldWithImage(state, data) {
+        state.otherFieldImage.push(data)
+    },
+    updateOtherFieldImage(state, {data, index, globalIndex}) {
+        // console.log(globalIndex)
+        state.otherFieldImage[globalIndex].info[index].image = {
+            file: data.file,
+            previewImg: data.previewImg
+        }
+    },
+    setOtherFieldImage(state, {data, globalIndex}) {
+        state.otherFieldImage[globalIndex].info.push(data)
+    },
+    removeOtherFieldImage(state, {index, globalIndex}) {
+        state.otherFieldImage[globalIndex].info.splice(index, 1)
+    },
+    removeOtherFieldWithImageBlock(state, index) {
+        state.otherFieldImage.splice(index, 1)
+    },
+    updateOtherFieldTitle(state, {type, index}) {
+        state.otherFieldImage[index].type = type
     }
 }
 
@@ -170,6 +193,24 @@ export const actions = {
     },
     async setWeekPrice({commit}, weekPrice) {
         commit('setWeekPrice', weekPrice)
+    },
+    async addNewFieldWithImage({commit}, data) {
+        commit('addNewFieldWithImage', data)
+    },
+    async updateOtherFieldImage({commit}, {data, index, globalIndex}) {
+        commit('updateOtherFieldImage', {data, index, globalIndex})
+    },
+    async setOtherFieldImage({commit}, {data, globalIndex}) {
+        commit('setOtherFieldImage', {data, globalIndex})
+    },
+    async removeOtherFieldImage({commit}, {index, globalIndex}) {
+        commit('removeOtherFieldImage', {index, globalIndex})
+    },
+    async removeOtherFieldWithImageBlock({commit}, index) {
+        commit('removeOtherFieldWithImageBlock', index)
+    },
+    async updateOtherFieldTitle({commit}, {type, index}) {
+        commit('updateOtherFieldTitle', {type, index})
     }
 }
 
@@ -186,5 +227,6 @@ export const getters = {
     other: state => state.other,
     stock: state => state.stock,
     bestseller: state => state.bestseller,
-    weekPrice: state => state.weekPrice
+    weekPrice: state => state.weekPrice,
+    otherFieldImage: state => state.otherFieldImage
 }

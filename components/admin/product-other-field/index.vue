@@ -6,6 +6,7 @@
         <div class="product-other-field__select">
             <v-select
                 :items="descr"
+                v-model="select"
                 label="Не выбрано"
                 dense
                 solo
@@ -20,7 +21,15 @@
         props: [
             'title',
             'descr'
-        ]
+        ],
+        async mounted() {
+            this.select = this.descr[0]
+        },
+        data() {
+            return {
+                select: ''
+            }
+        }
     }
 </script>
 
