@@ -334,6 +334,10 @@
                 colorExample: 'Синий',
                 arrImageExample: [
                     {
+                        color: 'Белый',
+                        img: 'flower.png'
+                    },
+                    {
                         color: 'Синий',
                         img: 'other-fields-image-blue.jpg'
                     },
@@ -342,11 +346,11 @@
                         img: 'other-fields-image-red.jpg'
                     },
                     {
-                        color: 'Оранжевый',
-                        img: 'other-fields-image-orange.jpg'
+                        color: 'Зеленый',
+                        img: 'other-fields-image-green.jpg'
                     },
                     {
-                        color: 'Золотой',
+                        color: 'Желтый',
                         img: 'other-fields-image-gold.jpg'
                     }
                 ],

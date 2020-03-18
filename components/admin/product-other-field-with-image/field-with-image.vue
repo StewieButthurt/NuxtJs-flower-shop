@@ -6,6 +6,7 @@
                 label="Название"
                 v-model="localTitle"
                 class="product-characteristics__field"
+                @blur="updateTitle()"
             ></v-text-field>
             <v-file-input
                 show-size 
@@ -98,6 +99,24 @@
 
                 await this.$store.dispatch('add-product/setOtherFieldImage', {data, globalIndex})
 
+            },
+            async updateTitle() {
+                let title = this.localTitle
+                let globalIndex = this.globalIndex
+                let index = this.index
+
+                await this.$store.dispatch('add-product/updateOtherFieldImageTitle', {title, globalIndex, index})
+            },
+            async clearImage() {
+                let data = {
+                    file: null,
+                    previewImg: null
+                }
+
+                let index = this.index
+                let globalIndex = this.globalIndex
+                
+                await this.$store.dispatch('add-product/updateOtherFieldImage', {data, index, globalIndex})
             }
         }
     }

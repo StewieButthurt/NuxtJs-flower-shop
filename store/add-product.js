@@ -120,6 +120,9 @@ export const mutations = {
     },
     updateOtherFieldTitle(state, {type, index}) {
         state.otherFieldImage[index].type = type
+    },
+    updateOtherFieldImageTitle(state, {title, globalIndex, index}) {
+        state.otherFieldImage[globalIndex].info[index].title = title
     }
 }
 
@@ -211,6 +214,9 @@ export const actions = {
     },
     async updateOtherFieldTitle({commit}, {type, index}) {
         commit('updateOtherFieldTitle', {type, index})
+    },
+    async updateOtherFieldImageTitle({commit}, {title, globalIndex, index}) {
+        commit('updateOtherFieldImageTitle', {title, globalIndex, index})
     }
 }
 

@@ -44,7 +44,7 @@
                 </div>
                 <div class="preview__descr">
                     <div class="preview__descr-title">
-                        Спатифиллум Штраусс в керамике 13/50 черный/белый керамический горшок
+                        {{title}}
                     </div>
                     <div class="preview__descr__descr-rating">
                         <v-rating 
@@ -65,12 +65,20 @@
                         />
                     </div>
                     <div class="preview__descr-text">
-                        Очищает воздух от вредных примесей формальдегида, бензола, трихлорэтилена, химикатов очистителей и растворителей. 
-                        Одно из самых известных растений, применяемых для очистки воздуха от паров спирта, ацетона. 
-                        По некоторым данным уничтожает споры плесени.
+                        {{descr}}
                     </div>
                     <div class="preview__descr-article">
                         артикул <span>{{article}}</span>
+                    </div>
+                    <div class="preview__field-with-image">
+                        <app-preview-field-with-image 
+                            v-for="(item, index) in otherFieldImage"
+                            :key="item.type"
+                            :index="index"
+                            :type="item.type"
+                            :info="item.info"
+                            @mouseEnterImage="mouseEnterImage"
+                        />
                     </div>
                     <div class="preview__descr-other-field preview__descr-price">
                         <app-product-other-field 
@@ -83,19 +91,21 @@
                     <div class="preview__descr-big-line">
                     </div>
                     <div class="preview__descr__buttons">
-                        <div class="preview__descr__buttons-minus" @click="counterMinus()">
-                            <span class="preview__descr__buttons-plus-hor"></span>
-                        </div>
-                        <div class="preview__descr__buttons-result">
-                            <span>{{counterProducts}}</span>
-                        </div>
-                        <div class="preview__descr__buttons-minus" @click="counterPlus()">
-                            <span class="preview__descr__buttons-plus-hor"></span> 
-                            <span class="preview__descr__buttons-plus-vert"></span>   
+                        <div class="preview__descr__counter-wrapper-buttons mr-5 mt-5">
+                            <div class="preview__descr__buttons-minus" @click="counterMinus()">
+                                <span class="preview__descr__buttons-plus-hor"></span>
+                            </div>
+                            <div class="preview__descr__buttons-result">
+                                <span>{{counterProducts}}</span>
+                            </div>
+                            <div class="preview__descr__buttons-minus" @click="counterPlus()">
+                                <span class="preview__descr__buttons-plus-hor"></span> 
+                                <span class="preview__descr__buttons-plus-vert"></span>   
+                            </div>
                         </div>
                         <v-btn
                             color="#7CAA1A"
-                            class="ml-5 white--text preview__descr__buttons-card"
+                            class="white--text preview__descr__buttons-card mt-5"
                         >
                             <v-icon class="mr-3" size="24px" right dark>mdi-cart-outline</v-icon>
                             В корзину
@@ -108,13 +118,26 @@
                     <v-tabs
                         color="black"
                     >
-                        <v-tab>Описание</v-tab>
-                        <v-tab>Отзывы</v-tab>
+                        <v-tab @click="clickDescr()">Описание</v-tab>
+                        <v-tab @click="clickReviews()">Отзывы</v-tab>
                     </v-tabs>
                     <div class="preview__specifications-tabs-line">
                     </div>
-
                 </div>
+                <transition name="itemIn" mode="out-in">
+                    <div key="vtabDescr" class="preview__characterisctics-wrapper" v-if="vtabDescr">
+                        <app-preview-characteristics 
+                            v-for="(item, index) in other"
+                            :key="item.title"
+                            :index="index"
+                            :title="item.title"
+                            :descr="item.descr"
+                        />
+                    </div>
+                    <div key="vtabReviews" class="preview__characterisctics-wrapper" v-if="vtabReviews">
+                        Здесь будут отзывы
+                    </div>
+                </transition>
             </div>
         </div>
     </div>
@@ -125,6 +148,8 @@
     const AppProductPrice = () => import('~/components/admin/product-price/index.vue')
     const AppProductOtherField = () => import('~/components/admin/product-other-field/index.vue')
     const AppProductPreviewImages = () => import('~/components/admin/product-preview-images/index.vue')
+    const AppPreviewFieldWithImage = () => import('~/components/admin/product-other-field-with-image/preview-field-with-image.vue')
+    const AppPreviewCharacteristics = () => import('~/components/admin/product-characteristics/preview-characteristics.vue')
 
     export default {
         layout: 'admin',
@@ -134,7 +159,9 @@
         components: {
             AppProductPrice,
             AppProductOtherField,
-            AppProductPreviewImages
+            AppProductPreviewImages,
+            AppPreviewFieldWithImage,
+            AppPreviewCharacteristics
         },
         middleware: 'checkData',
         async mounted() {
@@ -151,7 +178,9 @@
                 y: '',
                 bottom: 0,
                 right: 0,
-                resultSize: 'cover'
+                resultSize: 'cover',
+                vtabDescr: true,
+                vtabReviews: false
             }
         },
         computed: {
@@ -169,6 +198,9 @@
             },
             descr() {
                 return this.$store.getters['add-product/descr']
+            },
+            other() {
+                return this.$store.getters['add-product/other']
             },
             article() {
                 return this.$store.getters['add-product/article']
@@ -190,6 +222,9 @@
             },
             weekPrice() {
                 return this.$store.getters['add-product/weekPrice']
+            },
+            otherFieldImage() {
+                return this.$store.getters['add-product/otherFieldImage']
             }
 
         },
@@ -228,6 +263,18 @@
                 this.zoomStatus = false,
                 this.bottom = 0
                 this.right = 0
+            },
+            async mouseEnterImage(img) {
+                this.mainImg = img
+            },
+            async clickDescr() {
+                this.vtabReviews = false
+                this.vtabDescr = true
+
+            },
+            async clickReviews() {
+                this.vtabDescr = false
+                this.vtabReviews = true
             }
         }
     }
@@ -322,7 +369,7 @@
         display: flex
         align-items: center
         margin: 0.8rem
-        margin-top: 15px
+        flex-wrap: wrap
     
     .preview__descr__buttons-minus
         display: flex
@@ -440,6 +487,7 @@
             padding: 0.8rem
         display: flex
         flex-direction: column
+        +size-xs(12)
     
     .preview__specifications-tabs
         position: relative
@@ -451,4 +499,24 @@
         height: 1px
         background-color: #C8C8C8
         width: 100%
+    
+    .preview__field-with-image
+        margin: 0.8rem
+        display: flex
+        flex-direction: column
+    
+    .preview__characterisctics-wrapper
+        display: flex
+        flex-direction: column
+        margin-top: 30px
+        max-width: 961px
+    
+    .itemIn-enter-active, .itemIn-leave-active 
+        transition: opacity .3s
+    
+    .itemIn-enter, .itemIn-leave-to
+        opacity: 0
+    
+    .preview__descr__counter-wrapper-buttons
+        display: flex
 </style>

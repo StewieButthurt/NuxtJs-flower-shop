@@ -26,6 +26,7 @@ module.exports = {
   */
   css: [
     { src: '~assets/fonts/montserrat.css' },
+    { src: '~assets/fonts/rubik.css' },
   ],
   /*
   ** Plugins to load before mounting the App
