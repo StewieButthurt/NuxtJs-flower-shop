@@ -16,62 +16,7 @@ export const state = () => ({
             status: false
         },
         {
-            title: 'Наш полезный блог',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Наш полезный блог',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Наш полезный блог',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Наш полезный блог',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Наш полезный блог',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Наш полезный блог',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Помощь',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Помощь',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Помощь',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Помощь',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Помощь',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Помощь',
+            title: 'О нас',
             to: '#',
             status: false
         },

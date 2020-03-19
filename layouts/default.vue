@@ -1,44 +1,13 @@
 <template>
   <div class="defautl__container" v-resize="onResize">
     <v-app id="defalut-layouts" class="light default__fonts-rubik">
-      <v-navigation-drawer
-        disable-resize-watcher
-        v-model="drawer"
-        :clipped="clipped"
-        id="layout-default__navigation-drawer"
-        app
-        light
-      >
-        <v-list>
-          <v-list-item
-            v-for="(item, i) in links"
-            :key="i"
-            :to="item.to"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="#">
-            <v-list-item-action>
-              <v-icon>mdi-phone-in-talk</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title v-text="'Заказать звонок'" />
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <div style="display: flex; align-items: center">
-              <span style="text-decoration: underline">+7 (977) 537-23-69</span>
-            </div>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
+
+      <app-navigation-drawer 
+        :drawer="drawer"
+        :mainLinks="mainLinks"
+        @changeDrawer="changeDrawer"
+      />
+      
       <v-app-bar
         light
         style="position: relative; display: flex; align-items: center"
@@ -68,11 +37,13 @@
         height="80px"
         max-height="80px"
         app
+        flat
+        color="white"
       >
         <div class="default__logo">
           logo
         </div>
-        <div style="width: 100%; height: 23px; overflow: hidden">
+        <div id="default__menu-settings" style="width: 100%; height: 23px; overflow: hidden">
           <app-main-links 
             v-for="(item, index) in mainLinks"
             :key="item.index"
@@ -84,22 +55,50 @@
             :x="windowSize.x"
             @changeIndex="changeIndex"
           />
-          <div class="layout-default__link-more"> >> </div>
+          <v-menu
+            bottom
+            letf
+            offset-overflow
+            origin="center center"
+            transition="slide-y-transition"
+            v-if="falseMaimLinks.length !== 0"
+          >
+            <template v-slot:activator="{ on }">
+              <!-- <v-btn icon v-on="on">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn> -->
+              <div v-on="on" class="layout-default__link-more"> >> </div>
+            </template>
+    
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in falseMaimLinks"
+                :key="index"
+                @click="$router.push(item.to)"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </div>
       </v-app-bar>
       <v-app-bar
-        :clipped-left="clipped"
-        app
+        light
         style="position: relative"
-        color="#83ae26"
-        id="layout-default__v-app-bar"
-        height="64px"
-        max-height="64px"
+        id="default-header-search"
+        height="80px"
+        max-height="80px"
+        app
+        flat
+        color="white"
       >
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-        <nuxt-link class="layout-default__link ml-10" no-prefetch to="/">
-          Каталог товаров
-        </nuxt-link>
+        <v-btn
+          color="#97CF23"
+          class="white--text"
+        >
+          <v-icon class="mr-2" right dark>mdi-format-list-bulleted</v-icon>
+          Каталог
+        </v-btn>
         <v-autocomplete
           v-model="select"
           :items="searchResult"
@@ -145,6 +144,19 @@
             </template>
           </template>
         </v-autocomplete>
+      </v-app-bar>
+      <v-app-bar
+        app
+        style="position: relative"
+        color="#83ae26"
+        id="layout-default__v-app-bar"
+        height="64px"
+        max-height="64px"
+      >
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+        <nuxt-link class="layout-default__link ml-10" no-prefetch to="/">
+          Каталог товаров
+        </nuxt-link>
         <v-spacer />
       </v-app-bar>
       <v-content>
@@ -164,11 +176,11 @@
 <script>
 
 const AppMainLinks = () => import('~/components/layouts/main-links.vue')
+const AppNavigationDrawer = () => import('~/components/layouts/default/navigation-drawer/index.vue')
 
 export default {
   data () {
     return {
-      clipped: false,
       globalIndex: false,
       drawer: false,
       select: '',
@@ -186,18 +198,6 @@ export default {
         {name: 'Запас', group: 'Товары', avatar: require('~/assets/1.png')},
         {name: 'Слов', group: 'Товары', avatar: require('~/assets/1.png')}
       ],
-      links: [
-        {
-          icon: 'mdi-home',
-          title: 'Главная',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
       statusMenu: true,
       search: null,
       windowSize: {
@@ -212,13 +212,17 @@ export default {
     },
     onResize() {
       this.windowSize = { x: window.innerWidth, y: window.innerHeight }
+    },
+    async changeDrawer(drawer) {
+      this.drawer = drawer
     }
   },
   async mounted() {
     this.onResize()
   },
   components: {
-    AppMainLinks
+    AppMainLinks,
+    AppNavigationDrawer
   },
   computed: {
     disabledMenu() {
@@ -234,6 +238,16 @@ export default {
     },
     mainLinks() {
       return this.$store.getters['layouts-links/mainLinks']
+    },
+    falseMaimLinks() {
+      let arr = [];
+      for(let i = 0; i < this.mainLinks.length; i++) {
+        if(this.mainLinks[i].status === false) {
+          arr.push(this.mainLinks[i])
+        }
+      }
+
+      return arr
     }
   },
   watch: {
@@ -293,9 +307,6 @@ export default {
     +md-block
       padding: 4px 20px
   
-  #layout-default__navigation-drawer .v-list
-    padding: 0px
-  
   .default__fonts-rubik
     font-family: 'Rubik-Regular', sans-serif
     font-weight: 400
@@ -333,10 +344,21 @@ export default {
     display: inline-block
     cursor: pointer
     margin-left: 20px
-    position: absolute
-    right: 20px
-    top: 29px
+    +xs-block
+      position: absolute
+      right: 20px
+      top: 29px
+
   
   #default-header-logo-links .layout-default__link-more:hover
     color: #7CAA1A
+  
+  #default-header-search .v-toolbar__content
+    padding: 4px 60px 4px 70px
+    +md-block
+      padding: 4px 35px 
+  
+  #default-header-search .v-btn:not(.v-btn--round).v-size--default
+    padding: 0px 10px 0px 2px
+
 </style>
