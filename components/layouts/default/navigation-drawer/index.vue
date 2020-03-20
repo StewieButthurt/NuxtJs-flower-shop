@@ -13,6 +13,7 @@
             :to="item.to"
             router
             exact
+            
           >
             <v-list-item-content>
               <v-list-item-title v-text="item.title" />
