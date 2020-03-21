@@ -30,16 +30,16 @@
             offset-overflow
             origin="center center"
             transition="slide-y-transition"
-            v-if="falseMaimLinks.length !== 0"
+            v-show="falseMaimLinks.length !== 0"
           >
             <template v-slot:activator="{ on }">
               <!-- <v-btn icon v-on="on">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn> -->
-              <div v-on="on" class="layout-default__link-more"> >> </div>
+              <div v-on="on" v-show="falseMaimLinks.length !== 0" class="layout-default__link-more"> >> </div>
             </template>
     
-            <v-list>
+            <v-list class="logo-app-bar__text-style">
               <v-list-item
                 v-for="(item, index) in falseMaimLinks"
                 :key="index"
@@ -98,10 +98,6 @@
         margin: 0 auto
         +md-block
           padding: 4px 55px 4px 20px
-    
-    #default-header-logo-links .layout-default__link-hover 
-        color: #7CAA1A
-        border-bottom: 2px solid #FFA800
   
     #default-header-logo-links .layout-default__link-active
         color: #FFA800
@@ -128,6 +124,10 @@
         display: flex
         justify-content: center
         align-items: center
+    
+    .logo-app-bar__text-style
+        font-family: 'Rubik-Medium', sans-serif
+        font-weight: normal
 
         
 </style>

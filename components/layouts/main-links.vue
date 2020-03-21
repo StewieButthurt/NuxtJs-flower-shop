@@ -1,7 +1,7 @@
 <template>
-    <span v-if="checkStatus">
+    <span v-show="checkStatus">
         <nuxt-link 
-            class="layout-default__link ml-10" 
+            class="layout-default__link ml-10 main-links__link" 
             no-prefetch 
             :to="to"
             active-class="layout-default__link-active"
@@ -141,4 +141,11 @@
 
 <style lang="sass">
 
+    .main-links__link
+        font-family: 'Rubik-Medium', sans-serif
+        font-weight: normal
+
+    #default-header-logo-links .layout-default__link-hover 
+        color: #7CAA1A
+        border-bottom: 2px solid #FFA800
 </style>

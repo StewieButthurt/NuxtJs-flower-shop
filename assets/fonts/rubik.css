@@ -13,3 +13,11 @@
  font-weight: 400;
  font-style: normal;
 }
+
+@font-face {
+ font-family: 'Rubik-Medium';
+ src: url('./Rubik-Medium.ttf');
+ src: url('./Rubik-Medium.ttf') format('truetype');
+ font-weight: 500;
+ font-style: normal;
+}

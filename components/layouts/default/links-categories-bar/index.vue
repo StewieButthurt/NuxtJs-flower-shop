@@ -12,7 +12,7 @@
           Каталог товаров
         </nuxt-link>
         <v-spacer />
-      </v-app-bar>
+    </v-app-bar>
 </template>
 
 <script>
