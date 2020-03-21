@@ -15,7 +15,9 @@
         :windowSize="windowSize"
       /> 
 
-      <app-search-bar />
+      <app-search-bar 
+        :windowSize="windowSize"
+      />
 
       <app-links-categories-bar 
         :drawer="drawer"

@@ -12,14 +12,14 @@
         <v-btn
           color="#97CF23"
           class="white--text"
+          v-if="windowSize.x > 576"
         >
           Каталог
         </v-btn>
         <v-autocomplete
           v-model="select"
           :items="searchResult"
-          prepend-inner-icon="mdi-magnify"
-          class="layout-default__combox-search ml-10"
+          class="layout-default__combox-search"
           :search-input.sync="search"
           :menu-props="{value: disabledMenu}"
           item-text="name"
@@ -32,7 +32,7 @@
           chips
           no-data-text="Совпадения не найдены"
           small-chips
-          label="Поиск..."
+          label="Поиск товаров..."
         >
           <template v-slot:selection="data">
             <v-chip
@@ -60,6 +60,15 @@
             </template>
           </template>
         </v-autocomplete>
+        <v-btn
+          color="#97CF23"
+          class="white--text"
+          tile
+          depressed
+          height="40px"
+        >
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
       </v-app-bar>
 </template>
 
@@ -109,7 +118,10 @@
                     return false
                 }
             }
-        }
+        },
+        props: [
+          'windowSize'
+        ]
     }
 </script>
 
@@ -119,12 +131,17 @@
         padding: 4px 60px 4px 70px
         +md-block
             padding: 4px 35px 
+        +xs-block
+            padding: 4px 20px
   
     #default-header-search .v-btn:not(.v-btn--round).v-size--default
-        padding: 0px 10px 0px 10px
+        padding: 0px 15px 0px 15px
     
     #defalut-layouts .layout-default__combox-search
         max-width: 300px
+        margin-left: 40px
+        +xs-block
+          margin-left: 0px
   
     #defalut-layouts .layout-default__combox-search .v-input__control
         height: 40px
@@ -135,5 +152,9 @@
     
     #defalut-layouts .layout-default__combox-search .v-input__append-inner
         display: none
-
+      
+    #defalut-layouts .theme--light.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state) > .v-input__control > .v-input__slot fieldset
+        color: #97CF23
+        border-width: 2px
+        border-radius: 0px
 </style>
