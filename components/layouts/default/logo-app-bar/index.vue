@@ -30,12 +30,10 @@
             offset-overflow
             origin="center center"
             transition="slide-y-transition"
+            max-height="300px"
             v-show="falseMaimLinks.length !== 0"
           >
             <template v-slot:activator="{ on }">
-              <!-- <v-btn icon v-on="on">
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn> -->
               <div v-on="on" v-show="falseMaimLinks.length !== 0" class="layout-default__link-more"> >> </div>
             </template>
     
@@ -55,7 +53,7 @@
 
 <script>
 
-    const AppMainLinks = () => import('~/components/layouts/main-links.vue')
+    const AppMainLinks = () => import('~/components/layouts/default/logo-app-bar/main-links.vue')
 
     export default {
         data() {
@@ -98,9 +96,6 @@
         margin: 0 auto
         +md-block
           padding: 4px 55px 4px 20px
-  
-    #default-header-logo-links .layout-default__link-active
-        color: #FFA800
     
     #default-header-logo-links .layout-default__link-more
         display: inline-block

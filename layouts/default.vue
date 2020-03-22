@@ -21,6 +21,7 @@
 
       <app-links-categories-bar 
         :drawer="drawer"
+        :windowSize="windowSize"
         @changeDrawer="changeDrawer"
       />
 
@@ -31,7 +32,7 @@
         </v-container>
       </v-content>
       <v-footer
-        color="#8B9620"
+        color="#83ae26"
       >
         <span>&copy; 2019</span>
       </v-footer>
