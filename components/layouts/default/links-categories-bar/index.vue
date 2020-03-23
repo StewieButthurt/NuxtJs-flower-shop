@@ -4,6 +4,7 @@
         style="position: relative"
         color="#83ae26"
         id="layout-default__v-app-bar"
+        height="64px"
         max-height="64px"
       >
         <v-app-bar-nav-icon @click.stop="localDrawer = !localDrawer" />
@@ -114,6 +115,6 @@
         +xs-block
           position: absolute
           right: 20px
-          top: 14px
+          top: 17px
 
 </style>

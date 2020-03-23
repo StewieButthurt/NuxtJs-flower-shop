@@ -19,6 +19,11 @@
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
+          <v-list-item to="#">
+            <v-list-item-content>
+              <v-list-item-title v-text="'Каталог'" />
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item
             v-for="(item, index) in mainLinks"
             :key="item.title"

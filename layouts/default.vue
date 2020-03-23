@@ -26,11 +26,10 @@
       />
 
 
-      <v-content>
-        <v-container>
-          <nuxt />
-        </v-container>
-      </v-content>
+      <div>
+        <nuxt />
+      </div>
+          
       <v-footer
         color="#83ae26"
       >
