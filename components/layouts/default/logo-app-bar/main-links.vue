@@ -145,9 +145,6 @@
         font-family: 'Rubik-Medium', sans-serif
         font-weight: normal
 
-    #default-header-logo-links .layout-default__link-hover 
-        color: #7CAA1A
-        border-bottom: 2px solid #FFA800
     
     #defalut-layouts .layout-default__link
         text-decoration: none 
@@ -155,6 +152,11 @@
         font-size: 14px
         color: black
         position: relative
+
+    #defalut-layouts .layout-default__link-hover 
+        color: #7CAA1A
+        border-bottom: 2px solid #FFA800
+    
     
     #default-header-logo-links .layout-default__link-active
         color: #FFA800

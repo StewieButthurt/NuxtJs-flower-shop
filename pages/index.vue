@@ -5,6 +5,9 @@
 
     <app-services />
 
+    <app-links-with-images />
+
+
   </div>
 </template>
 
@@ -12,12 +15,14 @@
 
 const AppMainSlider = () => import('~/components/main-page/slider/index.vue')
 const AppServices = () => import('~/components/main-page/services/index.vue')
+const AppLinksWithImages = () => import('~/components/main-page/links-with-images/index.vue')
 
 
 export default {
   components: {
     AppMainSlider,
-    AppServices
+    AppServices,
+    AppLinksWithImages
   },
   head: {
     title: 'Цветочный магазин | Главная',

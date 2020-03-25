@@ -49,16 +49,18 @@
 </script>
 
 <style lang="sass">
+
     .main-sevices
         margin: 0 auto
         +size(10)
         display: flex
         justify-content: space-around
         flex-wrap: wrap
+        +size-xs(12)
     
     .main-sevices__item
         display: flex
-        align-items: start
+        align-items: flex-start
         justify-content: center
         padding-top: 53px
     
@@ -93,15 +95,15 @@
     .main-sevices__item-order-1
         +size(4)
         +size-lg(6)
-        +size-sm(12)
+        +size-ms(12)
     
     .main-sevices__item-order-2
         +size(4)
         +size-lg(6)
-        +size-sm(12)
+        +size-ms(12)
     
     .main-sevices__item-order-3
         +size(4)
         +size-lg(6)
-        +size-sm(12)
+        +size-ms(12)
 </style>

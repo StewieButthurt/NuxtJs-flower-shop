@@ -39,6 +39,8 @@
         +size(10)
         margin: 0 auto
         padding-top: 30px
+        +size-md(11)
+        +size-xs(12)
     
     #main-slider .v-carousel__controls__item .v-icon
         opacity: 1

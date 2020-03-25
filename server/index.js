@@ -17,17 +17,19 @@ const { Nuxt, Builder } = require('nuxt')
 const authRoutes = require('./routes/auth.routes');
 const productRoutes = require('./routes/product.routes');
 const formRoutes = require('./routes/form.routes');
+const menuRoutes = require('./routes/menu.routes');
 
 const app = express()
 
-mongoose.connect(keys.MONGO_URI)
+mongoose.connect(keys.MONGO_URI, 
+  { useNewUrlParser: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  })
   .then(() => console.log('MongoDB connected...'))
   .catch(error => console.log(error))
 
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true);
 
 app.use(passport.initialize())
 passport.use(passportStrategy)
@@ -52,6 +54,7 @@ app.use(apiLimiter)
 app.use('/api/auth', authRoutes)
 app.use('/api/product', productRoutes)
 app.use('/api/form', formRoutes)
+app.use('/api/menu', menuRoutes)
 
 
 // Import and Set Nuxt.js options
