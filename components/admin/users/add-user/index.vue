@@ -2,7 +2,8 @@
     <v-snackbar
         v-model="snackbar"
         multi-line
-        :color="changeColor"
+        :color="colorBckg"
+        left
     >
         {{ text }}
         <v-btn
@@ -23,17 +24,11 @@
         data() {
             return {
                 snackbar: false,
-                colorBtn: 'red'
+                colorBckg: '',
+                colorBtn: ''
             }
         },
         computed: {
-            changeColor() {
-                if(this.message === 'success') {
-                    return 'green darken-4'
-                } else {
-                    return 'error'
-                }
-            },
             text() {
                 if(this.message === 'success') {
                     return 'Новый пользователь добавлен'
@@ -48,10 +43,12 @@
             message(val) {
                 if(val === 'success') {
                     this.colorBtn = 'white'
+                    this.colorBckg = 'green darken-4'
                     this.snackbar = true
                 } else {
-                    this.snackbar = true
                     this.colorBtn = 'white'
+                    this.colorBckg = 'error'
+                    this.snackbar = true
                 }
             }
         }
@@ -59,5 +56,5 @@
 </script>
 
 <style lang="sass">
-
+    
 </style>
