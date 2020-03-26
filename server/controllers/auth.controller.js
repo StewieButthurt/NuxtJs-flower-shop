@@ -17,11 +17,11 @@ module.exports.login = async (req, res) => {
 			}, keys.JWT, {expiresIn: 60 * 60})
 			res.json({token})
 		} else {
-			res.status(404).json({
+			res.status(402).json({
 				message: 'The data you entered is not correct'})
 		}
 	} else {
-		res.status(404).json({
+		res.status(402).json({
 			message: 'The data you entered is not correct'})
 	}
 }
@@ -40,6 +40,6 @@ module.exports.createUser = async (req, res) => {
 		})
 
 		await user.save()
-		res.status(201).json(user)
+		res.status(201).json({message: 'success'})
 	}
 }

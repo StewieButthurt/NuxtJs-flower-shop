@@ -60,14 +60,23 @@
                     Сохранить
                 </v-btn>
             </v-row>
+            <app-snackbars 
+                :message="message"
+            />
         </v-container>
     </div>
 </template>
 
 <script>
+
+    const AppSnackbars = () => import('~/components/admin/product-menu/snackbars-for-menu.vue')
+
     export default {
         head: {
             title: 'Панель администратора | Добавление в меню'
+        },
+        components: {
+            AppSnackbars
         },
         async validate({ store, redirect, $axios }) {
             try {
@@ -119,7 +128,7 @@
                 }
             },
             async sendForm() {
-
+                this.message = false
                 if(this.checkFields) {
 
                     this.loading = true
@@ -149,6 +158,9 @@
                             console.log(error);
                         })
                 }
+            },
+            async changeScnackbar(value) {
+                this.snackbar = value
             }
         }
     }

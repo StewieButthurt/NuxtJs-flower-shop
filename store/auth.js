@@ -44,14 +44,6 @@ export const actions = {
 		commit('clearToken')
 		Cookies.remove('jwt-token')
 	},
-	async createUser({commit}, formData) {
-		try {
-			let response =  await this.$axios.$post('/api/auth/admin/create', formData)
-		} catch (e) {
-			commit('setError', e, { root: true })
-			throw e
-		}
-	},
 	autoLogin({dispatch}) {
 		const cookieStr = process.browser
 			? document.cookie

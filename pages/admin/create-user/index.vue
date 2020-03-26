@@ -65,6 +65,9 @@
               </v-card-actions>
           </v-col>
         </v-row>
+        <app-snackbars 
+          :message="message"
+        />
       </v-container>
     </div>
 </template>
@@ -73,6 +76,9 @@
     import isEmpty from 'validator/lib/isEmpty'
 	  import isAlphanumeric from 'validator/lib/isAlphanumeric'
     import isByteLength from 'validator/lib/isByteLength'
+
+    const AppSnackbars = () => import('~/components/admin/users/add-user/index.vue')
+
 
     export default {
         head: {
@@ -87,6 +93,9 @@
             }
         },
         layout: 'admin',
+        components: {
+          AppSnackbars
+        },
         data() {
             return {
                 login: '',
@@ -100,7 +109,8 @@
                 passwordValidate: false,
                 password: '',
                 password2: '',
-                loading: false
+                loading: false,
+                message: false
             }
         },
         computed: {
@@ -117,22 +127,35 @@
         },
         methods: {
             async createUser() {
-                if(this.passwordValidate === true && this.loginValidate === true) {
-                    this.loading = true
-                    try {
-                        const formData = {
-                            login: this.login,
-                            password: this.password
-                        }
+                this.message = false
 
-                        await this.$store.dispatch('auth/createUser', formData)
-                        this.message = 'The user successfully added!'
-                        this.login = ''
-                        this.password = ''
-                        this.loading = false
-                    } catch (e) {
-                        this.loading = false
+                if(this.passwordValidate === true && this.loginValidate === true) {
+                    let vm = this
+                    this.loading = true
+
+                    const formData = {
+                        login: this.login,
+                        password: this.password
                     }
+                    
+                    await this.$axios.$post('/api/auth/admin/create', formData)
+                      .then( function(response) {
+                          vm.message = response.message
+                          vm.login = ''
+                          vm.password = ''
+                          vm.password2 = ''
+                          vm.loading = false
+                      })
+                      .catch(function (error) {
+                            // handle error
+                            vm.message = 'error'
+                            vm.login = ''
+                            vm.password = ''
+                            vm.password2 = ''
+                            vm.loading = false
+                            console.log(error);
+                        })
+                    
                 }
             },
             inputLogin() {
