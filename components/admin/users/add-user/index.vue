@@ -25,29 +25,21 @@
             return {
                 snackbar: false,
                 colorBckg: '',
-                colorBtn: ''
-            }
-        },
-        computed: {
-            text() {
-                if(this.message === 'success') {
-                    return 'Новый пользователь добавлен'
-                } else if(this.message === 'error') {
-                    return 'Ой! Ошибка! Попробуйте снова!'
-                } else {
-                    return 'Упс! Что то пошло не так!'
-                }
+                colorBtn: '',
+                text: ''
             }
         },
         watch: {
             message(val) {
                 if(val === 'success') {
+                    this.text = 'Новый пользователь добавлен'
                     this.colorBtn = 'white'
-                    this.colorBckg = 'green darken-4'
+                    this.colorBckg = 'grey darken-4'
                     this.snackbar = true
-                } else {
+                } else if (val === 'error'){
+                    this.text = 'Упс! Что то пошло не так!'
                     this.colorBtn = 'white'
-                    this.colorBckg = 'error'
+                    this.colorBckg = 'grey darken-4'
                     this.snackbar = true
                 }
             }
