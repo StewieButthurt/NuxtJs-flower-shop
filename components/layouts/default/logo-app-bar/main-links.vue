@@ -2,8 +2,9 @@
     <span v-show="checkStatus">
         <nuxt-link 
             class="layout-default__link ml-10 main-links__link" 
-            no-prefetch 
-            :to="to"
+            no-prefetch
+            v-if="!absolutePatchStatus"
+            :to="link"
             active-class="layout-default__link-active"
             @mouseenter.native="$emit('changeIndex', index)"
             @mouseleave.native="$emit('changeIndex', false)"
@@ -11,6 +12,17 @@
             >
             {{title}}
           </nuxt-link>
+          <a 
+            class="layout-default__link ml-10 main-links__link" 
+            v-if="absolutePatchStatus"
+            :href="link"
+            active-class="layout-default__link-active"
+            @mouseenter="$emit('changeIndex', index)"
+            @mouseleave="$emit('changeIndex', false)"
+            :class="{'layout-default__link-hover' : index === globalIndex}"
+            >
+            {{title}}
+          </a>
     </span>
 </template>
 
@@ -19,12 +31,30 @@
         props: [
             'title',
             'index',
-            'to',
+            'link',
             'status',
             'globalIndex',
             'x'
         ],
         computed: {
+            absolutePatchStatus() {
+
+                let g = false
+
+                for(let i = 0;  i < this.link.length; i++) {
+                    if(this.link[i] === '.') {
+                        g = true
+                        
+                    }
+                }
+                
+                if(g) {
+                    return true
+                } else {
+                    return false
+                }
+
+            },
             checkStatus() {
                 if(this.index > 11) {
                     this.$store.dispatch('layouts-links/changeStatus', {

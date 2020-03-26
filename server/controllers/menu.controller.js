@@ -13,12 +13,22 @@ module.exports.create = async (req, res) => {
         const menu = new Menu({
             title: req.body.title,
             link: req.body.link,
-            count: req.body.count,
             status: req.body.status
         })
 
         await menu.save()
         res.status(201).json({
 			message: 'success'})
+    }
+}
+
+
+module.exports.getMenu = async (req, res) => {
+    try {
+        const menu = await Menu.find()
+        .collation({locale:'ru',strength: 2}).sort({title:1})
+        res.json(menu)
+    } catch(e) {
+        res.status(500).json(e)
     }
 }

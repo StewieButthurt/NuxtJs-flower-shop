@@ -28,26 +28,6 @@
                     ></v-text-field>
                 </v-col>
             </v-row>
-            <v-row align="center" justify="center" id="admin-add-menu__switcher">
-                <v-col cols="12" sm="9" md="7" align="center" justify="center" style="max-width: 700px" >
-                    <v-switch
-                        v-model="toEnd"
-                        class="mr-5"
-                        label="Добавить в конец меню"
-                    ></v-switch>
-                </v-col>
-            </v-row>
-            <v-row align="center" justify="center">
-                <v-col cols="12" sm="9" md="7">
-                    <v-text-field 
-                        :disabled="toEnd"
-                        prepend-inner-icon="mdi-counter"
-                        label="Добавить пункт под номером"
-                        v-model="numberLink"
-                        @blur="changeNumberLink()"
-                    ></v-text-field>
-                </v-col>
-            </v-row>
             <v-row align="center" justify="center">
                 <v-btn 
                     @click="sendForm()" 
@@ -95,8 +75,6 @@
             return {
                 title: '',
                 link: '',
-                toEnd: true,
-                numberLink: 1,
                 loading: false,
                 message: false,
                 text: '',
@@ -130,26 +108,9 @@
                 } else {
                     return false
                 }
-            },
-            checkNumberLink() {
-                if(!this.toEnd) {
-                    return this.numberLink
-                } else {
-                    return false
-                }
             }
         },
         methods: {
-            async changeNumberLink() {
-                this.numberLink = Number(this.numberLink)
-                if(this.numberLink || 
-                    this.numberLink > 1 
-                    ) {
-                    return this.numberLink 
-                } else {
-                    return this.numberLink = 1
-                }
-            },
             async sendForm() {
                 this.message = false
                 if(this.checkFields) {
@@ -159,7 +120,6 @@
                     const formData = {
                         title: this.title,
                         link: this.link,
-                        count: this.checkNumberLink ? this.checkNumberLink : false,
                         status: false
                     }
 
@@ -168,7 +128,6 @@
                                 vm.message = response.message
                                 vm.title = ''
                                 vm.link = ''
-                                vm.numberLink = 1
                                 vm.loading = false
                         })
                         .catch(function (error) {
@@ -176,7 +135,6 @@
                             vm.message = 'error'
                             vm.title = ''
                             vm.link = ''
-                            vm.numberLink = 1
                             vm.loading = false
                             console.log(error);
                         })

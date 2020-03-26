@@ -30,6 +30,12 @@ export default {
       {hid: 'homepage-description', name: 'description', content: 'Лучший интернет-магазин в котором вы найдете нужные товары по низким ценам. Купите цветы и инструменты для дачи и дома.'},
       {hid: 'homepage-keywords', name: 'keywords', content: 'цветы, цветочный магазин, интернет магазин, аксессуары, саженцы'}
     ]
+  },
+  async fetch ({ store, $axios}) {
+    if(store.getters['layouts-links/mainLinks'].length === 0) {
+      let menu = await $axios.$get('/api/menu')
+      store.commit('layouts-links/setMainLinks', menu)
+    }
   }
 }
 </script>

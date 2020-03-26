@@ -1,31 +1,5 @@
 export const state = () => ({
-	mainLinks: [
-        {
-            title: 'Акции и скидки',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Доставка и оплата',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Наш полезный блог',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'О нас',
-            to: '#',
-            status: false
-        },
-        {
-            title: 'Помощь',
-            to: '#',
-            status: false
-        }
-    ],
+	mainLinks: [],
     categories: [
         {
             title: 'Уход за растениями',
@@ -86,6 +60,9 @@ export const mutations = {
     },
     changeCategoriesStatus(state, {status, index}) {
         state.categories[index].status = status
+    },
+    setMainLinks(state, menu) {
+        state.mainLinks = menu
     }
 }
 

@@ -12,12 +12,12 @@
         <div class="default__logo">
           logo
         </div>
-        <div id="default__menu-settings" style="width: 100%; height: 23px; overflow: hidden">
+        <div  id="default__menu-settings" style="width: 100%; height: 23px; overflow: hidden">
           <app-main-links 
             v-for="(item, index) in mainLinks"
             :key="item.index"
             :title="item.title"
-            :to="item.to"
+            :link="item.link"
             :status="item.status"
             :index="index"
             :globalIndex="globalIndex"
@@ -41,7 +41,7 @@
               <v-list-item
                 v-for="(item, index) in falseMaimLinks"
                 :key="index"
-                @click="$router.push(item.to)"
+                @click="$router.push(item.link)"
               >
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
