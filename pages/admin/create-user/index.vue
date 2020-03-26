@@ -66,7 +66,11 @@
           </v-col>
         </v-row>
         <app-snackbars 
-          :message="message"
+          :snackbar="snackbar"
+          :text="text"
+          :colorBckg="colorBckg"
+          :colorBtn="colorBtn"
+          @changeSnackbar="changeSnackbar"
         />
       </v-container>
     </div>
@@ -77,7 +81,7 @@
 	  import isAlphanumeric from 'validator/lib/isAlphanumeric'
     import isByteLength from 'validator/lib/isByteLength'
 
-    const AppSnackbars = () => import('~/components/admin/users/add-user/index.vue')
+    const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
 
 
     export default {
@@ -110,7 +114,11 @@
                 password: '',
                 password2: '',
                 loading: false,
-                message: false
+                message: false,
+                text: '',
+                colorBtn: '',
+                colorBckg: '',
+                snackbar: false
             }
         },
         computed: {
@@ -123,6 +131,21 @@
                   } else {
                       return false
                   }
+            }
+        },
+        watch: {
+            message(val) {
+                if(val === 'success') {
+                    this.text = 'Новый пользователь добавлен'
+                    this.colorBtn = 'white'
+                    this.colorBckg = 'grey darken-4'
+                    this.snackbar = true
+                } else if(val === 'error'){
+                    this.text = 'Упс! Что то пошло не так!'
+                    this.colorBtn = 'white'
+                    this.colorBckg = 'grey darken-4'
+                    this.snackbar = true
+                }
             }
         },
         methods: {
@@ -158,7 +181,7 @@
                     
                 }
             },
-            inputLogin() {
+            async inputLogin() {
               if(!isEmpty(this.login)) {
                 this.loginError = null
                 this.loginErrorDescr = ''
@@ -185,7 +208,7 @@
                 this.loginValidate = false
               }
             },
-            inputPassword() {
+            async inputPassword() {
               if(!isEmpty(this.password)) {
                 this.passwordError = null
                 this.passwordErrorDescr = ''
@@ -211,6 +234,9 @@
                 this.passwordError = true
                 this.passwordValidate = false
               }
+            },
+            async changeSnackbar(value) {
+                this.snackbar = value
             }
         }
     }

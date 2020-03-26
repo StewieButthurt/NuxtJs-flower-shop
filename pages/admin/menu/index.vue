@@ -61,7 +61,11 @@
                 </v-btn>
             </v-row>
             <app-snackbars 
-                :message="message"
+                :snackbar="snackbar"
+                :text="text"
+                :colorBckg="colorBckg"
+                :colorBtn="colorBtn"
+                @changeSnackbar="changeSnackbar"
             />
         </v-container>
     </div>
@@ -69,7 +73,7 @@
 
 <script>
 
-    const AppSnackbars = () => import('~/components/admin/product-menu/snackbars-for-menu.vue')
+    const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
 
     export default {
         head: {
@@ -94,7 +98,26 @@
                 toEnd: true,
                 numberLink: 1,
                 loading: false,
-                message: false
+                message: false,
+                text: '',
+                colorBtn: '',
+                colorBckg: '',
+                snackbar: false
+            }
+        },
+        watch: {
+            message(val) {
+                if(val === 'success') {
+                    this.text = 'Добавлен новый пункт меню'
+                    this.colorBtn = 'white'
+                    this.colorBckg = 'grey darken-4'
+                    this.snackbar = true
+                } else if(val === 'error'){
+                    this.text = 'Упс! Что то пошло не так!'
+                    this.colorBtn = 'white'
+                    this.colorBckg = 'grey darken-4'
+                    this.snackbar = true
+                }
             }
         },
         computed: {
@@ -159,7 +182,7 @@
                         })
                 }
             },
-            async changeScnackbar(value) {
+            async changeSnackbar(value) {
                 this.snackbar = value
             }
         }
