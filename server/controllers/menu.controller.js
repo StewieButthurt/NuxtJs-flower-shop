@@ -22,6 +22,25 @@ module.exports.create = async (req, res) => {
     }
 }
 
+module.exports.edit = async (req, res) => {
+
+    const $set = {
+        title: req.body.title,
+        link: req.body.link,
+        status: req.body.status     
+    }
+
+    try {
+        let menu = await Menu.findByIdAndUpdate({ _id: req.body.id },
+            {$set}
+            )
+            res.status(201).json({
+                message: 'success'})
+    } catch(e) {
+        res.status(500).json(e)
+    }
+}
+
 
 module.exports.getMenu = async (req, res) => {
     try {

@@ -18,11 +18,21 @@
                     </v-list-item>
                     <v-list-item nuxt to="/admin/menu/">
                     <v-list-item-action>
-                        <v-icon>mdi-menu-open</v-icon>
+                        <v-icon>mdi-playlist-plus</v-icon>
                     </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>
                                     Добавление в меню
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item nuxt to="/admin/menu-edit/">
+                    <v-list-item-action>
+                        <v-icon>mdi-playlist-edit</v-icon>
+                    </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>
+                                    Редактирование меню
                             </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>

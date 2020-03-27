@@ -1,10 +1,10 @@
 <template>
-    <div class="admin-add-menu">
+    <div class="admin-edit-on-menu">
         <v-container fluid align-center>
             <v-row>
                 <v-col>
                     <div class="font-weight-bold title text-center">
-                        Добавление нового пункта в меню
+                        Редактирование пункта меню
                     </div>
                 </v-col>
             </v-row>
@@ -14,7 +14,7 @@
                     style="max-width: 700px" 
                     prepend-inner-icon="mdi-format-title"
                     label="Название пункта меню"
-                    v-model="title"
+                    v-model="localTitle"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -24,11 +24,18 @@
                     style="max-width: 700px" 
                     prepend-inner-icon="mdi-link"
                     label="Ссылка"
-                    v-model="link"
+                    v-model="localLink"
                     ></v-text-field>
                 </v-col>
             </v-row>
             <v-row align="center" justify="center">
+                <v-btn class="mx-2 mt-5" 
+                    dark
+                    @click="$router.back()"
+                    >
+                    <v-icon dark left>mdi-arrow-left</v-icon>
+                    Назад
+                </v-btn>
                 <v-btn 
                     @click="sendForm()" 
                     class="mx-2 mt-5" 
@@ -55,9 +62,10 @@
 
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
 
+
     export default {
         head: {
-            title: 'Панель администратора | Добавление в меню'
+            title: 'Панель администратора | Редактирование меню'
         },
         components: {
             AppSnackbars
@@ -70,11 +78,21 @@
                 redirect('/login?message=login')
             }
         },
+        async fetch ({ store, $axios}) {
+
+            let menu = await $axios.$get('/api/menu')
+            store.commit('layouts-links/setMainLinks', menu)
+            
+        },
         layout: 'admin',
+        async mounted() {
+            this.localTitle = this.title
+            this.localLink = this.link
+        },
         data() {
             return {
-                title: '',
-                link: '',
+                localTitle: '',
+                localLink: '',
                 loading: false,
                 message: false,
                 text: '',
@@ -83,10 +101,31 @@
                 snackbar: false
             }
         },
+        computed: {
+            menu() {
+                return this.$store.getters['localStorage/menu']
+            },
+            title() {
+                return this.menu.title
+            },
+            link() {
+                return this.menu.link
+            },
+            checkFields() {
+                if( this.localTitle !== '' &&
+                    this.localLink !== '' 
+                ) 
+                {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        },
         watch: {
             message(val) {
                 if(val === 'success') {
-                    this.text = 'Добавлен новый пункт меню'
+                    this.text = 'Пункт изменен'
                     this.colorBtn = 'white'
                     this.colorBckg = 'grey darken-4'
                     this.snackbar = true
@@ -96,18 +135,12 @@
                     this.colorBckg = 'grey darken-4'
                     this.snackbar = true
                 }
-            }
-        },
-        computed: {
-            checkFields() {
-                if( this.title !== '' &&
-                    this.link !== '' 
-                ) 
-                {
-                    return true
-                } else {
-                    return false
-                }
+            },
+            title(val) {
+                this.localTitle = val
+            },
+            link(val) {
+                this.localLink = val
             }
         },
         methods: {
@@ -119,23 +152,22 @@
                     this.loading = true
                     let vm = this
                     const formData = {
-                        title: this.title,
-                        link: this.link,
+                        title: this.localTitle,
+                        link: this.localLink,
+                        id: this.menu.id,
                         status: false
                     }
 
-                    await this.$axios.$post('/api/menu/create', formData)
-                        .then(function (response) {
+                    await this.$axios.$post('/api/menu/edit', formData)
+                        .then(async function (response) {
                                 vm.message = response.message
-                                vm.title = ''
-                                vm.link = ''
                                 vm.loading = false
+
+                                await vm.$store.dispatch('localStorage/setMenu', formData)
                         })
                         .catch(function (error) {
                             // handle error
                             vm.message = 'error'
-                            vm.title = ''
-                            vm.link = ''
                             vm.loading = false
                             console.log(error);
                         })
@@ -149,6 +181,5 @@
 </script>
 
 <style lang="sass">
-    #admin-add-menu__switcher .v-input--selection-controls
-        margin-top: 0px
+
 </style>
