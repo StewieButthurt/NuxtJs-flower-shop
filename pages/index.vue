@@ -36,6 +36,11 @@ export default {
       let menu = await $axios.$get('/api/menu')
       store.commit('layouts-links/setMainLinks', menu)
     }
+
+    if(store.getters['layouts-links/categories'].length === 0) {
+      let categories = await $axios.$get('/api/categories')
+      store.commit('layouts-links/setCategories', categories)
+    }
   }
 }
 </script>

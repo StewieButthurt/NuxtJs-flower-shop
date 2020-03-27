@@ -1,57 +1,6 @@
 export const state = () => ({
 	mainLinks: [],
-    categories: [
-        {
-            title: 'Уход за растениями',
-            to: "#",
-            status: false
-        },
-        {
-            title: 'Инструмент и инвентарь',
-            to: "#",
-            status: false
-        },
-        {
-            title: 'Наши услуги',
-            to: "#",
-            status: false
-        },
-        {
-            title: 'Садовая техника',
-            to: "#",
-            status: false
-        },
-        {
-            title: 'Садовый декор',
-            to: "#",
-            status: false
-        },
-        {
-            title: 'Саженцы',
-            to: "#",
-            status: false
-        },
-        {
-            title: 'Биопрепараты',
-            to: "#",
-            status: false
-        },
-        {
-            title: 'Инструмент и инвентарь',
-            to: "#",
-            status: false
-        },
-        {
-            title: 'Инструмент и инвентарь',
-            to: "#",
-            status: false
-        },
-        {
-            title: 'инструмент и инвентарь',
-            to: "#",
-            status: false
-        }
-    ]   
+    categories: []   
 })
 
 export const mutations = {
@@ -63,6 +12,9 @@ export const mutations = {
     },
     setMainLinks(state, menu) {
         state.mainLinks = menu
+    },
+    setCategories(state, categories) {
+        state.categories = categories
     }
 }
 

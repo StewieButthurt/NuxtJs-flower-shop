@@ -1,7 +1,6 @@
 const Menu = require('../models/menu.model')
 const request = require('request');
 const fs = require('fs');
-const Axios = require('axios').default;
 
 module.exports.create = async (req, res) => {
     const paragraph = await Menu.findOne({title: req.body.title})

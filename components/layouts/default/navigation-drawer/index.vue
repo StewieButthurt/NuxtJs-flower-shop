@@ -7,40 +7,30 @@
         light
       >
         <v-list>
-          <v-list-item
-            v-for="(item, i) in links"
-            :key="i"
-            :to="item.to"
-            router
-            exact
-            
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="#">
-            <v-list-item-content>
-              <v-list-item-title v-text="'Каталог'" />
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item
+          <app-redirect 
+            v-for="(item, index) in links"
+            :key="item.title"
+            :index="index"
+            :link="item.link"
+            :title="item.title"
+          />
+          <app-redirect 
+            key="Каталог"
+            link="#"
+            title="Каталог"
+          />
+          <app-redirect 
             v-for="(item, index) in mainLinks"
             :key="item.title"
             :index="index"
-            :to="item.to"
-            router
-            exact
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item to="#">
-            <v-list-item-content>
-              <v-list-item-title v-text="'Заказать звонок'" />
-            </v-list-item-content>
-          </v-list-item>
+            :link="item.link"
+            :title="item.title"
+          />
+          <app-redirect 
+            key="Заказать звонок"
+            link="#"
+            title="Заказать звонок"
+          />
           <v-list-item>
             <div style="display: flex; align-items: center">
               <span style="text-decoration: underline">+7 (977) 537-23-69</span>
@@ -51,6 +41,9 @@
 </template>
 
 <script>
+
+    const AppRedirect = () => import('~/components/layouts/default/navigation-drawer/redirect.vue')
+
     export default {
         async mounted() {
             this.localDrawer = this.drawer
@@ -59,9 +52,8 @@
             return {
                 links: [
                     {
-                    icon: 'mdi-home',
                     title: 'Главная',
-                    to: '/'
+                    link: '/'
                     }
                 ],
                 localDrawer: false
@@ -71,6 +63,9 @@
             'drawer',
             'mainLinks'
         ],
+        components: {
+          AppRedirect
+        },
         watch: {
             localDrawer(val) {
                 this.$emit('changeDrawer', val)

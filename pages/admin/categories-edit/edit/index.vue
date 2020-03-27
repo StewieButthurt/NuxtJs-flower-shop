@@ -1,13 +1,10 @@
-!<template>
-    <div class="admin-categories">
-        <v-container
-            class="fill-height"
-            fluid
-        >
+<template>
+    <div class="admin-edit-on-categories">
+        <v-container fluid align-center>
             <v-row>
                 <v-col>
                     <div class="font-weight-bold title text-center">
-                        Добавление новой категории
+                        Редактирование категорий
                     </div>
                 </v-col>
             </v-row>
@@ -16,12 +13,19 @@
                     <v-text-field
                     style="max-width: 700px" 
                     prepend-inner-icon="mdi-format-title"
-                    label="Название категории"
-                    v-model="title"
+                    label="Название пункта меню"
+                    v-model="localTitle"
                     ></v-text-field>
                 </v-col>
             </v-row>
             <v-row align="center" justify="center">
+                <v-btn class="mx-2 mt-5" 
+                    dark
+                    @click="$router.back()"
+                    >
+                    <v-icon dark left>mdi-arrow-left</v-icon>
+                    Назад
+                </v-btn>
                 <v-btn 
                     @click="sendForm()" 
                     class="mx-2 mt-5" 
@@ -45,13 +49,13 @@
 </template>
 
 <script>
-    
+
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
 
+
     export default {
-        layout: 'admin',
         head: {
-            title: 'Панель администратора | Категории товаров'
+            title: 'Панель администратора | Редактирование категорий'
         },
         components: {
             AppSnackbars
@@ -64,9 +68,19 @@
                 redirect('/login?message=login')
             }
         },
+        async fetch ({ store, $axios}) {
+
+            let categories = await $axios.$get('/api/categories')
+            store.commit('layouts-links/setCategories', categories)
+            
+        },
+        layout: 'admin',
+        async mounted() {
+            this.localTitle = this.title
+        },
         data() {
             return {
-                title: '',
+                localTitle: '',
                 loading: false,
                 message: false,
                 text: '',
@@ -75,15 +89,25 @@
                 snackbar: false
             }
         },
+        computed: {
+            categories() {
+                return this.$store.getters['localStorage/categories']
+            },
+            title() {
+                return this.categories.title
+            },
+            checkFields() {
+                if( this.localTitle !== '') {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        },
         watch: {
             message(val) {
                 if(val === 'success') {
-                    this.text = 'Добавлена новая категория'
-                    this.colorBtn = 'white'
-                    this.colorBckg = 'grey darken-4'
-                    this.snackbar = true
-                } else if( val === 'busy') {
-                    this.text = 'Такая категория уже существует'
+                    this.text = 'Категория изменена'
                     this.colorBtn = 'white'
                     this.colorBckg = 'grey darken-4'
                     this.snackbar = true
@@ -93,15 +117,9 @@
                     this.colorBckg = 'grey darken-4'
                     this.snackbar = true
                 }
-            }
-        },
-        computed: {
-            checkFields() {
-                if( this.title !== '' ) {
-                    return true
-                } else {
-                    return false
-                }
+            },
+            title(val) {
+                this.localTitle = val
             }
         },
         methods: {
@@ -113,20 +131,21 @@
                     this.loading = true
                     let vm = this
                     const formData = {
-                        title: this.title,
+                        title: this.localTitle,
+                        id: this.categories.id,
                         status: false
                     }
 
-                    await this.$axios.$post('/api/categories/create', formData)
-                        .then(function (response) {
+                    await this.$axios.$post('/api/categories/edit', formData)
+                        .then(async function (response) {
                                 vm.message = response.message
-                                vm.title = ''
                                 vm.loading = false
+
+                                await vm.$store.dispatch('localStorage/setCategories', formData)
                         })
                         .catch(function (error) {
                             // handle error
                             vm.message = 'error'
-                            vm.title = ''
                             vm.loading = false
                             console.log(error);
                         })

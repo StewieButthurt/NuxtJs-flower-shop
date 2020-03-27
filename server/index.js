@@ -18,6 +18,7 @@ const authRoutes = require('./routes/auth.routes');
 const productRoutes = require('./routes/product.routes');
 const formRoutes = require('./routes/form.routes');
 const menuRoutes = require('./routes/menu.routes');
+const categoriesRoutes = require('./routes/categories.routes');
 
 const app = express()
 
@@ -55,6 +56,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/product', productRoutes)
 app.use('/api/form', formRoutes)
 app.use('/api/menu', menuRoutes)
+app.use('/api/categories', categoriesRoutes)
 
 
 // Import and Set Nuxt.js options

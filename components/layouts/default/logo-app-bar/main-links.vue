@@ -15,6 +15,7 @@
           <a 
             class="layout-default__link ml-10 main-links__link" 
             v-if="absolutePatchStatus"
+            target="_blank"
             :href="link"
             active-class="layout-default__link-active"
             @mouseenter="$emit('changeIndex', index)"

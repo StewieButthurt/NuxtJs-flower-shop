@@ -36,13 +36,23 @@
                             </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item nuxt to="/admin/categories">
+                    <v-list-item nuxt to="/admin/categories/">
                     <v-list-item-action>
-                        <v-icon>mdi-format-list-bulleted</v-icon>
+                        <v-icon>mdi-playlist-plus</v-icon>
                     </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>
-                                    Категории товаров
+                                    Добавление категорий
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item nuxt to="/admin/categories-edit/">
+                    <v-list-item-action>
+                        <v-icon>mdi-playlist-edit</v-icon>
+                    </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>
+                                    Редактирование категорий
                             </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>

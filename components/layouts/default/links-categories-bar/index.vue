@@ -12,7 +12,7 @@
                 v-for="(item, index) in categories"
                 :key="index"
                 :index="index"
-                :to="item.to"
+                :to="item.link"
                 :title="item.title"
                 :status="item.status"
                 :globalIndex="globalIndex"
@@ -39,7 +39,7 @@
                 <v-list-item
                     v-for="(item, index) in falseCategoriesLinks"
                     :key="index"
-                    @click="$router.push(item.to)"
+                    @click="$router.push(item.link)"
                 >
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
