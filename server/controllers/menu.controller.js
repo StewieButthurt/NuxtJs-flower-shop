@@ -40,6 +40,16 @@ module.exports.edit = async (req, res) => {
     }
 }
 
+module.exports.remove = async (req, res) => {
+    try {
+        let menu = await Menu.deleteOne({ _id: req.body.id })
+        res.status(200).json({
+            message: 'delete-success'})
+    } catch (e) {
+        res.status(500).json(e)
+    }
+}
+
 
 module.exports.getMenu = async (req, res) => {
     try {

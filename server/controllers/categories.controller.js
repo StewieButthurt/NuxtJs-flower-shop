@@ -7,8 +7,8 @@ module.exports.create = async (req, res) => {
     const category = await Categories.findOne({title: req.body.title})
 
     if(category) {
-        res.status(409).json({
-			message: 'This categories is already used'})
+        res.status(200).json({
+			message: 'busy'})
     } else {
         let link = req.body.title;
 
@@ -43,7 +43,7 @@ module.exports.edit = async (req, res) => {
     }
 
     try {
-        let menu = await Categories.findByIdAndUpdate({ _id: req.body.id },
+        let category = await Categories.findByIdAndUpdate({ _id: req.body.id },
             {$set}
             )
             res.status(201).json({
@@ -53,10 +53,19 @@ module.exports.edit = async (req, res) => {
     }
 }
 
+module.exports.remove = async (req, res) => {
+    try {
+        let categories = await Categories.deleteOne({ _id: req.body.id })
+        res.status(200).json({
+            message: 'delete-success'})
+    } catch (e) {
+        res.status(500).json(e)
+    }
+}
 
 module.exports.getCategories = async (req, res) => {
     try {
-        const categories = await Categories.find()
+        let categories = await Categories.find()
         .collation({locale:'ru',strength: 2}).sort({title:1})
         res.json(categories)
     } catch(e) {

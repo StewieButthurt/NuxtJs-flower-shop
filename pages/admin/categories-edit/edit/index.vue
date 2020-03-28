@@ -36,7 +36,22 @@
                         <v-icon class="mr-2">mdi-content-save</v-icon>
                     Сохранить
                 </v-btn>
+                <v-btn 
+                    @click="dialog = true" 
+                    class="mx-2 mt-5" 
+                    color="error" 
+                    :disabled="!checkFields"
+                    :loading="loadingDelete" 
+                    >
+                        <v-icon class="mr-2">mdi-delete</v-icon>
+                    Удалить
+                </v-btn>
             </v-row>
+            <app-dialogs 
+                :dialog="dialog"
+                :dialogText="dialogText"
+                @changeDialog="changeDialog"
+            /> 
             <app-snackbars 
                 :snackbar="snackbar"
                 :text="text"
@@ -51,6 +66,8 @@
 <script>
 
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
+    const AppDialogs = () => import('~/components/alerts/dialogs-delete/index.vue')
+
 
 
     export default {
@@ -58,7 +75,8 @@
             title: 'Панель администратора | Редактирование категорий'
         },
         components: {
-            AppSnackbars
+            AppSnackbars,
+            AppDialogs
         },
         async validate({ store, redirect, $axios }) {
             try {
@@ -86,7 +104,12 @@
                 text: '',
                 colorBtn: '',
                 colorBckg: '',
-                snackbar: false
+                snackbar: false,
+                dialog: false,
+                loadingDelete: false,
+                dialogText: 'Удалить этот пункт меню?',
+                status: null
+
             }
         },
         computed: {
@@ -111,6 +134,11 @@
                     this.colorBtn = 'white'
                     this.colorBckg = 'grey darken-4'
                     this.snackbar = true
+                } else if(val === 'delete-success') {
+                    this.text = 'Категория успешно удалена! Переадресация...'
+                    this.colorBtn = 'white'
+                    this.colorBckg = 'grey darken-4'
+                    this.snackbar = true
                 } else if(val === 'error'){
                     this.text = 'Упс! Что то пошло не так!'
                     this.colorBtn = 'white'
@@ -120,6 +148,11 @@
             },
             title(val) {
                 this.localTitle = val
+            },
+            async status(val) {
+                if(val === true) {
+                    await this.deleteForm()
+                }
             }
         },
         methods: {
@@ -151,8 +184,36 @@
                         })
                 }
             },
+            async deleteForm() {
+                this.message = false
+                this.snackbar = false
+
+                this.loadingDelete = true
+                let vm = this
+
+                await this.$axios.$delete('/api/categories/delete', { data: { id: this.categories.id}})
+                    .then(async function (response) {
+                            vm.message = response.message
+                            vm.loading = false
+
+                            setTimeout(vm.redirectMenuEdit, 2000)
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        vm.message = 'error'
+                        vm.loading = false
+                        console.log(error);
+                    })
+            },
             async changeSnackbar(value) {
                 this.snackbar = value
+            },
+            async redirectMenuEdit() {
+                this.$router.push('/admin/categories-edit/')
+            },
+            async changeDialog({status}) {
+                this.dialog = false
+                this.status = status
             }
         }
     }

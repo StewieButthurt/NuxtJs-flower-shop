@@ -78,7 +78,7 @@
         watch: {
             message(val) {
                 if(val === 'success') {
-                    this.text = 'Добавлена новая категория'
+                    this.text = 'Добавлена новая категория!'
                     this.colorBtn = 'white'
                     this.colorBckg = 'grey darken-4'
                     this.snackbar = true
