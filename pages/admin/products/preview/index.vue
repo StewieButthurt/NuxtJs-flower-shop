@@ -105,6 +105,7 @@
                         </div>
                         <v-btn
                             color="#7CAA1A"
+                            :disabled="true"
                             class="white--text preview__descr__buttons-card mt-5"
                         >
                             <v-icon class="mr-3" size="24px" right dark>mdi-cart-outline</v-icon>
@@ -139,6 +140,30 @@
                     </div>
                 </transition>
             </div>
+            <v-row justify="center" align="center">
+                <v-btn class="mx-2 mt-5" 
+                    dark
+                    @click="$router.back()"
+                    >
+                    <v-icon dark left>mdi-arrow-left</v-icon>
+                    Назад
+                </v-btn>
+                <v-btn class="mx-2 mt-5" 
+                    color="teal"
+                    :loading="loading"
+                    @click="sendForm()"
+                    >
+                        <v-icon class="mr-2">mdi-content-save</v-icon>
+                        Сохранить
+                </v-btn>
+            </v-row>
+            <app-snackbars 
+                :snackbar="snackbar"
+                :text="text"
+                :colorBckg="colorBckg"
+                :colorBtn="colorBtn"
+                @changeSnackbar="changeSnackbar"
+            />
         </div>
     </div>
                 
@@ -150,6 +175,8 @@
     const AppProductPreviewImages = () => import('~/components/admin/product-preview-images/index.vue')
     const AppPreviewFieldWithImage = () => import('~/components/admin/product-other-field-with-image/preview-field-with-image.vue')
     const AppPreviewCharacteristics = () => import('~/components/admin/product-characteristics/preview-characteristics.vue')
+    const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
+
 
     export default {
         layout: 'admin',
@@ -161,7 +188,8 @@
             AppProductOtherField,
             AppProductPreviewImages,
             AppPreviewFieldWithImage,
-            AppPreviewCharacteristics
+            AppPreviewCharacteristics,
+            AppSnackbars
         },
         middleware: 'checkData',
         async mounted() {
@@ -180,7 +208,13 @@
                 right: 0,
                 resultSize: 'cover',
                 vtabDescr: true,
-                vtabReviews: false
+                vtabReviews: false,
+                text: '',
+                colorBtn: '',
+                colorBckg: '',
+                snackbar: false,
+                message: false,
+                loading: false
             }
         },
         computed: {
@@ -225,10 +259,51 @@
             },
             otherFieldImage() {
                 return this.$store.getters['add-product/otherFieldImage']
+            },
+            categories() {
+                return this.$store.getters['add-product/categories']
             }
+
 
         },
         methods: {
+            async sendForm() {
+                this.message = false
+                this.snackbar = false
+
+                this.loading = true
+                let vm = this
+                const formData = {
+                    title: this.title,
+                    price: this.price,
+                    descr: this.descr,
+                    article: this.article,
+                    categories: this.categories,
+                    discountStatus: this.discountStatus,
+                    sizeDiscount: this.sizeDiscount,
+                    newFields: this.newFields,
+                    other: this.other,
+                    stock: this.stock,
+                    bestseller: this.bestseller,
+                    weekPrice: this.weekPrice,
+                    images: this.images,
+                    otherFieldImage: this.otherFieldImage
+                }
+
+                await this.$axios.$post('/api/product/create', formData)
+                    .then(async function (response) {
+                            vm.message = response.message
+                            vm.loading = false
+
+                            // setTimeout(vm.redirectMenuEdit, 2000)
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        vm.message = 'error'
+                        vm.loading = false
+                        console.log(error);
+                    })
+            },
             async getImages() {
                 await this.$store.dispatch('image-preview/getImage')
             },
@@ -275,6 +350,27 @@
             async clickReviews() {
                 this.vtabDescr = false
                 this.vtabReviews = true
+            },
+            async changeSnackbar(value) {
+                this.snackbar = value
+            },
+            async redirectMenuEdit() {
+                this.$router.push('/admin/products/')
+            },
+        },
+        watch: {
+            message(val) {
+                if(val === 'success') {
+                    this.text = 'Товар добавлен'
+                    this.colorBtn = 'white'
+                    this.colorBckg = 'grey darken-4'
+                    this.snackbar = true
+                } else if(val === 'error'){
+                    this.text = 'Упс! Что то пошло не так!'
+                    this.colorBtn = 'white'
+                    this.colorBckg = 'grey darken-4'
+                    this.snackbar = true
+                }
             }
         }
     }

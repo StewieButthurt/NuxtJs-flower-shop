@@ -13,7 +13,8 @@ export const state = () => ({
     stock: false,
     bestseller: false,
     weekPrice: false,
-    otherFieldImage: []
+    otherFieldImage: [],
+    categories: []
 })
 
 export const mutations = {
@@ -123,6 +124,9 @@ export const mutations = {
     },
     updateOtherFieldImageTitle(state, {title, globalIndex, index}) {
         state.otherFieldImage[globalIndex].info[index].title = title
+    },
+    setCategories(state, value) {
+        state.categories = value
     }
 }
 
@@ -217,6 +221,9 @@ export const actions = {
     },
     async updateOtherFieldImageTitle({commit}, {title, globalIndex, index}) {
         commit('updateOtherFieldImageTitle', {title, globalIndex, index})
+    },
+    async setCategories({commit}, value) {
+        commit('setCategories', value)
     }
 }
 
@@ -234,5 +241,6 @@ export const getters = {
     stock: state => state.stock,
     bestseller: state => state.bestseller,
     weekPrice: state => state.weekPrice,
-    otherFieldImage: state => state.otherFieldImage
+    otherFieldImage: state => state.otherFieldImage,
+    categories: state => state.categories
 }

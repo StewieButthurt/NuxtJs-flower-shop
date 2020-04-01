@@ -66,6 +66,18 @@
                                             </v-list-item-title>
                                         </v-list-item-content>
                                     </v-list-item>
+                                    <div id="admin-expansion-panels-elem-icon">
+                                        <v-list-item nuxt to="/admin/categories-with-image/">
+                                            <v-list-item-content>
+                                                <v-list-item-title style="align-items: center; display: flex;">
+                                                        С картинками
+                                                        <v-list-item-action>
+                                                            <v-icon class="ml-3">mdi-plus</v-icon>
+                                                        </v-list-item-action>
+                                                </v-list-item-title>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </div>
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
                             <v-expansion-panel>
@@ -166,6 +178,12 @@
 
 <style lang="sass">
 
+    #inspire
+        font-family: "Rubik-Regular", sans-serif
+
+    #inspire .v-content__wrap
+        max-width: 1920px
+        
     #inspire .v-footer--fixed
         z-index: 7
     
@@ -203,4 +221,7 @@
     #admin-expansion-panels-on-elem
         border-top: thin solid
         border-color: rgba(0, 0, 0, 0.12)
+    
+    #admin-expansion-panels-elem-icon .v-list-item__action
+        margin: 0 
 </style>

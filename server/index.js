@@ -19,6 +19,7 @@ const productRoutes = require('./routes/product.routes');
 const formRoutes = require('./routes/form.routes');
 const menuRoutes = require('./routes/menu.routes');
 const categoriesRoutes = require('./routes/categories.routes');
+const categoriesWithImage = require('./routes/categoriesWithImage.routes');
 
 const app = express()
 
@@ -57,6 +58,7 @@ app.use('/api/product', productRoutes)
 app.use('/api/form', formRoutes)
 app.use('/api/menu', menuRoutes)
 app.use('/api/categories', categoriesRoutes)
+app.use('/api/categories-with-image', categoriesWithImage)
 
 
 // Import and Set Nuxt.js options

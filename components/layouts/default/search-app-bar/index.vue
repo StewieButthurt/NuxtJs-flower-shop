@@ -107,7 +107,7 @@
               </g>
             </g>
           </svg>
-          <nuxt-link to="/" no-prefetch  class="ml-5 search-app-bar__button-link">Личный кабинет</nuxt-link >
+          <nuxt-link to="/admin/home" no-prefetch  class="ml-5 search-app-bar__button-link">Личный кабинет</nuxt-link >
         </div>
         <div class="search-app-bar__button" v-show="cart">
           <v-badge

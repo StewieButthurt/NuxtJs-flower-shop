@@ -71,7 +71,7 @@
                 dark
                 flat
               >
-                <v-toolbar-title>Authorization</v-toolbar-title>
+                <v-toolbar-title>Авторизация</v-toolbar-title>
                 <v-spacer />
               </v-toolbar>
               <v-card-text>
@@ -167,28 +167,28 @@
             },
             messageInfo() {
               if(this.message.message === 'login') {
-                return 'Log in to get started'
+                return 'Авторизуйтесь чтобы начать'
               } else {
                 return false
               }
             },
             messageSession() {
               if(this.message.message === 'session') {
-                return 'Session timed out, login again'
+                return 'Время сессии истекло, авторизуйтесь заного'
               } else {
                 return false
               }
             },
             messageAuthError() {
               if(this.message.message === 'errorAuth') {
-                return 'The data you entered is not correct'
+                return 'Введеные данные неверные'
               } else {
                 return false
               }
             },
             messageLoginAttempts() {
               if(this.message.message === 'loginAttempts') {
-                return 'Too many authorization attempts, try again in an 5 min'
+                return 'Слишком много попыток авторизации, попробуйте вновь через 5 мин'
               } else {
                 return false
               }
@@ -208,17 +208,17 @@
                     this.loginErrorDescr = ''
                     this.loginValidate = true
                   } else {
-                    this.loginErrorDescr = '* Username must be at least 3 characters and no more than 16'
+                    this.loginErrorDescr = '* Логин должно быть от 3х до 16ти символов'
                     this.loginError = true
                     this.loginValidate = false
                   }
                 } else {
-                  this.loginErrorDescr = '* Login must contain only letters and digits in the Latin alphabet'
+                  this.loginErrorDescr = '* Логин должен содержать только буквы и цифры в латинском алфавите'
                   this.loginError = true
                   this.loginValidate = false
                 }
               } else {
-                this.loginErrorDescr = '* Enter the username'
+                this.loginErrorDescr = '* Введите логин'
                 this.loginError = true
                 this.loginValidate = false
               }
@@ -235,17 +235,17 @@
                     this.passwordErrorDescr = ''
                     this.passwordValidate = true
                   } else {
-                    this.passwordErrorDescr = '* The password must be at least 3 characters and no more than 24'
+                    this.passwordErrorDescr = '* Пароль должен быть не менее 3 символов и не более 24'
                     this.passwordError = true
                     this.passwordValidate = false
                   }
                 } else {
-                  this.passwordErrorDescr = '* The password must contain only letters and digits in the Latin alphabet'
+                  this.passwordErrorDescr = '* Пароль должен содержать только буквы и цифры в латинском алфавите'
                   this.passwordError = true
                   this.passwordValidate = false
                 }
               } else {
-                this.passwordErrorDescr = '* Enter the password'
+                this.passwordErrorDescr = '* Введите пароль'
                 this.passwordError = true
                 this.passwordValidate = false
               }
