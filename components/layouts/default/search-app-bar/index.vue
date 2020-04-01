@@ -140,14 +140,10 @@
                     {name: 'Для дома', group: 'Категории', avatar: require('~/assets/1.png')},
                     {name: 'Для сада', group: 'Категории', avatar: require('~/assets/1.png')},
                     {name: 'Аксессуары', group: 'Категории', avatar: require('~/assets/1.png')},
-                    {name: 'Для взлома жеппы', group: 'Категории', avatar: require('~/assets/1.png')},
                     { divider: true },
                     { header: 'Товары' },
-                    {name: 'Для страданий', group: 'Товары', avatar: require('~/assets/1.png')},
-                    {name: 'Тупо', group: 'Товары', avatar: require('~/assets/1.png')},
-                    {name: 'Минус', group: 'Товары', avatar: require('~/assets/1.png')},
-                    {name: 'Запас', group: 'Товары', avatar: require('~/assets/1.png')},
-                    {name: 'Слов', group: 'Товары', avatar: require('~/assets/1.png')}
+                    {name: 'Саженцы', group: 'Товары', avatar: require('~/assets/1.png')}
+                    
                 ],
                 search: null
             }
