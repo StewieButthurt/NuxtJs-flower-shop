@@ -151,7 +151,6 @@
                 <v-btn class="mx-2 mt-5" 
                     color="teal"
                     :loading="loading"
-                    @click="sendForm()"
                     >
                         <v-icon class="mr-2">mdi-content-save</v-icon>
                         Сохранить
