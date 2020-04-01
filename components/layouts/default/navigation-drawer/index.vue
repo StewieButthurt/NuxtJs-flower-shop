@@ -27,6 +27,13 @@
             :title="item.title"
           />
           <app-redirect 
+            v-for="(item, index) in categories"
+            :key="item.title"
+            :index="index"
+            :link="item.link"
+            :title="item.title"
+          />
+          <app-redirect 
             key="Заказать звонок"
             link="#"
             title="Заказать звонок"
@@ -61,7 +68,8 @@
         },
         props: [
             'drawer',
-            'mainLinks'
+            'mainLinks',
+            'categories'
         ],
         components: {
           AppRedirect

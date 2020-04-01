@@ -5,6 +5,7 @@
       <app-navigation-drawer 
         :drawer="drawer"
         :mainLinks="mainLinks"
+        :categories="categories"
         @changeDrawer="changeDrawer"
       />
 
@@ -21,6 +22,7 @@
 
       <app-links-categories-bar 
         :drawer="drawer"
+        :categories="categories"
         :windowSize="windowSize"
         @changeDrawer="changeDrawer"
       />
@@ -78,6 +80,9 @@ export default {
   computed: {
     mainLinks() {
       return this.$store.getters['layouts-links/mainLinks']
+    },
+    categories() {
+      return this.$store.getters['layouts-links/categories']
     }
   }
 }

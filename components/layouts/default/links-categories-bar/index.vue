@@ -72,9 +72,6 @@
             }
         },
         computed: {
-            categories() {
-                return this.$store.getters['layouts-links/categories']
-            },
             falseCategoriesLinks() {
                 let arr = [];
                 for(let i = 0; i < this.categories.length; i++) {
@@ -88,7 +85,8 @@
         },
         props: [
             'drawer',
-            'windowSize'
+            'windowSize',
+            'categories'
         ],
         components: {
             AppLink
