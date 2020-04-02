@@ -31,9 +31,9 @@
             async mouseEnterImage() {
                 this.hoverImage = true
                 let index = this.index
-                let title = this.title
+                let name = this.title
                 let img = this.image.previewImg
-                this.$emit('mouseEnterImage', {index, title, img})
+                this.$emit('mouseEnterImage', {index, name, img})
             }
         }
     }

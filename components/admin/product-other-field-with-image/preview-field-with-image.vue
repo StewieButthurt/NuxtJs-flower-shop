@@ -2,10 +2,10 @@
     <div class="preview-field-with-image-item">
         <div class="preview-field-with-image-item-wrapper">
             <div class="preview-field-with-image-item__type mr-5">
-                {{type}}
+                {{title}}
             </div>
             <div class="preview-field-with-image-item__title font-italic">
-                {{title}}
+                {{name}}
             </div>
         </div>
         <div class="preview-field-with-image-item__images">
@@ -31,20 +31,20 @@
             AppPreviewImage
         },
         props: [
-            'type',
+            'title',
             'info',
             'index'
         ],
         data() {
             return {
-                title: '',
+                name: '',
                 globalIndex: 0
             }
         },
         methods: {
-            async mouseEnterImage({index, title, img}) {
+            async mouseEnterImage({index, name, img}) {
                 this.globalIndex = index
-                this.title = title
+                this.name = name
                 this.$emit('mouseEnterImage', img)
             }
         }

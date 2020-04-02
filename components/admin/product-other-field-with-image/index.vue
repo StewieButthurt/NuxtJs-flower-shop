@@ -4,7 +4,7 @@
             <v-text-field 
                 prepend-inner-icon="mdi-format-title"
                 label="Название (Например: 'Цвет')"
-                v-model="localType"
+                v-model="localTitle"
                 class="product-characteristics__field"
                 @blur="updateTitle()"
             ></v-text-field>
@@ -34,7 +34,7 @@
 
     export default {
         async mounted() {
-            this.localType = this.type
+            this.localTitle = this.title
             this.globalIndex = this.index
         },
         components: {
@@ -42,12 +42,12 @@
         },
         data() {
             return {
-                localType: '',
+                localTitle: '',
                 globalIndex: null
             }
         },
         props: [
-            'type',
+            'title',
             'info',
             'index'
         ],
@@ -56,9 +56,9 @@
                 this.$store.dispatch('add-product/removeOtherFieldWithImageBlock', this.index)
             },
             async updateTitle() {
-                let type = this.localType
+                let title = this.localTitle
                 let index = this.index
-                this.$store.dispatch('add-product/updateOtherFieldTitle', {type, index})
+                this.$store.dispatch('add-product/updateOtherFieldTitle', {title, index})
             }
         }
     }

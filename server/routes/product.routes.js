@@ -13,31 +13,37 @@ router.post(
 )
 
 router.post(
-    '/create',
+    '/create/images',
     passport.authenticate('jwt', { session: false }),
-    ctr.create
+    ctr.images
 )
 
-router.post(
-    '/search-on-city',
-    ctr.searchCity
-)
+// router.post(
+//     '/create',
+//     passport.authenticate('jwt', { session: false }),
+//     ctr.create
+// )
 
-router.post(
-    '/admin/update-city',
-    passport.authenticate('jwt', { session: false }),
-    ctr.updateCity
-)
+// router.post(
+//     '/search-on-city',
+//     ctr.searchCity
+// )
 
-router.delete(
-    '/admin/delete-city',
-    passport.authenticate('jwt', { session: false }),
-    ctr.remove
-)
+// router.post(
+//     '/admin/update-city',
+//     passport.authenticate('jwt', { session: false }),
+//     ctr.updateCity
+// )
 
-router.get(
-    '/',
-    ctr.getCity
-)
+// router.delete(
+//     '/admin/delete-city',
+//     passport.authenticate('jwt', { session: false }),
+//     ctr.remove
+// )
+
+// router.get(
+//     '/',
+//     ctr.getCity
+// )
 
 module.exports = router

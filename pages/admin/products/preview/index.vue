@@ -44,7 +44,7 @@
                 </div>
                 <div class="preview__descr">
                     <div class="preview__descr-title">
-                        {{title}}
+                        {{name}}
                     </div>
                     <div class="preview__descr__descr-rating">
                         <v-rating 
@@ -73,9 +73,9 @@
                     <div class="preview__field-with-image">
                         <app-preview-field-with-image 
                             v-for="(item, index) in otherFieldImage"
-                            :key="item.type"
+                            :key="item.title"
                             :index="index"
-                            :type="item.type"
+                            :title="item.title"
                             :info="item.info"
                             @mouseEnterImage="mouseEnterImage"
                         />
@@ -167,7 +167,7 @@
             <v-overlay :value="overlay" opacity="0.9" z-index="10">
                 <div class="preview-image-overlay">
                     <v-progress-linear  
-                        value="50"
+                        :value="progressValue"
                         height="7"
                         light
                     ></v-progress-linear>
@@ -235,7 +235,8 @@
                 message: false,
                 loading: false,
                 overlay: false,
-                messageStatus: 'Начало загрузки...'
+                messageStatus: 'Начало загрузки...',
+                progressValue: 0
             }
         },
         computed: {
@@ -245,8 +246,8 @@
             img() {
                 return this.mainImg
             },
-            title() {
-                return this.$store.getters['add-product/title']
+            name() {
+                return this.$store.getters['add-product/name']
             },
             price() {
                 return this.$store.getters['add-product/price']
@@ -291,29 +292,14 @@
             async sendForm() {
                 this.message = false
                 this.snackbar = false
+                this.progressValue = 0
 
                 // this.loading = true
                 this.overlay = true
                 let vm = this
-                const formData = {
-                    title: this.title,
-                    price: this.price,
-                    descr: this.descr,
-                    article: this.article,
-                    categories: this.categories,
-                    discountStatus: this.discountStatus,
-                    sizeDiscount: this.sizeDiscount,
-                    newFields: this.newFields,
-                    other: this.other,
-                    stock: this.stock,
-                    bestseller: this.bestseller,
-                    weekPrice: this.weekPrice,
-                    images: this.images,
-                    otherFieldImage: this.otherFieldImage
-                }
 
                 let fields = {
-                    title: this.title,
+                    name: this.name,
                     price: this.price,
                     descr: this.descr,
                     article: this.article,
@@ -327,19 +313,124 @@
                     weekPrice: this.weekPrice,
                 }
 
-                // await this.$axios.$post('/api/product/create/fields', fields)
-                //     .then(async function (response) {
-                //             // vm.message = response.message
-                //             // vm.loading = false
+                this.progressValue = 40
+                this.messageStatus = 'Загрузка основных данных...'
 
-                //             // setTimeout(vm.redirectMenuEdit, 2000)
-                //     })
-                //     .catch(function (error) {
-                //         // handle error
-                //         // vm.message = 'error'
-                //         // vm.loading = false
-                //         console.log(error);
-                //     })
+                await this.$axios.$post('/api/product/create/fields', fields)
+                    .then(async function (response) {
+                                let id = response.product._id
+                                let name = response.product.name
+                                vm.sendImage(id)
+                            
+                            
+                            // vm.message = response.message
+                            // vm.loading = false
+
+                            // setTimeout(vm.redirectMenuEdit, 2000)
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        // vm.message = 'error'
+                        // vm.loading = false
+                        console.log(error);
+                    })
+            },
+            async sendImage(id) {
+                let vm = this
+                let counter = 0
+                let checkError = false
+
+                for(let i = 0; i < this.images.length; i++) {
+
+                    let image = this.images[i].previewImg
+                    
+                    
+                    if(checkError === false) {
+                        this.messageStatus = `Загрузка картинок ${i + 1} из ${this.images.length}...`
+                        
+                        let data = {
+                            image: image,
+                            id: id
+                        }
+
+                        await this.$axios.$post('/api/product/create/images', data)
+                            .then(async function (response) {
+                                    counter++
+                            })
+                            .catch(function (error) {
+                                // handle error
+                                // vm.message = 'error'
+                                // vm.loading = false
+                                vm.messageStatus = 'При загрузке произошла ошибка!'
+                                checkError = error
+                                console.log(error);
+                                throw error
+                            })
+                    } else {
+                        return checkError
+                    }
+
+                    if(counter === this.images.length) {
+                        this.progressValue = 60
+                        this.sendOtherImage(id)
+                    }
+                }
+            
+            },
+            async sendOtherImage(id) {
+                let vm = this
+                let counter = 0
+                let checkError = false
+
+                for(let k = 0; k > this.otherFieldImage.length; k++) {
+
+                    let otherImage = this.otherFieldImage[k]
+
+                    for(let i = 0; i < otherImage.info.length; i++) {
+
+                        let image = otherImage.info[i].image.previewImg
+                        
+
+                        if(checkError === false) {
+                            this.messageStatus = `Загрузка картинок из раздела '${otherImage.title}' ${i + 1} из ${otherImage.info.length}...`
+                            
+                            let data = {
+                                image: image,
+                                id: id
+                            }
+
+                            await this.$axios.$post('/api/product/create/other-images', data)
+                                .then(async function (response) {
+                                        if(response.message === 'success') {
+                                            counter++
+                                        }
+                                })
+                                .catch(function (error) {
+                                    // handle error
+                                    // vm.message = 'error'
+                                    // vm.loading = false
+                                    vm.messageStatus = 'При загрузке произошла ошибка!'
+                                    checkError = error
+                                    console.log(error);
+                                    throw error
+                                })
+                        } else {
+                            return checkError
+                        }
+
+                        if(counter === this.images.length) {
+                            this.progressValue = 100
+                            this.overlayOff()
+                        }
+                        
+                    }
+
+                }
+
+                
+            },
+            async overlayOff() {
+                this.overlay = false
             },
             async getImages() {
                 await this.$store.dispatch('image-preview/getImage')

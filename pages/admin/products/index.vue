@@ -13,8 +13,8 @@
                     <v-text-field
                     prepend-inner-icon="mdi-format-title"
                     label="Название товара"
-                    v-model="localTitle"
-                    @blur="updateTitle(localTitle)"
+                    v-model="localName"
+                    @blur="updateName(localName)"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -145,8 +145,8 @@
                             <v-col align="center" justify="center" cols="12" sm="9" md="7" style="max-width: 700px">
                                     <app-product-other-field-with-image 
                                         v-for="(item, index) in otherFieldImage"
-                                        :key="item.type"
-                                        :type="item.type"
+                                        :key="item.title"
+                                        :title="item.title"
                                         :info="item.info"
                                         :index="index"
                                     />
@@ -307,7 +307,7 @@
         },
         data() {
             return {
-                localTitle: '',
+                localName: '',
                 localPrice: '',
                 localDescr: '',
                 localArticle: '',
@@ -363,7 +363,7 @@
             }
         },
         async mounted() {
-            this.localTitle = this.title
+            this.localName = this.name
             this.localPrice = this.price
             this.localDescr = this.descr
             this.localArticle = this.article
@@ -391,8 +391,8 @@
             images() {
                 return this.$store.getters['add-product/images']
             },
-            title() {
-                return this.$store.getters['add-product/title']
+            name() {
+                return this.$store.getters['add-product/name']
             },
             price() {
                 return this.$store.getters['add-product/price']
@@ -426,7 +426,7 @@
                     }
             },
             checkFields() {
-                if( this.title !== '' &&
+                if( this.name !== '' &&
                     this.price !== '' &&
                     this.descr !== '' &&
                     this.article !== '' && 
@@ -471,8 +471,8 @@
 
                 this.$store.dispatch('add-product/setNewFields', data)
             },
-            async updateTitle(title) {
-                this.$store.dispatch('add-product/setTitle', title)
+            async updateName(name) {
+                this.$store.dispatch('add-product/setName', name)
             },
             async updatePrice() {
                 this.localPrice = parseInt(this.localPrice)
@@ -500,7 +500,7 @@
             },
             async addNewFieldWithImage() {
                 let data = {
-                    type: '',
+                    title: '',
                     info: [
                         {
                             title: '',

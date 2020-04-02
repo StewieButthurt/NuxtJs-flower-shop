@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 export const state = () => ({
 	images: [],
-    title: '',
+    name: '',
     descr: '',
     price: '',
     article: '',
@@ -18,8 +18,8 @@ export const state = () => ({
 })
 
 export const mutations = {
-	setTitle(state, title) {
-        state.title = title
+	setName(state, name) {
+        state.name = name
     },
     setDescr(state, descr) {
         state.descr = descr
@@ -51,7 +51,7 @@ export const mutations = {
         arr.splice(index, 1)
     },
     clearFields(state) {
-        state.title = '',
+        state.name = '',
         state.descr = '',
         state.price = '',
         state.article = '',
@@ -119,8 +119,8 @@ export const mutations = {
     removeOtherFieldWithImageBlock(state, index) {
         state.otherFieldImage.splice(index, 1)
     },
-    updateOtherFieldTitle(state, {type, index}) {
-        state.otherFieldImage[index].type = type
+    updateOtherFieldTitle(state, {title, index}) {
+        state.otherFieldImage[index].title = title
     },
     updateOtherFieldImageTitle(state, {title, globalIndex, index}) {
         state.otherFieldImage[globalIndex].info[index].title = title
@@ -131,8 +131,8 @@ export const mutations = {
 }
 
 export const actions = {
-    async setTitle({commit}, title) {
-        commit('setTitle', title)
+    async setName({commit}, name) {
+        commit('setName', name)
     },
     async setPrice({commit}, price) {
         commit('setPrice', price)
@@ -216,8 +216,8 @@ export const actions = {
     async removeOtherFieldWithImageBlock({commit}, index) {
         commit('removeOtherFieldWithImageBlock', index)
     },
-    async updateOtherFieldTitle({commit}, {type, index}) {
-        commit('updateOtherFieldTitle', {type, index})
+    async updateOtherFieldTitle({commit}, {title, index}) {
+        commit('updateOtherFieldTitle', {title, index})
     },
     async updateOtherFieldImageTitle({commit}, {title, globalIndex, index}) {
         commit('updateOtherFieldImageTitle', {title, globalIndex, index})
@@ -230,7 +230,7 @@ export const actions = {
 export const getters = {
 	data: state => state,
     newFields: state => state.newFields,
-    title: state => state.title,
+    name: state => state.name,
     descr: state => state.descr,
     price: state => state.price,
     images: state => state.images,
