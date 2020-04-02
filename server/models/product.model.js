@@ -9,6 +9,18 @@ const citySchema = new Schema({
         type: String,
         required: true
     },
+    price: {
+        type: Number,
+        required: true
+    },
+    article: {
+        type: String,
+        required: true
+    },
+    categories: {
+        type: [String],
+        required: true
+    },
     previewImg: {
         type: [String],
         required: true

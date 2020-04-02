@@ -151,6 +151,7 @@
                 <v-btn class="mx-2 mt-5" 
                     color="teal"
                     :loading="loading"
+                    @click="sendForm()"
                     >
                         <v-icon class="mr-2">mdi-content-save</v-icon>
                         Сохранить
@@ -163,6 +164,25 @@
                 :colorBtn="colorBtn"
                 @changeSnackbar="changeSnackbar"
             />
+            <v-overlay :value="overlay" opacity="0.9" z-index="10">
+                <div class="preview-image-overlay">
+                    <v-progress-linear  
+                        value="50"
+                        height="7"
+                        light
+                    ></v-progress-linear>
+                    <div class="preview-image-overlay__text mt-5">
+                        {{messageStatus}}
+                    </div>
+                </div>
+                <v-btn
+                icon
+                @click="overlay = false"
+                >
+                <v-icon>mdi-close</v-icon>
+                </v-btn>
+                
+            </v-overlay>
         </div>
     </div>
                 
@@ -213,7 +233,9 @@
                 colorBckg: '',
                 snackbar: false,
                 message: false,
-                loading: false
+                loading: false,
+                overlay: false,
+                messageStatus: 'Начало загрузки...'
             }
         },
         computed: {
@@ -270,7 +292,8 @@
                 this.message = false
                 this.snackbar = false
 
-                this.loading = true
+                // this.loading = true
+                this.overlay = true
                 let vm = this
                 const formData = {
                     title: this.title,
@@ -289,19 +312,34 @@
                     otherFieldImage: this.otherFieldImage
                 }
 
-                await this.$axios.$post('/api/product/create', formData)
-                    .then(async function (response) {
-                            vm.message = response.message
-                            vm.loading = false
+                let fields = {
+                    title: this.title,
+                    price: this.price,
+                    descr: this.descr,
+                    article: this.article,
+                    categories: this.categories,
+                    discountStatus: this.discountStatus,
+                    sizeDiscount: this.sizeDiscount,
+                    newFields: this.newFields,
+                    other: this.other,
+                    stock: this.stock,
+                    bestseller: this.bestseller,
+                    weekPrice: this.weekPrice,
+                }
 
-                            // setTimeout(vm.redirectMenuEdit, 2000)
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        vm.message = 'error'
-                        vm.loading = false
-                        console.log(error);
-                    })
+                // await this.$axios.$post('/api/product/create/fields', fields)
+                //     .then(async function (response) {
+                //             // vm.message = response.message
+                //             // vm.loading = false
+
+                //             // setTimeout(vm.redirectMenuEdit, 2000)
+                //     })
+                //     .catch(function (error) {
+                //         // handle error
+                //         // vm.message = 'error'
+                //         // vm.loading = false
+                //         console.log(error);
+                //     })
             },
             async getImages() {
                 await this.$store.dispatch('image-preview/getImage')
@@ -389,6 +427,7 @@
         flex-direction: column
         align-items: center
         display: flex
+        position: relative
     
     .preview__swiper-descr
         width: 100%
@@ -614,4 +653,11 @@
     
     .preview__descr__counter-wrapper-buttons
         display: flex
+    
+    .preview-image-overlay
+        display: flex
+        width: 300px
+        justify-content: center
+        align-items: center
+        flex-direction: column
 </style>

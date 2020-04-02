@@ -7,6 +7,12 @@ const router = Router()
 // /api/product
 
 router.post(
+    '/create/fields',
+    passport.authenticate('jwt', { session: false }),
+    ctr.fields
+)
+
+router.post(
     '/create',
     passport.authenticate('jwt', { session: false }),
     ctr.create

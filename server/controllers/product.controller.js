@@ -60,6 +60,10 @@ module.exports.create = async (req, res) => {
     }
 }
 
+module.exports.fields = async (req, res) => {
+    
+}
+
 
 module.exports.updateCity = async (req, res) => {
     const $set = {

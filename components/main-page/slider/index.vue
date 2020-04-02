@@ -2,9 +2,9 @@
     <div class="main-slider" id="main-slider">
         <v-carousel
             height="400"
-            cycle
             hide-delimiter-background
             show-arrows-on-hover
+            cycle
             >
             <v-carousel-item
                 v-for="(item, index) in slides"
@@ -49,4 +49,10 @@
         opacity: 1
         color: #FFA800
         z-index: 10
+
+    #main-slider .v-btn:before
+        top: 2.8px
+        left: 4px
+        width: 21px
+        height: 21px
 </style>

@@ -76,6 +76,7 @@
     .main-sevices__item-image-size-2
         width: 49px
         height: 49px
+        margin-right: 0px
     
     .main-sevices__item-text
         display: flex
