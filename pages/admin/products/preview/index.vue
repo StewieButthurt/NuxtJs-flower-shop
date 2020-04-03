@@ -319,7 +319,6 @@
                 await this.$axios.$post('/api/product/create/fields', fields)
                     .then(async function (response) {
                                 let id = response.product._id
-                                let name = response.product.name
                                 vm.sendImage(id)
                             
                             
@@ -350,6 +349,7 @@
                         
                         let data = {
                             image: image,
+                            index: i,
                             id: id
                         }
 
@@ -372,57 +372,104 @@
 
                     if(counter === this.images.length) {
                         this.progressValue = 60
+                        console.log(1)
                         this.sendOtherImage(id)
                     }
                 }
             
             },
             async sendOtherImage(id) {
+                console.log(2)
                 let vm = this
-                let counter = 0
                 let checkError = false
+                let newId = false
+                let mainId = id
 
-                for(let k = 0; k > this.otherFieldImage.length; k++) {
-
+                for(let k = 0; k < this.otherFieldImage.length; k++) {
+                    console.log(3)
+                    let counter = 0
                     let otherImage = this.otherFieldImage[k]
 
-                    for(let i = 0; i < otherImage.info.length; i++) {
+                    let data = {
+                        id: id,
+                        title: otherImage.title
+                    }
+                    if(checkError === false) {
+                        console.log(4)
+                        await this.$axios.$post('/api/product/create/other-image-title', data)
+                            .then(async function (response) {
+                                    vm.messageStatus = 'Подготовка загрузки дополнительных изображений...'
 
-                        let image = otherImage.info[i].image.previewImg
-                        
+                                    
+                                    await vm.$axios.$get('/api/product/get-product-id', {params : { id: mainId }})
+                                        .then(async function (response) {
+                                                newId = response.otherFieldImage[k]._id
+                                                console.log(newId)
+                                        })
+                                        .catch(function (error) {
+                                            // handle error
+                                            // vm.message = 'error'
+                                            // vm.loading = false
+                                            vm.messageStatus = 'При загрузке произошла ошибка!'
+                                            checkError = error
+                                            console.log(error);
+                                            throw error
+                                        })
 
-                        if(checkError === false) {
-                            this.messageStatus = `Загрузка картинок из раздела '${otherImage.title}' ${i + 1} из ${otherImage.info.length}...`
-                            
-                            let data = {
-                                image: image,
-                                id: id
-                            }
+                                        
 
-                            await this.$axios.$post('/api/product/create/other-images', data)
-                                .then(async function (response) {
-                                        if(response.message === 'success') {
-                                            counter++
+                                    for(let i = 0; i < otherImage.info.length; i++) {
+
+                                            let image = otherImage.info[i].image.previewImg
+                                            
+
+                                            if(checkError === false) {
+                                                vm.messageStatus = `Загрузка картинок из раздела '${otherImage.title}'  ${i + 1} из ${otherImage.info.length}...`
+                                                
+                                                data = {
+                                                    image: image,
+                                                    id: id,
+                                                    newId: newId,
+                                                    title: otherImage.info[i].title,
+                                                    index: i,
+                                                    globalIndex: k
+                                                }
+
+                                                await vm.$axios.$post('/api/product/create/other-images', data)
+                                                    .then(async function (response) {
+                                                                counter++
+                                                    })
+                                                    .catch(function (error) {
+                                                        // handle error
+                                                        // vm.message = 'error'
+                                                        // vm.loading = false
+                                                        vm.messageStatus = 'При загрузке произошла ошибка!'
+                                                        checkError = error
+                                                        console.log(error);
+                                                        throw error
+                                                    })
+                                            } else {
+                                                return checkError
+                                            }
+                                            
                                         }
-                                })
-                                .catch(function (error) {
-                                    // handle error
-                                    // vm.message = 'error'
-                                    // vm.loading = false
-                                    vm.messageStatus = 'При загрузке произошла ошибка!'
-                                    checkError = error
-                                    console.log(error);
-                                    throw error
-                                })
-                        } else {
-                            return checkError
-                        }
+                            })
+                            .catch(function (error) {
+                                // handle error
+                                // vm.message = 'error'
+                                // vm.loading = false
+                                vm.messageStatus = 'При загрузке произошла ошибка!'
+                                checkError = error
+                                console.log(error);
+                                throw error
+                            })
+                    } else {
+                        return checkError
+                    }
 
-                        if(counter === this.images.length) {
-                            this.progressValue = 100
-                            this.overlayOff()
-                        }
-                        
+                    if(k === this.otherFieldImage.length) {
+                        this.messageStatus = 'Загрузка завершена!'
+                        setTimeout(this.overlayOff, 1000)
                     }
 
                 }

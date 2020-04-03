@@ -1,6 +1,7 @@
 const Product = require('../models/product.model')
 const request = require('request');
 const fs = require('fs');
+const fsExtra = require('fs-extra');
 const Axios = require('axios').default;
 const FormData = require('form-data');
 const Jimp = require('jimp');
@@ -34,25 +35,163 @@ module.exports.fields = async (req, res) => {
 }
 
 module.exports.images = async (req, res) => {
+    
     let image = req.body.image
+    let id = req.body.id
+    let index = req.body.index
+    let mypath = `./assets/${id}`
+    let createmyfile = `./assets/${id}/img-${index + 1}.png`
+    let url
+
+
     let n = image.indexOf(',', 0)
-    image = await file.slice(n)
+    image = await image.slice(n)
     image = await Buffer.from(image, 'base64')
     image = await Jimp.read(image)
     image = image.quality(60)
     image = await image.getBufferAsync(Jimp.AUTO)
     image = image.toString('base64')
 
-
-    const product = await Product.update(
-        {_id: req.body.id},
-        { $push: { 
-                images: {
-                    previewImg: req.body.image
+    fs.access(mypath, fs.F_OK, (err) => {
+        if (err) {
+            fs.mkdir(mypath, { recursive: true }, (err) => {
+                if (err) {
+                    throw err
+                } else {
+                    newWriteFile()
                 }
-            } 
+            });
+        } else {
+            newWriteFile()
         }
-    )
+    })
+
+    
+
+    async function newWriteFile() {
+        fsExtra.writeFile(`./assets/${id}/img-${index + 1}.png`, image, 'base64', async function(err) {
+            if(err) {
+                throw err;
+            } else {
+            url = `./assets/${id}/img-${index + 1}.png`
+            
+                try {
+                    const product = await Product.update(
+                        {_id: req.body.id},
+                        { $push: { 
+                                images: {
+                                    previewImg: url
+                                }
+                            } 
+                        }
+                    )
+        
+                    res.json(product)
+
+                } catch (e) {
+                    res.status(500).json(e)
+                }
+            }
+
+        })
+    }
+}
+
+module.exports.otherImagesTitle = async (req, res) => {
+    let title = req.body.title
+
+    try {
+        const product = await Product.update(
+            {_id: req.body.id},
+            { $push: { 
+                otherFieldImage: {
+                        info: [],
+                        title: title
+                    }
+                } 
+            }
+        )
+
+        res.json(product)
+
+    } catch (e) {
+        res.status(500).json(e)
+    }
+}
+
+module.exports.otherImages = async (req, res) => {
+
+    let image = req.body.image
+    let id = req.body.id
+    let newId = req.body.newId
+    let index = req.body.index
+    let globalIndex = req.body.globalIndex
+    let title = req.body.title
+    let mypath = `./assets/${id}/${newId}`
+    let createmyfile = `./assets/${id}/${newId}/img-${index + 1}.png`
+    let url
+
+    let n = image.indexOf(',', 0)
+    image = await image.slice(n)
+    image = await Buffer.from(image, 'base64')
+    image = await Jimp.read(image)
+    image = image.quality(60)
+    image = await image.getBufferAsync(Jimp.AUTO)
+    image = image.toString('base64')
+
+    fs.access(mypath, fs.F_OK, (err) => {
+        if (err) {
+            fs.mkdir(mypath, { recursive: true }, (err) => {
+                if (err) {
+                    throw err
+                } else {
+                    newWriteFile()
+                }
+            });
+        } else {
+            newWriteFile()
+        }
+    })
+
+
+    async function newWriteFile() {
+        fsExtra.writeFile(`./assets/${id}/${newId}/img-${index + 1}.png`, image, 'base64', async function(err) {
+            if(err) {
+                throw err;
+            } else {
+            url = `./assets/${id}/${newId}/img-${index + 1}.png`
+
+
+            try {
+                const product = await Product.update(
+                    {_id: req.body.id},
+                    { $push: {'otherFieldImage.0.episodes.0.videos.$.reports': data.details}}
+                )
+    
+                res.json(product)
+
+            } catch (e) {
+                res.status(500).json(e)
+            }
+            }
+
+        })
+    }
+}
+
+module.exports.getProductId = async (req, res) => {
+    let id = req.query.id
+
+    console.log(id)
+    console.log(req.query.id)
+    console.log(1)
+
+    try {
+        const product = await Product.findOne({_id: req.query.id})
+        res.json(product)
+    } catch (e) {
+        res.status(500).json(e)
+    }
 }
 
 
