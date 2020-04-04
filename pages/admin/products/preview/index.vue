@@ -469,6 +469,11 @@
             },
             async overlayOff() {
                 this.overlay = false
+                this.message = 'success'
+                setTimeout(this.redirectAddProduct, 2000)
+            },
+            async redirectAddProduct() {
+                window.location.reload(true)
             },
             async getImages() {
                 await this.$store.dispatch('image-preview/getImage')
@@ -527,7 +532,7 @@
         watch: {
             message(val) {
                 if(val === 'success') {
-                    this.text = 'Товар добавлен'
+                    this.text = 'Товар добавлен! Переадресация...'
                     this.colorBtn = 'white'
                     this.colorBckg = 'grey darken-4'
                     this.snackbar = true
