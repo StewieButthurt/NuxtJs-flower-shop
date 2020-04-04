@@ -175,13 +175,6 @@
                         {{messageStatus}}
                     </div>
                 </div>
-                <v-btn
-                icon
-                @click="overlay = false"
-                >
-                <v-icon>mdi-close</v-icon>
-                </v-btn>
-                
             </v-overlay>
         </div>
     </div>
@@ -379,14 +372,12 @@
             
             },
             async sendOtherImage(id) {
-                console.log(2)
                 let vm = this
                 let checkError = false
                 let newId = false
                 let mainId = id
 
                 for(let k = 0; k < this.otherFieldImage.length; k++) {
-                    console.log(3)
                     let counter = 0
                     let otherImage = this.otherFieldImage[k]
 
@@ -395,7 +386,6 @@
                         title: otherImage.title
                     }
                     if(checkError === false) {
-                        console.log(4)
                         await this.$axios.$post('/api/product/create/other-image-title', data)
                             .then(async function (response) {
                                     vm.messageStatus = 'Подготовка загрузки дополнительных изображений...'
@@ -404,7 +394,6 @@
                                     await vm.$axios.$get('/api/product/get-product-id', {params : { id: mainId }})
                                         .then(async function (response) {
                                                 newId = response.otherFieldImage[k]._id
-                                                console.log(newId)
                                         })
                                         .catch(function (error) {
                                             // handle error
@@ -466,8 +455,10 @@
                     } else {
                         return checkError
                     }
-
-                    if(k === this.otherFieldImage.length) {
+                    
+                    console.log('k = ', k)
+                    if(k + 1 === this.otherFieldImage.length) {
+                        this.progressValue = 100
                         this.messageStatus = 'Загрузка завершена!'
                         setTimeout(this.overlayOff, 1000)
                     }
@@ -798,4 +789,5 @@
         justify-content: center
         align-items: center
         flex-direction: column
+        text-align: center
 </style>

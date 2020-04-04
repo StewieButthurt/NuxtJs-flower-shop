@@ -163,9 +163,15 @@ module.exports.otherImages = async (req, res) => {
 
 
             try {
-                const product = await Product.update(
-                    {_id: req.body.id},
-                    { $push: {'otherFieldImage.0.episodes.0.videos.$.reports': data.details}}
+                const product = await Product.update({
+                    _id: req.body.id,
+                    'otherFieldImage._id': newId
+                }, { $push: {'otherFieldImage.$.info' : {
+                    "image": {
+                        "previewImg": `${image}`
+                    },
+                    "title": `${title}`
+                }}}
                 )
     
                 res.json(product)
@@ -181,10 +187,6 @@ module.exports.otherImages = async (req, res) => {
 
 module.exports.getProductId = async (req, res) => {
     let id = req.query.id
-
-    console.log(id)
-    console.log(req.query.id)
-    console.log(1)
 
     try {
         const product = await Product.findOne({_id: req.query.id})
