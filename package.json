@@ -37,6 +37,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "mongoose": "^5.9.1",
+    "node-cron": "^2.0.3",
     "nodemailer": "^6.4.2",
     "nuxt": "^2.0.0",
     "nuxt-compress": "^1.1.0",
@@ -45,6 +46,7 @@
     "nuxt-vuex-localstorage": "^1.2.6",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "simple-node-logger": "^18.12.24",
     "smart-grid": "^2.1.2",
     "v-click-outside": "^3.0.1",
     "validator": "^12.2.0"

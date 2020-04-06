@@ -20,6 +20,33 @@ const formRoutes = require('./routes/form.routes');
 const menuRoutes = require('./routes/menu.routes');
 const categoriesRoutes = require('./routes/categories.routes');
 const categoriesWithImage = require('./routes/categoriesWithImage.routes');
+const cron = require('node-cron');
+
+cron.schedule('00 00 00 1 * *', () => {
+	let time = new Date().getMonth()
+	time = time - 2
+
+	try {
+		fs.unlink(`./project-${time}.log`, function(err) {
+			log.info('Запланированная очистка логов');
+		});
+	} catch(e) {
+
+	}
+});
+
+cron.schedule('00 00 15 5 * *', () => {
+	let time = new Date().getMonth()
+	time = time - 2
+
+	try {
+		fs.unlink(`./project-${time}.log`, function(err) {
+			log.info('Запланированная очистка логов');
+		});
+	} catch(e) {
+
+	}
+});
 
 const app = express()
 
