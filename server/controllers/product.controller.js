@@ -6,12 +6,19 @@ const Axios = require('axios').default;
 const FormData = require('form-data');
 const Jimp = require('jimp');
 const keys = require('../keys')
+const SimpleNodeLogger  = require('simple-node-logger'),
+	opts = {
+		logFilePath:`project-${new Date().getMonth()}.log`,
+		timestampFormat:'YYYY-MM-DD HH:mm:ss.SSS'
+	}
+const log = SimpleNodeLogger.createSimpleLogger( opts );
 
 
 module.exports.fields = async (req, res) => {
     const name = await Product.findOne({name: req.body.name})
 
     if(name) {
+        log.warn(`Неудачная попытка добавления нового товара! Товар '${req.body.name}' уже существует!`);
         res.json({message: 'busy'})
     } else {
         const product = new Product({
@@ -29,8 +36,18 @@ module.exports.fields = async (req, res) => {
             weekPrice: req.body.weekPrice,
         })
 
-        await product.save()
-        res.status(201).json({product})
+        try {
+            await product.save()
+
+            log.info(`Успешное добавление основной информации о товаре!'${req.body.name}'`);
+
+            res.status(201).json({product})
+        } catch(e) {
+            log.warn(`Неудачная попытка добавления основной информации о товаре '${req.body.name}'! Ошибка обращения к базе!`);
+            res.status(500).json(e)
+        }
+
+        
     }
 }
 
@@ -73,10 +90,10 @@ module.exports.images = async (req, res) => {
             if(err) {
                 throw err;
             } else {
-            url = `./assets/${id}/img-${index + 1}.png`
+            url = `${id}/img-${index + 1}.png`
             
                 try {
-                    const product = await Product.update(
+                    const product = await Product.updateOne(
                         {_id: req.body.id},
                         { $push: { 
                                 images: {
@@ -85,10 +102,11 @@ module.exports.images = async (req, res) => {
                             } 
                         }
                     )
-        
+                    log.info(`Успешное добавление картинки для товра '${req.body.id}'!`);
                     res.json(product)
 
                 } catch (e) {
+                    log.warn(`Неудачная попытка добавления картинки для товара '${req.body.id}'!`);
                     res.status(500).json(e)
                 }
             }
@@ -101,7 +119,7 @@ module.exports.otherImagesTitle = async (req, res) => {
     let title = req.body.title
 
     try {
-        const product = await Product.update(
+        const product = await Product.updateOne(
             {_id: req.body.id},
             { $push: { 
                 otherFieldImage: {
@@ -111,10 +129,11 @@ module.exports.otherImagesTitle = async (req, res) => {
                 } 
             }
         )
-
+        log.info(`Успешное добавление раздела с доп.картинками для товара '${req.body.id}'!`);
         res.json(product)
 
     } catch (e) {
+        log.warn(`Неудачная попытка добавления раздела с доп.картинками для товара '${req.body.id}'!`);
         res.status(500).json(e)
     }
 }
@@ -159,24 +178,27 @@ module.exports.otherImages = async (req, res) => {
             if(err) {
                 throw err;
             } else {
-            url = `./assets/${id}/${newId}/img-${index + 1}.png`
+            url = `${id}/${newId}/img-${index + 1}.png`
 
 
             try {
-                const product = await Product.update({
+                const product = await Product.updateOne({
                     _id: req.body.id,
                     'otherFieldImage._id': newId
                 }, { $push: {'otherFieldImage.$.info' : {
                     "image": {
-                        "previewImg": `${image}`
+                        "previewImg": `${url}`
                     },
                     "title": `${title}`
                 }}}
                 )
-    
+                
+                log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
+
                 res.json(product)
 
             } catch (e) {
+                log.warn(`Неудачная попытка добавления дополнительной картинки для товара '${req.body.id}'!`);
                 res.status(500).json(e)
             }
             }
@@ -194,6 +216,23 @@ module.exports.getProductId = async (req, res) => {
     } catch (e) {
         res.status(500).json(e)
     }
+}
+
+module.exports.getProductSearch = async (req, res) => {
+    console.log('сервер',req.query.search)
+    try {
+        let article = await Product.find({"article": {'$regex': `${req.query.search}`, '$options': 'i'}}).limit(10)
+        let name = await Product.find({"name": {'$regex': `${req.query.search}`, '$options': 'i'}}).limit(10)
+        let categories = await Product.find({"categories": {'$regex': `${req.query.search}`, '$options': 'i'}}).limit(10)
+        res.json({
+            article: article,
+            name: name,
+            categories: categories
+        })
+    } catch (e) {
+        res.status(500).json(e)
+    }
+
 }
 
 

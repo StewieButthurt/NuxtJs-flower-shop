@@ -7,6 +7,11 @@ const router = Router()
 // /api/product
 
 router.get(
+    '/get-product-search',
+    ctr.getProductSearch
+)
+
+router.get(
     '/get-product-id',
     ctr.getProductId
 )

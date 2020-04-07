@@ -103,6 +103,7 @@ const productSchema = new Schema({
 
 productSchema.index({ name: 1 })
 productSchema.index({ categories: 1 })
+productSchema.index({ article: 1 })
 
 module.exports = model('product', productSchema)
 

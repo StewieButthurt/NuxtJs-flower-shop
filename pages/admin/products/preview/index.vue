@@ -311,19 +311,18 @@
 
                 await this.$axios.$post('/api/product/create/fields', fields)
                     .then(async function (response) {
-                                let id = response.product._id
-                                vm.sendImage(id)
-                            
-                            
-                            // vm.message = response.message
-                            // vm.loading = false
-
-                            // setTimeout(vm.redirectMenuEdit, 2000)
+                                if(response.message === 'busy') {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Название занято!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                } else {
+                                    let id = response.product._id
+                                    vm.sendImage(id)
+                                }
                     })
                     .catch(function (error) {
-                        // handle error
-                        // vm.message = 'error'
-                        // vm.loading = false
+                        vm.messageStatus = 'При загрузке произошла ошибка! Название занято!'
+                        setTimeout(vm.overlayOffError, 1000)
                         console.log(error);
                     })
             },
@@ -351,11 +350,9 @@
                                     counter++
                             })
                             .catch(function (error) {
-                                // handle error
-                                // vm.message = 'error'
-                                // vm.loading = false
-                                vm.messageStatus = 'При загрузке произошла ошибка!'
+                                vm.messageStatus = 'При загрузке произошла ошибка! Попробуйте еще раз!'
                                 checkError = error
+                                setTimeout(vm.overlayOffError, 1000)
                                 console.log(error);
                                 throw error
                             })
@@ -365,8 +362,15 @@
 
                     if(counter === this.images.length) {
                         this.progressValue = 60
-                        console.log(1)
-                        this.sendOtherImage(id)
+
+                        if(this.otherFieldImage.length > 0) {
+                            this.sendOtherImage(id)
+                        } else {
+                            this.messageStatus = 'Загрузка завершена'
+                            this.progressValue = 100
+                            setTimeout(this.overlayOff, 1000)
+                        }
+                        
                     }
                 }
             
@@ -401,6 +405,7 @@
                                             // vm.loading = false
                                             vm.messageStatus = 'При загрузке произошла ошибка!'
                                             checkError = error
+                                            setTimeout(vm.overlayOffError, 1000)
                                             console.log(error);
                                             throw error
                                         })
@@ -434,6 +439,7 @@
                                                         // vm.loading = false
                                                         vm.messageStatus = 'При загрузке произошла ошибка!'
                                                         checkError = error
+                                                        setTimeout(vm.overlayOffError, 1000)
                                                         console.log(error);
                                                         throw error
                                                     })
@@ -449,6 +455,7 @@
                                 // vm.loading = false
                                 vm.messageStatus = 'При загрузке произошла ошибка!'
                                 checkError = error
+                                setTimeout(vm.overlayOffError, 1000)
                                 console.log(error);
                                 throw error
                             })
@@ -466,6 +473,9 @@
                 }
 
                 
+            },
+            async overlayOffError() {
+                this.overlay = false
             },
             async overlayOff() {
                 this.overlay = false

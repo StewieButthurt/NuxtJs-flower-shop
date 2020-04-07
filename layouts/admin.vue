@@ -95,6 +95,13 @@
                                             </v-list-item-title>
                                         </v-list-item-content>
                                     </v-list-item>
+                                    <v-list-item nuxt to="/admin/products-edit">
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                                    Редактирование товара
+                                            </v-list-item-title>
+                                        </v-list-item-content>
+                                    </v-list-item>
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
                         </v-expansion-panels>
