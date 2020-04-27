@@ -1,6 +1,9 @@
-const {Router} = require('express')
+const { Router } = require('express')
 const passport = require('passport')
-const {create, getCategories, edit, remove} = require('../controllers/categories.controller')
+const { create } = require('../controllers/categories/create')
+const { get } = require('../controllers/categories/get')
+const { edit } = require('../controllers/categories/edit')
+const { remove } = require('../controllers/categories/remove')
 const router = Router()
 
 // /api/categories/
@@ -24,7 +27,7 @@ router.delete(
 
 router.get(
     '/',
-    getCategories
+    get
 )
 
 

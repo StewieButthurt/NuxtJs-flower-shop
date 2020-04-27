@@ -1,6 +1,9 @@
-const {Router} = require('express')
+const { Router } = require('express')
 const passport = require('passport')
-const {create, getMenu, edit, remove} = require('../controllers/menu.controller')
+const { create } = require('../controllers/menu/create')
+const { edit } = require('../controllers/menu/edit')
+const { remove } = require('../controllers/menu/remove')
+const { get } = require('../controllers/menu/get')
 const router = Router()
 
 // /api/menu/
@@ -24,7 +27,7 @@ router.delete(
 
 router.get(
     '/',
-    getMenu
+    get
 )
 
 

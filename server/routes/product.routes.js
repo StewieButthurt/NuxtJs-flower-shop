@@ -1,6 +1,11 @@
 const passport = require('passport')
-const {Router} = require('express')
-const ctr = require('../controllers/product.controller')
+const { Router } = require('express')
+const { fields } = require('../controllers/product/fields')
+const { images } = require('../controllers/product/images')
+const { otherImagesTitle } = require('../controllers/product/otherImagesTitle')
+const { otherImages } = require('../controllers/product/otherImages')
+const { getProductId } = require('../controllers/product/getProductId')
+const { search } = require('../controllers/product/search')
 const router = Router()
 
 //Admin
@@ -8,64 +13,37 @@ const router = Router()
 
 router.get(
     '/get-product-search',
-    ctr.getProductSearch
+    search
 )
 
 router.get(
     '/get-product-id',
-    ctr.getProductId
+    getProductId
 )
 
 router.post(
     '/create/fields',
     passport.authenticate('jwt', { session: false }),
-    ctr.fields
+    fields
 )
 
 router.post(
     '/create/images',
     passport.authenticate('jwt', { session: false }),
-    ctr.images
+    images
 )
 
 router.post(
     '/create/other-image-title',
     passport.authenticate('jwt', { session: false }),
-    ctr.otherImagesTitle
+    otherImagesTitle
 )
 
 router.post(
     '/create/other-images',
     passport.authenticate('jwt', { session: false }),
-    ctr.otherImages
+    otherImages
 )
 
-// router.post(
-//     '/create',
-//     passport.authenticate('jwt', { session: false }),
-//     ctr.create
-// )
-
-// router.post(
-//     '/search-on-city',
-//     ctr.searchCity
-// )
-
-// router.post(
-//     '/admin/update-city',
-//     passport.authenticate('jwt', { session: false }),
-//     ctr.updateCity
-// )
-
-// router.delete(
-//     '/admin/delete-city',
-//     passport.authenticate('jwt', { session: false }),
-//     ctr.remove
-// )
-
-// router.get(
-//     '/',
-//     ctr.getCity
-// )
 
 module.exports = router
