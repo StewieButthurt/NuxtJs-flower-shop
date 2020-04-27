@@ -311,8 +311,36 @@
 
                 await this.$axios.$post('/api/product/create/fields', fields)
                     .then(async function (response) {
-                                if(response.message === 'busy') {
+                                if(response.message === 'error validate name') {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Название товара не прошло проверку!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                } else if(response.message === 'busy') {
                                     vm.messageStatus = 'При загрузке произошла ошибка! Название занято!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                } else if(response.message === 'Field Categories error') {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Категории не прошли проверку!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                } else if(response.message === 'Field Other error') {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Описание товара не прошло проверку!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                } else if(response.message === 'Field newFields error') {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Дополнительные поля (пример с керамикой) не прошли проверку!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                } else if(response.message === 'Field newFields.descr error') {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Дополнительные поля (пример с керамикой) не прошли проверку!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                } else if(response.message === 'error save') {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Неудалось сохранить данные в базе!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                } else if(response.message === 'main info validate error') {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Основные данные о товаре не прошли проверку!'
                                     checkError = error
                                     setTimeout(vm.overlayOffError, 1000)
                                 } else {
