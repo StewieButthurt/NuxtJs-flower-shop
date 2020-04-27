@@ -6,7 +6,6 @@ const Axios = require('axios').default;
 const FormData = require('form-data');
 const Jimp = require('jimp');
 const keys = require('../../keys')
-const { check, validationResult } = require('express-validator');
 const SimpleNodeLogger = require('simple-node-logger'),
     opts = {
         logFilePath: `project-${new Date().getMonth()}.log`,
@@ -21,6 +20,9 @@ module.exports.search = async(req, res) => {
         let article = await Product.find({ "article": { '$regex': `${req.query.search}`, '$options': 'i' } }).limit(10)
         let name = await Product.find({ "name": { '$regex': `${req.query.search}`, '$options': 'i' } }).limit(10)
         let categories = await Product.find({ "categories": { '$regex': `${req.query.search}`, '$options': 'i' } }).limit(10)
+        console.log('article', article)
+        console.log('name', name),
+            console.log('categories', categories)
         res.json({
             article: article,
             name: name,
