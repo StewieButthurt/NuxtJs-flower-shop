@@ -9,14 +9,21 @@ const SimpleNodeLogger = require('simple-node-logger'),
 const log = SimpleNodeLogger.createSimpleLogger(opts);
 
 module.exports.remove = async(req, res) => {
-    try {
-        let menu = await Menu.deleteOne({ _id: req.body.id })
-        log.info(`Успешное удаление пункта меню`);
-        res.status(200).json({
-            message: 'delete-success'
-        })
-    } catch (e) {
-        log.warn(`Неудачная попытка удаления пункта меню (ошибка обращения к базе)`);
-        res.status(500).json(e)
+
+    if (typeof(req.body.id) === 'string') {
+        try {
+            let menu = await Menu.deleteOne({ _id: req.body.id })
+            log.info(`Успешное удаление пункта меню`);
+            res.status(200).json({
+                message: 'delete-success'
+            })
+        } catch (e) {
+            log.warn(`Неудачная попытка удаления пункта меню (ошибка обращения к базе)`);
+            res.status(500).json(e)
+        }
+    } else {
+        log.warn(`Ошибка удаления товара. Данные не прошли валидацию!`);
+        res.status(500).json('Error server. Data did not pass verification')
     }
+
 }
