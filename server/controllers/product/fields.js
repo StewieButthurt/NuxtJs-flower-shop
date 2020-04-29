@@ -34,7 +34,6 @@ module.exports.fields = async(req, res) => {
                     if (typeof(req.body.categories[i]) === 'string') {
 
                     } else {
-                        console.log(3, 'Field Categories')
                         log.warn(`Неудачная попытка добавления основной информации о товаре 
                         '${req.body.name}'! Данные не прошли валидацию! Field Categories error!`);
                         res.json({ message: 'Field Categories error' })
@@ -48,7 +47,6 @@ module.exports.fields = async(req, res) => {
                     ) {
 
                     } else {
-                        console.log(4, 'Field Other error')
                         log.warn(`Неудачная попытка добавления основной информации о товаре 
                         '${req.body.name}'! Данные не прошли валидацию! Field Other error`);
                         res.json({ message: 'Field Other error' })
@@ -63,14 +61,12 @@ module.exports.fields = async(req, res) => {
                             if (typeof(req.body.newFields[k].descr[c]) === 'string') {
 
                             } else {
-                                console.log(6, 'Field newFields.descr error')
                                 log.warn(`Неудачная попытка добавления основной информации о товаре 
                                 '${req.body.name}'! Данные не прошли валидацию! Field newFields.descr error`);
                                 res.json({ message: 'Field newFields.descr error' })
                             }
                         }
                     } else {
-                        console.log(5, 'Field newFields error')
                         log.warn(`Неудачная попытка добавления основной информации о товаре 
                         '${req.body.name}'! Данные не прошли валидацию! Field newFields error`);
                         res.json({ message: 'Field newFields error' })
@@ -103,7 +99,6 @@ module.exports.fields = async(req, res) => {
                     res.json({ message: 'error save' })
                 }
             } else {
-                console.log(2)
                 log.warn(`Неудачная попытка добавления основной информации о товаре '${req.body.name}'! Данные не прошли валидацию!`);
                 res.json({ message: 'main info validate error' })
             }
@@ -111,7 +106,6 @@ module.exports.fields = async(req, res) => {
         }
 
     } else {
-        console.log(1)
         log.warn(`Неудачная попытка добавления основной информации о товаре '${req.body.name}'! Данные не прошли валидацию!`);
         res.json({ message: 'error validate name' })
     }

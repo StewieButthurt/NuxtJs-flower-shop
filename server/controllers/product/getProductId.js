@@ -15,12 +15,18 @@ const log = SimpleNodeLogger.createSimpleLogger(opts);
 
 
 module.exports.getProductId = async(req, res) => {
-    let id = req.query.id
+    if (typeof(req.query.id) === 'string') {
 
-    try {
-        const product = await Product.findOne({ _id: req.query.id })
-        res.json(product)
-    } catch (e) {
-        res.status(500).json(e)
+        let id = req.query.id
+
+        try {
+            const product = await Product.findOne({ _id: req.query.id })
+            res.json(product)
+        } catch (e) {
+            res.status(500).json(e)
+        }
+    } else {
+        res.status(500).json('data did not pass verification')
     }
+
 }
