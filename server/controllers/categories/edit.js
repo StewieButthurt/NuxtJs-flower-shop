@@ -12,26 +12,38 @@ const log = SimpleNodeLogger.createSimpleLogger(opts);
 
 module.exports.edit = async(req, res) => {
 
-    let link = req.body.title;
+    if (typeof(req.body.title) === 'string' &&
+        typeof(req.body.status) === 'boolean' &&
+        typeof(req.body.id) === 'string'
+    ) {
 
-    link = link.toLowerCase();
+        let link = req.body.title;
 
-    link = await cyrillic().transform(link, "-")
+        link = link.toLowerCase();
 
-    const $set = {
-        title: req.body.title,
-        link: link,
-        status: req.body.status
+        link = await cyrillic().transform(link, "-")
+
+        const $set = {
+            title: req.body.title,
+            link: link,
+            status: req.body.status
+        }
+
+        try {
+            let category = await Categories.findByIdAndUpdate({ _id: req.body.id }, { $set })
+            log.info(`Успешное редактирование категории '${req.body.title}'`);
+            res.status(201).json({
+                message: 'success'
+            })
+        } catch (e) {
+            log.warn(`Неудачная попытка редактирования категории '${req.body.title}' (ошибка обращения к базе)`);
+            res.status(500).json(e)
+        }
+    } else {
+        log.warn(`Ошибка редактирования категории. 
+                      Данные не прошли валидацию!`);
+        res.status(500).json('Error server. Data did not pass verification')
     }
 
-    try {
-        let category = await Categories.findByIdAndUpdate({ _id: req.body.id }, { $set })
-        log.info(`Успешное редактирование категории '${req.body.title}'`);
-        res.status(201).json({
-            message: 'success'
-        })
-    } catch (e) {
-        log.warn(`Неудачная попытка редактирования категории '${req.body.title}' (ошибка обращения к базе)`);
-        res.status(500).json(e)
-    }
+
 }

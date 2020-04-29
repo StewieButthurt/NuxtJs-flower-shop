@@ -11,39 +11,46 @@ const log = SimpleNodeLogger.createSimpleLogger(opts);
 
 
 module.exports.create = async(req, res) => {
-    const category = await Categories.findOne({ title: req.body.title })
+    if (typeof(req.body.title) === 'string') {
+        const category = await Categories.findOne({ title: req.body.title })
 
-    if (category) {
-        log.warn(`Неудачная попытка добавления новой категории (категория '${req.body.title}' уже существует)`);
-        res.status(200).json({
-            message: 'busy'
-        })
-    } else {
-
-        try {
-            let link = req.body.title;
-
-            link = link.toLowerCase();
-
-            link = await cyrillic().transform(link, "-")
-
-            const SaveCategory = new Categories({
-                title: req.body.title,
-                link: link,
-                status: req.body.status
+        if (category) {
+            log.warn(`Неудачная попытка добавления новой категории (категория '${req.body.title}' уже существует)`);
+            res.status(200).json({
+                message: 'busy'
             })
+        } else {
 
-            await SaveCategory.save()
+            try {
+                let link = req.body.title;
 
-            log.info(`Успешное добавление новой категории '${req.body.title}'`);
+                link = link.toLowerCase();
 
-            res.status(201).json({
-                message: 'success'
-            })
+                link = await cyrillic().transform(link, "-")
 
-        } catch (e) {
-            log.warn(`Неудачная попытка добавления новой категории '${req.body.title}' (ошибка обращения к базе)`);
-            res.status(500).json(e)
+                const SaveCategory = new Categories({
+                    title: req.body.title,
+                    link: link,
+                    status: req.body.status
+                })
+
+                await SaveCategory.save()
+
+                log.info(`Успешное добавление новой категории '${req.body.title}'`);
+
+                res.status(201).json({
+                    message: 'success'
+                })
+
+            } catch (e) {
+                log.warn(`Неудачная попытка добавления новой категории '${req.body.title}' (ошибка обращения к базе)`);
+                res.status(500).json(e)
+            }
         }
+    } else {
+        log.warn(`Ошибка создания категории. 
+                      Данные не прошли валидацию!`);
+        res.status(500).json('Error server. Data did not pass verification')
     }
+
 }
