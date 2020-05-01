@@ -37,7 +37,8 @@
             'title',
             'descr',
             'index',
-            'statusButton'
+            'statusButton',
+            'storeUrl'
         ],
         mounted() {
             this.localTitle = this.title,
@@ -53,12 +54,12 @@
         watch: {
             localDescr(val) {
                 let index = this.index
-                this.$store.dispatch('add-product/updateNewFieldDescr', {val, index})
+                this.$store.dispatch(`${this.storeUrl}updateNewFieldDescr`, {val, index})
             },
             localTitle(val) {
                 let title = this.localTitle
                 let index = this.index
-                this.$store.dispatch('add-product/updateNewFieldTitle', {title, index})
+                this.$store.dispatch(`${this.storeUrl}updateNewFieldTitle`, {title, index})
             }
         },
         methods: {
@@ -67,7 +68,7 @@
             },
             async removeField() {
                 let index = this.index
-                this.$store.dispatch('add-product/removeNewField', index)
+                this.$store.dispatch(`${this.storeUrl}removeNewField`, index)
             },
             async addNewField() {
 
@@ -77,7 +78,7 @@
                     descr: []
                 }
 
-                this.$store.dispatch('add-product/setNewFields', data)
+                this.$store.dispatch(`${this.storeUrl}setNewFields`, data)
             }
         },
         computed: {
@@ -89,7 +90,7 @@
                 }
             },
             newFields() {
-                return this.$store.getters['add-product/newFields']
+                return this.$store.getters[`${this.storeUrl}newFields`]
             },
             items() {
                 return this.localDescr

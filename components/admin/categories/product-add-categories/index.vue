@@ -34,23 +34,33 @@
               arr.push(items[i].title)
           }
           this.items = arr
+
+          this.chips = this.getCategories
         },
         data () {
             return {
                 chips: [],
-                items: [],
+                items: []
             }
         },
+        props: [
+          'storeUrl'
+        ],
         methods: {
-            remove (item) {
-            this.chips.splice(this.chips.indexOf(item), 1)
-            this.chips = [...this.chips]
+            async remove (item) {
+              await this.chips.splice(this.chips.indexOf(item), 1)
+              this.chips = [...this.chips]
             }
         },
         watch: {
             chips(val) {
-                this.$store.dispatch('add-product/setCategories', val)
+                this.$store.dispatch(`${this.storeUrl}setCategories`, val)
             }
+        },
+        computed: {
+          getCategories() {
+            return this.$store.getters[`${this.storeUrl}categories`]
+          }
         }
     }
 </script>

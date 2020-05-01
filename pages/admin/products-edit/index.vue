@@ -22,6 +22,7 @@
                         color="black"
                         dense
                         solo
+                        return-object
                         eager
                         flat
                         chips
@@ -73,7 +74,8 @@
                 select: '',
                 searchResult: [],
                 search: null,
-                statusMenu: true
+                statusMenu: true,
+                infoProduct: false
             }
         },
         computed: {
@@ -92,14 +94,12 @@
         watch: {
             async search (val) {
                 let vm = this
-                // this.searchResult = []
                 if(val && val.length > 1) {
+                   this.searchResult = []
                    await this.$axios.$get('/api/product/get-product-search', { params: { search: val } })
                         .then(async function (response) {
 
                                 if(response.name.length !== 0) {
-
-                                    vm.searchResult.push({header: 'Товары'})
 
                                     for(let i = 0; i < response.name.length; i++) {
 
@@ -112,7 +112,8 @@
                                         vm.searchResult.push({
                                             name: `${response.name[i].name}, ${response.name[i].article}`,
                                             group: `${group}`,
-                                            avatar: require('~/assets/' + response.name[i].images[0].previewImg)
+                                            avatar: require('~/assets/' + response.name[i].images[0].previewImg),
+                                            id: `${response.name[i]._id}`
                                         })
 
                                     }
@@ -130,7 +131,8 @@
                                         vm.searchResult.push({
                                             name: `${response.article[i].name}, ${response.article[i].article}`,
                                             group: `${group}`,
-                                            avatar: require('~/assets/' + response.article[i].images[0].previewImg)
+                                            avatar: require('~/assets/' + response.article[i].images[0].previewImg),
+                                            id: `${response.name[i]._id}`
                                         })
 
                                     }
@@ -147,8 +149,10 @@
                     this.search = null
                 }
             },
-            select(val) {
-                console.log(val)
+            async select(val) {
+                await this.$store.dispatch('localStorage/setProductEdit', val.id)
+
+                this.$router.push('/admin/products-edit/edit')
             }
         }
     }

@@ -1,11 +1,10 @@
-export default function({store, redirect}) {
-    if(store.getters['add-product/images'].length > 0 &&
-        store.getters['add-product/title'] !== '' &&
-        store.getters['add-product/descr'] !== '' &&
-        store.getters['add-product/price'] !== '' &&
-        store.getters['add-product/article'] !== ''
-    ) {
-    } else {
+export default function({ store, redirect }) {
+    if (store.getters['product/add/images'].length > 0 &&
+        store.getters['product/add/title'] !== '' &&
+        store.getters['product/add/descr'] !== '' &&
+        store.getters['product/add/price'] !== '' &&
+        store.getters['product/add/article'] !== ''
+    ) {} else {
         redirect('/admin/products/')
     }
 }

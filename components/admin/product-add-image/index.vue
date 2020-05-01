@@ -35,9 +35,11 @@
         props: [
             'index',
             'previewImageLocal',
-            'fileLocal'
+            'fileLocal',
+            'storeUrl'
         ],
         mounted() {
+            console.log(this.fileLocal)
             this.file = this.fileLocal,
             this.previewImg = this.previewImageLocal
         },
@@ -61,16 +63,17 @@
                         let index = vm.index
 
 
-                        await vm.$store.dispatch('add-product/updateDataImage', {data, index})
+                        await vm.$store.dispatch(`${vm.storeUrl}updateDataImage`, {data, index})
                     }
 
+                    console.log(this.file)
                     await readerPreview.readAsDataURL(this.file);
                 }
 
             },
             async removeImageField() {
                 let index = this.index
-                await this.$store.dispatch('add-product/removeImageField', index)
+                await this.$store.dispatch(`${this.storeUrl}removeImageField`, index)
             },
             async addImageField() {
                 let data = {
@@ -78,7 +81,7 @@
                     previewImg: null
                 }
 
-                await this.$store.dispatch('add-product/setImageField', data)
+                await this.$store.dispatch(`${this.storeUrl}setImageField`, data)
 
             },
             async clearImage() {
@@ -89,13 +92,13 @@
 
                 let index = this.index
                 
-                 await this.$store.dispatch('add-product/updateDataImage', {data, index})
+                 await this.$store.dispatch(`${this.storeUrl}updateDataImage`, {data, index})
 
             }
         },
         computed: {
             images() {
-                return this.$store.getters['add-product/images']
+                return this.$store.getters[`${this.storeUrl}images`]
             }
         }
     }

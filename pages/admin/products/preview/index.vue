@@ -62,6 +62,7 @@
                     <div class="preview__descr-price">
                         <app-product-price 
                             :price="price"
+                            :storeUrl="storeUrl"
                         />
                     </div>
                     <div class="preview__descr-text">
@@ -133,6 +134,7 @@
                             :index="index"
                             :title="item.title"
                             :descr="item.descr"
+                            :storeUrl="storeUrl"
                         />
                     </div>
                     <div key="vtabReviews" class="preview__characterisctics-wrapper" v-if="vtabReviews">
@@ -209,6 +211,7 @@
         },
         data() {
             return {
+                storeUrl: 'product/add/',
                 rating: 0,
                 counterProducts: 1,
                 mainImg: '',
@@ -234,49 +237,49 @@
         },
         computed: {
             images() {
-                return this.$store.getters['add-product/images']
+                return this.$store.getters['product/add/images']
             },
             img() {
                 return this.mainImg
             },
             name() {
-                return this.$store.getters['add-product/name']
+                return this.$store.getters['product/add/name']
             },
             price() {
-                return this.$store.getters['add-product/price']
+                return this.$store.getters['product/add/price']
             },
             descr() {
-                return this.$store.getters['add-product/descr']
+                return this.$store.getters['product/add/descr']
             },
             other() {
-                return this.$store.getters['add-product/other']
+                return this.$store.getters['product/add/other']
             },
             article() {
-                return this.$store.getters['add-product/article']
+                return this.$store.getters['product/add/article']
             },
             newFields() {
-                return this.$store.getters['add-product/newFields']
+                return this.$store.getters['product/add/newFields']
             },
             sizeDiscount() {
-                return this.$store.getters['add-product/sizeDiscount']
+                return this.$store.getters['product/add/sizeDiscount']
             },
             discountStatus() {
-                return this.$store.getters['add-product/discountStatus']
+                return this.$store.getters['product/add/discountStatus']
             },
             bestseller() {
-                return this.$store.getters['add-product/bestseller']
+                return this.$store.getters['product/add/bestseller']
             },
             stock() {
-                return this.$store.getters['add-product/stock']
+                return this.$store.getters['product/add/stock']
             },
             weekPrice() {
-                return this.$store.getters['add-product/weekPrice']
+                return this.$store.getters['product/add/weekPrice']
             },
             otherFieldImage() {
-                return this.$store.getters['add-product/otherFieldImage']
+                return this.$store.getters['product/add/otherFieldImage']
             },
             categories() {
-                return this.$store.getters['add-product/categories']
+                return this.$store.getters['product/add/categories']
             }
 
 
@@ -362,6 +365,7 @@
                 for(let i = 0; i < this.images.length; i++) {
 
                     let image = this.images[i].previewImg
+                    let file = this.images[i].file
                     
                     
                     if(checkError === false) {
@@ -369,6 +373,7 @@
                         
                         let data = {
                             image: image,
+                            file: file,
                             index: i,
                             id: id
                         }

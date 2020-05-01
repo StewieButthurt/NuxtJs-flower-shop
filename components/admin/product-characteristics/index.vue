@@ -32,18 +32,19 @@
             title(val) {
                 let index = this.index
                 let title = this.title
-                this.$store.dispatch('add-product/setOtherTitle', {index, title})
+                this.$store.dispatch(`${this.storeUrl}setOtherTitle`, {index, title})
             },
             descr(val) {
                 let index = this.index
                 let descr = this.descr
-                this.$store.dispatch('add-product/setOtherDescr', {index, descr})
+                this.$store.dispatch(`${this.storeUrl}setOtherDescr`, {index, descr})
             }
         },
         props: [
             'index',
             'titleLocal',
-            'descrLocal'
+            'descrLocal',
+            'storeUrl'
         ],
         mounted() {
             this.title = this.titleLocal,
@@ -52,7 +53,7 @@
         methods: {
             async removeField() {
                 let index = this.index
-                this.$store.dispatch('add-product/removeField', index)
+                this.$store.dispatch(`${this.storeUrl}removeField`, index)
             }
         }
     }
@@ -65,11 +66,6 @@
         align-items: center
         width: 100%
         max-width: 550px
-    
-    // .xs-ml-0
-    //     margin-left: 20px
-    //     +xs-block
-    //         margin-left: 0px
     
     .product-characteristics__fields
         display: flex

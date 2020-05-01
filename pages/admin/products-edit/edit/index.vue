@@ -108,7 +108,7 @@
                             v-for="(item, index) in images"
                             :key="index"
                             :previewImageLocal="item.previewImg"
-                            :fileLocal="item.file"
+                            :fileLocal="require(`~/assets/${item.previewImg}`)"
                             :index="index"
                             :storeUrl="storeUrl"  
                         />
@@ -303,16 +303,26 @@
         head: {
             title: 'Панель администратора | Добавление товара'
         },
-        // async validate({ store, redirect, $axios }) {
+        async validate({ store, redirect, $axios }) {
 
-        //     try {
-        //         await $axios.$get('/api/auth/admin/token')
-        //         return true
-        //     } catch(e) {
-        //         redirect('/login?message=login')
-        //     }
+            if(store.getters['localStorage/productEdit'] !== '') {
+                await $axios.$get('/api/product/get-product-id', {params : { id: store.getters['localStorage/productEdit'] }})
+                    .then(async function (response) {
+                            
+                            await store.dispatch('product/edit/setData', response)    
+                            return true
+                            
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        redirect('/admin/products-edit/')
+                    })
+                    return true
+            } else {
+                redirect('/admin/products-edit/')
+            }
             
-        // },
+        },
         components: {
             AppProductCharacteristics,
             AppProductAddImage,
@@ -323,7 +333,7 @@
         },
         data() {
             return {
-                storeUrl: 'product/add/',
+                storeUrl: 'product/edit/',
                 localName: '',
                 localPrice: '',
                 localDescr: '',
@@ -367,16 +377,16 @@
         },
         watch: {
             localDiscountStatus(val) {
-                this.$store.dispatch('product/add/setDiscountStatus', val)
+                this.$store.dispatch('product/edit/setDiscountStatus', val)
             },
             localStock(val) {
-                this.$store.dispatch('product/add/setStock', val)
+                this.$store.dispatch('product/edit/setStock', val)
             },
             localBestseller(val) {
-                this.$store.dispatch('product/add/setBestseller', val)
+                this.$store.dispatch('product/edit/setBestseller', val)
             },
             localWeekPrice(val) {
-                this.$store.dispatch('product/add/setWeekPrice', val)
+                this.$store.dispatch('product/edit/setWeekPrice', val)
             }
         },
         async mounted() {
@@ -403,37 +413,37 @@
         },
         computed: {
             other() {
-                return this.$store.getters['product/add/other']
+                return this.$store.getters['product/edit/other']
             },
             images() {
-                return this.$store.getters['product/add/images']
+                return this.$store.getters['product/edit/images']
             },
             name() {
-                return this.$store.getters['product/add/name']
+                return this.$store.getters['product/edit/name']
             },
             price() {
-                return this.$store.getters['product/add/price']
+                return this.$store.getters['product/edit/price']
             },
             descr() {
-                return this.$store.getters['product/add/descr']
+                return this.$store.getters['product/edit/descr']
             },
             article() {
-                return this.$store.getters['product/add/article']
+                return this.$store.getters['product/edit/article']
             },
             discountStatus() {
-                return this.$store.getters['product/add/discountStatus']
+                return this.$store.getters['product/edit/discountStatus']
             },
             sizeDiscount() {
-                return this.$store.getters['product/add/sizeDiscount']
+                return this.$store.getters['product/edit/sizeDiscount']
             },
             stock() {
-                return this.$store.getters['product/add/stock']
+                return this.$store.getters['product/edit/stock']
             },
             weekPrice() {
-                return this.$store.getters['product/add/weekPrice']
+                return this.$store.getters['product/edit/weekPrice']
             },
             bestseller() {
-                return this.$store.getters['product/add/bestseller']
+                return this.$store.getters['product/edit/bestseller']
             },
             statusImage() {
                     if(this.images[0].previewImg !== null) {
@@ -456,10 +466,10 @@
                 }
             },
             newFields() {
-                return this.$store.getters['product/add/newFields']
+                return this.$store.getters['product/edit/newFields']
             },
             otherFieldImage() {
-                return this.$store.getters['product/add/otherFieldImage']
+                return this.$store.getters['product/edit/otherFieldImage']
             }
 
         },
@@ -470,13 +480,13 @@
                     descr: ''
                 }
 
-                this.$store.dispatch('product/add/setField', data)
+                this.$store.dispatch('product/edit/setField', data)
             },
             async setImageField(data) {
-                await this.$store.dispatch('product/add/setImageField', data)
+                await this.$store.dispatch('product/edit/setImageField', data)
             },
             async clearFields() {
-                await this.$store.dispatch('product/add/clearFields')
+                await this.$store.dispatch('product/edit/clearFields')
             },
             async addNewField() {
 
@@ -486,30 +496,30 @@
                     descr: []
                 }
 
-                this.$store.dispatch('product/add/setNewFields', data)
+                this.$store.dispatch('product/edit/setNewFields', data)
             },
             async updateName(name) {
-                this.$store.dispatch('product/add/setName', name)
+                this.$store.dispatch('product/edit/setName', name)
             },
             async updatePrice() {
                 this.localPrice = parseInt(this.localPrice)
 
                 if(this.localPrice) {
-                    this.$store.dispatch('product/add/setPrice', this.localPrice)
+                    this.$store.dispatch('product/edit/setPrice', this.localPrice)
                 } else {
                     this.localPrice = ''
                 }
                 
             },
             async updateDescr(descr) {
-                this.$store.dispatch('product/add/setDescr', descr)
+                this.$store.dispatch('product/edit/setDescr', descr)
             },
             async updateArticle(article) {
-                this.$store.dispatch('product/add/setArticle', article)
+                this.$store.dispatch('product/edit/setArticle', article)
             },
             async updateDiscount() {
                 this.localDiscount = this.localDiscount.replace(/[^\d]/g, '')
-                this.$store.dispatch('product/add/setDiscount', this.localDiscount)
+                this.$store.dispatch('product/edit/setDiscount', this.localDiscount)
             },
             async disabledHoverImage({index, color}) {
                 this.indexExampleHoverImage = index
@@ -529,7 +539,7 @@
                     ]
                 }
 
-                this.$store.dispatch('product/add/addNewFieldWithImage', data)
+                this.$store.dispatch('product/edit/addNewFieldWithImage', data)
             }
         }
     }

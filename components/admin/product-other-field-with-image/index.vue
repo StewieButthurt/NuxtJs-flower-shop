@@ -49,16 +49,17 @@
         props: [
             'title',
             'info',
-            'index'
+            'index',
+            'storeUrl'
         ],
         methods: {
             async removeBlock() {
-                this.$store.dispatch('add-product/removeOtherFieldWithImageBlock', this.index)
+                this.$store.dispatch(`${this.storeUrl}removeOtherFieldWithImageBlock`, this.index)
             },
             async updateTitle() {
                 let title = this.localTitle
                 let index = this.index
-                this.$store.dispatch('add-product/updateOtherFieldTitle', {title, index})
+                this.$store.dispatch(`${this.storeUrl}updateOtherFieldTitle`, {title, index})
             }
         }
     }

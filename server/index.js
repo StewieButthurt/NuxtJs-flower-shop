@@ -13,12 +13,17 @@ const path = require('path');
 const keys = require('./keys')
 const router = Router()
 const { Nuxt, Builder } = require('nuxt')
-
 const authRoutes = require('./routes/auth.routes');
 const productRoutes = require('./routes/product.routes');
 const menuRoutes = require('./routes/menu.routes');
 const categoriesRoutes = require('./routes/categories.routes');
 const cron = require('node-cron');
+const SimpleNodeLogger = require('simple-node-logger'),
+    opts = {
+        logFilePath: `project-${new Date().getMonth()}.log`,
+        timestampFormat: 'YYYY-MM-DD HH:mm:ss.SSS'
+    }
+const log = SimpleNodeLogger.createSimpleLogger(opts);
 
 cron.schedule('00 00 00 1 * *', () => {
     let time = new Date().getMonth()
