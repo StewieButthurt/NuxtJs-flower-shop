@@ -291,11 +291,11 @@
 
 <script>
 
-    const AppProductCharacteristics = () => import('~/components/admin/product-characteristics/index.vue')
-    const AppProductAddImage = () => import('~/components/admin/product-add-image/index.vue')
-    const AppProductAddNewField = () => import('~/components/admin/product-add-new-field/index.vue')
-    const AppProductOtherFieldExampleImage = () => import('~/components/admin/product-other-field-example-image/index.vue')
-    const AppProductOtherFieldWithImage = () => import('~/components/admin/product-other-field-with-image/index.vue')
+    const AppProductCharacteristics = () => import('~/components/admin/product/characteristics/index.vue')
+    const AppProductAddImage = () => import('~/components/admin/product/add-image/index.vue')
+    const AppProductAddNewField = () => import('~/components/admin/product/add-new-field/index.vue')
+    const AppProductOtherFieldExampleImage = () => import('~/components/admin/product/other-field-example-image/index.vue')
+    const AppProductOtherFieldWithImage = () => import('~/components/admin/product/other-field-with-image/index.vue')
     const AppProductAddCategories = () => import('~/components/admin/categories/product-add-categories/index.vue')
 
     export default {

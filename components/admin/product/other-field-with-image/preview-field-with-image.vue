@@ -24,7 +24,7 @@
 
 <script>
 
-    const AppPreviewImage = () => import('~/components/admin/product-other-field-with-image/preview-image.vue')
+    const AppPreviewImage = () => import('~/components/admin/product/other-field-with-image/preview-image.vue')
 
     export default {
         components: {

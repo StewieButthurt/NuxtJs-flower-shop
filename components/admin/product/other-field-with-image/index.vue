@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    const AppFieldWithImage = () => import('~/components/admin/product-other-field-with-image/field-with-image.vue')
+    const AppFieldWithImage = () => import('~/components/admin/product/other-field-with-image/field-with-image.vue')
 
     export default {
         async mounted() {

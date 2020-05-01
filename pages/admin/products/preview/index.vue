@@ -184,11 +184,11 @@
 </template>
 
 <script>
-    const AppProductPrice = () => import('~/components/admin/product-price/index.vue')
-    const AppProductOtherField = () => import('~/components/admin/product-other-field/index.vue')
-    const AppProductPreviewImages = () => import('~/components/admin/product-preview-images/index.vue')
-    const AppPreviewFieldWithImage = () => import('~/components/admin/product-other-field-with-image/preview-field-with-image.vue')
-    const AppPreviewCharacteristics = () => import('~/components/admin/product-characteristics/preview-characteristics.vue')
+    const AppProductPrice = () => import('~/components/admin/product/price/index.vue')
+    const AppProductOtherField = () => import('~/components/admin/product/other-field/index.vue')
+    const AppProductPreviewImages = () => import('~/components/admin/product/preview-images/index.vue')
+    const AppPreviewFieldWithImage = () => import('~/components/admin/product/other-field-with-image/preview-field-with-image.vue')
+    const AppPreviewCharacteristics = () => import('~/components/admin/product/characteristics/preview-characteristics.vue')
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
 
 
