@@ -102,7 +102,7 @@
                     ></v-switch>
                 </v-col>
             </v-row>
-            <v-row align="center" justify="center">
+            <!-- <v-row align="center" justify="center">
                 <v-col align="center" justify="center" cols="12" sm="9" md="7" >
                         <app-product-add-image 
                             v-for="(item, index) in images"
@@ -113,6 +113,18 @@
                             :storeUrl="storeUrl"  
                         />
                 </v-col>
+            </v-row> -->
+            <v-row align="center" justify="center">
+                <div class="products-image-filepond">
+                    <app-product-add-image-filepond 
+                        v-for="(item, index) in images"
+                        :key="index"
+                        :info="item"
+                        :index="index"
+                        :storeUrl="storeUrl"
+                        @changeMessage="changeMessage"
+                    />
+                </div>
             </v-row>
             <v-row align="center" justify="center">
                 <v-col align="center" justify="center">
@@ -129,7 +141,7 @@
                                     <span>Цвет:</span>
                                     <span class="ml-5 font-italic">{{colorExample}}</span>
                                 </v-row>
-                                <v-row style="padding: 12px">
+                                <v-row style="justify-content: space-between; margin: 10px 0px">
                                     <app-product-other-field-example-image 
                                         v-for="(item, index) in arrImageExample"
                                         :key="index"
@@ -285,6 +297,13 @@
                     Очистить поля
                 </v-btn>
             </v-row>
+            <app-snackbars 
+                :snackbar="snackbar"
+                :text="text"
+                :colorBckg="colorBckg"
+                :colorBtn="colorBtn"
+                @changeSnackbar="changeSnackbar"
+            />
         </v-container>
     </div>
 </template>
@@ -293,10 +312,12 @@
 
     const AppProductCharacteristics = () => import('~/components/admin/product/characteristics/index.vue')
     const AppProductAddImage = () => import('~/components/admin/product/add-image/index.vue')
+    const AppProductAddImageFilepond = () => import('~/components/admin/product/add-image-filepond/index.vue')
     const AppProductAddNewField = () => import('~/components/admin/product/add-new-field/index.vue')
     const AppProductOtherFieldExampleImage = () => import('~/components/admin/product/other-field-example-image/index.vue')
     const AppProductOtherFieldWithImage = () => import('~/components/admin/product/other-field-with-image/index.vue')
     const AppProductAddCategories = () => import('~/components/admin/categories/product-add-categories/index.vue')
+    const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
 
     export default {
         layout: 'admin',
@@ -316,13 +337,20 @@
         components: {
             AppProductCharacteristics,
             AppProductAddImage,
+            AppProductAddImageFilepond,
             AppProductAddNewField,
             AppProductOtherFieldExampleImage,
             AppProductOtherFieldWithImage,
-            AppProductAddCategories
+            AppProductAddCategories,
+            AppSnackbars
         },
         data() {
             return {
+                message: false,
+                snackbar: false,
+                text: '',
+                colorBckg: '',
+                colorBtn: '',
                 storeUrl: 'product/add/',
                 localName: '',
                 localPrice: '',
@@ -367,16 +395,24 @@
         },
         watch: {
             localDiscountStatus(val) {
-                this.$store.dispatch('product/add/setDiscountStatus', val)
+                this.$store.dispatch(`${this.storeUrl}setDiscountStatus`, val)
             },
             localStock(val) {
-                this.$store.dispatch('product/add/setStock', val)
+                this.$store.dispatch(`${this.storeUrl}setStock`, val)
             },
             localBestseller(val) {
-                this.$store.dispatch('product/add/setBestseller', val)
+                this.$store.dispatch(`${this.storeUrl}setBestseller`, val)
             },
             localWeekPrice(val) {
-                this.$store.dispatch('product/add/setWeekPrice', val)
+                this.$store.dispatch(`${this.storeUrl}setWeekPrice`, val)
+            },
+            message(val) {
+                if(this.message === 'error type') {
+                    this.text = 'Картинка должна быть формата png или jpeg!'
+                    this.colorBtn = 'white'
+                    this.colorBckg = 'grey darken-4'
+                    this.snackbar = true
+                }
             }
         },
         async mounted() {
@@ -391,49 +427,49 @@
             this.localBestseller = this.bestseller
             
 
-            if(this.images.length === 0) {
-                let data = {
-                    file: null,
-                    previewImg: null
-                }
+            // if(this.images.length === 0) {
+            //     let data = {
+            //         file: null,
+            //         previewImg: null
+            //     }
 
-                await this.setImageField(data)
-            }
+            //     await this.setImageField(data)
+            // }
 
         },
         computed: {
             other() {
-                return this.$store.getters['product/add/other']
+                return this.$store.getters[`${this.storeUrl}other`]
             },
             images() {
-                return this.$store.getters['product/add/images']
+                return this.$store.getters[`${this.storeUrl}images`]
             },
             name() {
-                return this.$store.getters['product/add/name']
+                return this.$store.getters[`${this.storeUrl}name`]
             },
             price() {
-                return this.$store.getters['product/add/price']
+                return this.$store.getters[`${this.storeUrl}price`]
             },
             descr() {
-                return this.$store.getters['product/add/descr']
+                return this.$store.getters[`${this.storeUrl}descr`]
             },
             article() {
-                return this.$store.getters['product/add/article']
+                return this.$store.getters[`${this.storeUrl}article`]
             },
             discountStatus() {
-                return this.$store.getters['product/add/discountStatus']
+                return this.$store.getters[`${this.storeUrl}discountStatus`]
             },
             sizeDiscount() {
-                return this.$store.getters['product/add/sizeDiscount']
+                return this.$store.getters[`${this.storeUrl}sizeDiscount`]
             },
             stock() {
-                return this.$store.getters['product/add/stock']
+                return this.$store.getters[`${this.storeUrl}stock`]
             },
             weekPrice() {
-                return this.$store.getters['product/add/weekPrice']
+                return this.$store.getters[`${this.storeUrl}weekPrice`]
             },
             bestseller() {
-                return this.$store.getters['product/add/bestseller']
+                return this.$store.getters[`${this.storeUrl}bestseller`]
             },
             statusImage() {
                     if(this.images[0].previewImg !== null) {
@@ -456,10 +492,10 @@
                 }
             },
             newFields() {
-                return this.$store.getters['product/add/newFields']
+                return this.$store.getters[`${this.storeUrl}newFields`]
             },
             otherFieldImage() {
-                return this.$store.getters['product/add/otherFieldImage']
+                return this.$store.getters[`${this.storeUrl}otherFieldImage`]
             }
 
         },
@@ -470,13 +506,13 @@
                     descr: ''
                 }
 
-                this.$store.dispatch('product/add/setField', data)
+                this.$store.dispatch(`${this.storeUrl}setField`, data)
             },
             async setImageField(data) {
-                await this.$store.dispatch('product/add/setImageField', data)
+                await this.$store.dispatch(`${this.storeUrl}setImageField`, data)
             },
             async clearFields() {
-                await this.$store.dispatch('product/add/clearFields')
+                await this.$store.dispatch(`${this.storeUrl}clearFields`)
             },
             async addNewField() {
 
@@ -486,30 +522,30 @@
                     descr: []
                 }
 
-                this.$store.dispatch('product/add/setNewFields', data)
+                this.$store.dispatch(`${this.storeUrl}setNewFields`, data)
             },
             async updateName(name) {
-                this.$store.dispatch('product/add/setName', name)
+                this.$store.dispatch(`${this.storeUrl}setName`, name)
             },
             async updatePrice() {
                 this.localPrice = parseInt(this.localPrice)
 
                 if(this.localPrice) {
-                    this.$store.dispatch('product/add/setPrice', this.localPrice)
+                    this.$store.dispatch(`${this.storeUrl}setPrice`, this.localPrice)
                 } else {
                     this.localPrice = ''
                 }
                 
             },
             async updateDescr(descr) {
-                this.$store.dispatch('product/add/setDescr', descr)
+                this.$store.dispatch(`${this.storeUrl}setDescr`, descr)
             },
             async updateArticle(article) {
-                this.$store.dispatch('product/add/setArticle', article)
+                this.$store.dispatch(`${this.storeUrl}setArticle`, article)
             },
             async updateDiscount() {
                 this.localDiscount = this.localDiscount.replace(/[^\d]/g, '')
-                this.$store.dispatch('product/add/setDiscount', this.localDiscount)
+                this.$store.dispatch(`${this.storeUrl}setDiscount`, this.localDiscount)
             },
             async disabledHoverImage({index, color}) {
                 this.indexExampleHoverImage = index
@@ -529,7 +565,14 @@
                     ]
                 }
 
-                this.$store.dispatch('product/add/addNewFieldWithImage', data)
+                this.$store.dispatch(`${this.storeUrl}addNewFieldWithImage`, data)
+            },
+            async changeSnackbar(value) {
+                this.snackbar = value
+                this.message = false
+            },
+            async changeMessage(value) {
+                this.message = value
             }
         }
     }
@@ -545,6 +588,7 @@
         width: 100%
         display: flex
         align-items: center
+        
     
     .edit__list-col-1
         min-width: 150px
@@ -570,4 +614,15 @@
     
     #products__discount .v-input--selection-controls
         margin-top: 0px
+    
+    .products-image-filepond
+        max-width: 650px
+        width: 100%
+        margin: 0 auto
+        display: flex
+        flex-wrap: wrap
+        justify-content: space-between
+        +xs-block
+            flex-direction: column
+            align-items: center
 </style>

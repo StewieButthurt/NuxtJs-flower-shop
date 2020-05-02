@@ -57,7 +57,7 @@
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/vuetify": "^1.0.0",
     "node-sass": "^4.13.1",
-    "nodemon": "^1.18.9",
+    "nodemon": "^2.0.3",
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2"
   }

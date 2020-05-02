@@ -39,11 +39,13 @@
         +size(2)
         max-width: 90px
         cursor: pointer
+        transition-duration: .2s
     
     .products__other-fields-example-image
         width: 100%
         padding-top: 100%
     
     .products__other-fields-example-image-hover
-        border: 2px solid grey
+        transform: scale(1.4)
+        transition-duration: .2s
 </style>

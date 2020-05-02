@@ -2,7 +2,37 @@ import Vue from 'vue'
 
 export const state = () => ({
     data: {
-        images: [],
+        images: [{
+                file: null,
+                previewImg: 'flower.png',
+                text: 'Главная картинка'
+            },
+            {
+                file: null,
+                previewImg: 'other-fields-image-blue.jpg',
+                text: 'Картинка №2'
+            },
+            {
+                file: null,
+                previewImg: null,
+                text: 'Картинка №3'
+            },
+            {
+                file: null,
+                previewImg: null,
+                text: 'Картинка №4'
+            },
+            {
+                file: null,
+                previewImg: null,
+                text: 'Картинка №5'
+            },
+            {
+                file: null,
+                previewImg: null,
+                text: 'Картинка №6'
+            }
+        ],
         name: '',
         descr: '',
         price: '',
