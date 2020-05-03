@@ -4,7 +4,7 @@
             <v-card class="add-image-filepond-component-card">
                 <div class="add-image-filepond-component-input">
                     <input 
-                    name="myFile" 
+                    name="myFile"
                     type="file" 
                     title=" "
                     @change="changeFile"
@@ -32,8 +32,24 @@
         data() {
             return {
                 file: null,
-                newImg: null
+                newImg: null,
+                checkDinamImg: null
             }
+        },
+        watch: {
+            // checkDinamImg(val) {
+            //     if(val) {
+            //         let vm = this
+            //         async function encodeImg() {
+
+            //             console.log('init encodeBase64')
+
+
+            //         }
+
+            //         encodeImg()
+            //     }
+            // }
         },
         methods: {
             async changeFile(e) {
@@ -45,9 +61,20 @@
                     if(this.file.type === 'image/png' || this.file.type === 'image/jpeg') {
                         this.newImg = URL.createObjectURL(this.file)
 
+                        // await this.encodeBase64(this.file)
+                        
+                        let data = {
+                            file: this.file,
+                            previewImg: this.file,
+                            text: this.info.text
+                        }
+
+                        let index = this.index
+
+
+                        await this.$store.dispatch(`${this.storeUrl}updateDataImage`, {data, index})
                         
                     } else {
-                        this.newImg = null
                         this.$emit('changeMessage', 'error type')
                     }
 
@@ -58,7 +85,30 @@
 
                 }
                 
-            }
+            },
+            // async encodeBase64(file) {
+
+            //     let readerPreview = new FileReader();
+            //     let vm = this;
+
+
+            //     readerPreview.onload = async function(e) {
+            //         vm.previewImg = e.target.result
+
+            //         let data = {
+            //             file: file,
+            //             previewImg: vm.previewImg,
+            //             text: vm.info.text
+            //         }
+
+            //         let index = vm.index
+
+
+            //         await vm.$store.dispatch(`${vm.storeUrl}updateDataImage`, {data, index})
+            //     }
+
+            //     await readerPreview.readAsDataURL(file);
+            // }
             
         },
         computed: {
@@ -67,7 +117,16 @@
                     return this.newImg
                 } else {
                     if(this.info.previewImg) {
-                        return require('~/assets/' + `${this.info.previewImg}`)
+                        if(this.info.previewImg.type) {
+                            if(this.info.previewImg.type === 'image/png' || this.info.previewImg.type === 'image/jpeg') {
+                                this.newImg = URL.createObjectURL(this.info.previewImg)
+                                return this.newImg
+                            } else {
+                                return require('~/assets/' + 'newAdd.jpg')
+                            }
+                        } else {
+                            return require('~/assets/' + `${this.info.previewImg}`)
+                        }
                     } else {
                         return require('~/assets/' + 'newAdd.jpg')
                     }

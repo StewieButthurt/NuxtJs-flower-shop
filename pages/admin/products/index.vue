@@ -572,6 +572,7 @@
                 this.message = false
             },
             async changeMessage(value) {
+                console.log(1)
                 this.message = value
             }
         }

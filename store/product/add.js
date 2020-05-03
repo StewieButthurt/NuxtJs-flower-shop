@@ -4,12 +4,12 @@ export const state = () => ({
     data: {
         images: [{
                 file: null,
-                previewImg: 'flower.png',
+                previewImg: null,
                 text: 'Главная картинка'
             },
             {
                 file: null,
-                previewImg: 'other-fields-image-blue.jpg',
+                previewImg: null,
                 text: 'Картинка №2'
             },
             {
@@ -92,9 +92,36 @@ export const mutations = {
             this.discountStatus = false,
             this.sizeDiscount = 0
         state.data.images = [{
-            file: null,
-            previewImg: null
-        }]
+                file: null,
+                previewImg: null,
+                text: 'Главная картинка'
+            },
+            {
+                file: null,
+                previewImg: null,
+                text: 'Картинка №2'
+            },
+            {
+                file: null,
+                previewImg: null,
+                text: 'Картинка №3'
+            },
+            {
+                file: null,
+                previewImg: null,
+                text: 'Картинка №4'
+            },
+            {
+                file: null,
+                previewImg: null,
+                text: 'Картинка №5'
+            },
+            {
+                file: null,
+                previewImg: null,
+                text: 'Картинка №6'
+            }
+        ]
     },
     updateDataImage(state, data) {
         state.data.images.splice(data.index, 1, data.data)

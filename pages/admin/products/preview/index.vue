@@ -33,6 +33,7 @@
                             <app-product-preview-images 
                                 v-for="(item, index) in images"
                                 :key="index"
+                                v-if="item.previewImg"
                                 :image="item.previewImg"
                                 :index="index"
                                 :mainIndex="mainIndex"
@@ -94,14 +95,13 @@
                     <div class="preview__descr__buttons">
                         <div class="preview__descr__counter-wrapper-buttons mr-5 mt-5">
                             <div class="preview__descr__buttons-minus" @click="counterMinus()">
-                                <span class="preview__descr__buttons-plus-hor"></span>
+                                -
                             </div>
                             <div class="preview__descr__buttons-result">
                                 <span>{{counterProducts}}</span>
                             </div>
                             <div class="preview__descr__buttons-minus" @click="counterPlus()">
-                                <span class="preview__descr__buttons-plus-hor"></span> 
-                                <span class="preview__descr__buttons-plus-vert"></span>   
+                                +
                             </div>
                         </div>
                         <v-btn
@@ -207,14 +207,15 @@
         },
         middleware: 'checkData',
         async mounted() {
-            this.mainImg = this.images[0].previewImg
+            this.img = this.images[0].previewImg
+            console.log(this.img)
         },
         data() {
             return {
                 storeUrl: 'product/add/',
+                img: null,
                 rating: 0,
                 counterProducts: 1,
-                mainImg: '',
                 mainIndex: '',
                 zoomStatus: false,
                 x: '',
@@ -236,11 +237,22 @@
             }
         },
         computed: {
+            mainImg() {
+                if(this.img) {
+                    if( typeof this.img === 'object') {
+                        if(this.img.type === 'image/png' || this.img.type === 'image/jpeg') {
+                            return URL.createObjectURL(this.img)
+                        } 
+                    } else if(typeof this.img === 'string'){
+                        return require('~/assets/' + this.img)                   
+                    }
+                } else {
+                    return ''
+                }
+                
+            },
             images() {
                 return this.$store.getters['product/add/images']
-            },
-            img() {
-                return this.mainImg
             },
             name() {
                 return this.$store.getters['product/add/name']
@@ -532,7 +544,8 @@
                 }
             },
             async changeImg({mainIndex, image}) {
-                this.mainImg = image
+                console.log(image)
+                this.img = image
                 this.mainIndex = mainIndex
             },
             async zoomImg(event) {
@@ -554,7 +567,7 @@
                 this.right = 0
             },
             async mouseEnterImage(img) {
-                this.mainImg = img
+                this.img = img
             },
             async clickDescr() {
                 this.vtabReviews = false
@@ -625,6 +638,7 @@
             margin-top: 2%
         +size-md(6)
         +size-xs(11)
+        box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)
     
     .preview__descr
         +size(6)
@@ -691,6 +705,9 @@
         border: 1px solid #BDBDBD
         cursor: pointer
         position: relative
+        font-size: 20px
+        user-select: none
+    
     
     .preview__descr__buttons-result
         width: 47px
@@ -703,17 +720,6 @@
         font-family: 'Montserrat-SemiBold'
         font-weight: 600
     
-    .preview__descr__buttons-plus-hor
-        width: 10px
-        height: 1px
-        background-color: black
-    
-    .preview__descr__buttons-plus-vert
-        width: 1px
-        height: 10px
-        background-color: black
-        position: absolute
-        top: 20px
     
     #preview-container .preview__descr__buttons-card
         width: 161px
@@ -733,6 +739,7 @@
         width: 100%
         justify-content: center
         margin-top: 5%
+        margin-bottom: 5%
     
     .preview__swiper-image-item
         +size(2)

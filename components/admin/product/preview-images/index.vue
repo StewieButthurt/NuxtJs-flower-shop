@@ -5,7 +5,7 @@
     >
         <div 
             class="preview__swiper-image " 
-            :style="{ backgroundImage: `url(${image})`, backgroundPosition: 'center center', backgroundSize: 'cover' }">
+            :style="{ backgroundImage: `url(${localImage})`, backgroundPosition: 'center center', backgroundSize: 'cover' }">
         </div>
     </div>
 </template>
@@ -41,6 +41,15 @@
                     return false
                 } else {
                     return true
+                }
+            },
+            localImage() {
+                if( typeof this.image === 'object') {
+                    if(this.image.type === 'image/png' || this.image.type === 'image/jpeg') {
+                        return URL.createObjectURL(this.image)
+                    }
+                } else {
+                    return require('~/assets/' + this.image)                
                 }
             }
         }
