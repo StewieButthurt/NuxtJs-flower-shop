@@ -208,11 +208,11 @@
         middleware: 'checkData',
         async mounted() {
             this.img = this.images[0].previewImg
-            console.log(this.img)
         },
         data() {
             return {
                 storeUrl: 'product/add/',
+                image: null,
                 img: null,
                 rating: 0,
                 counterProducts: 1,
@@ -302,7 +302,6 @@
                 this.snackbar = false
                 this.progressValue = 0
 
-                // this.loading = true
                 this.overlay = true
                 let vm = this
 
@@ -376,31 +375,63 @@
 
                 for(let i = 0; i < this.images.length; i++) {
 
-                    let image = this.images[i].previewImg
-                    let file = this.images[i].file
+                    this.image = this.images[i].previewImg
                     
                     
                     if(checkError === false) {
                         this.messageStatus = `Загрузка картинок ${i + 1} из ${this.images.length}...`
-                        
-                        let data = {
-                            image: image,
-                            file: file,
-                            index: i,
-                            id: id
-                        }
 
-                        await this.$axios.$post('/api/product/create/images', data)
-                            .then(async function (response) {
-                                    counter++
-                            })
-                            .catch(function (error) {
-                                vm.messageStatus = 'При загрузке произошла ошибка! Попробуйте еще раз!'
-                                checkError = error
-                                setTimeout(vm.overlayOffError, 1000)
-                                console.log(error);
-                                throw error
-                            })
+                        var readerPreview = new FileReader();
+
+                        readerPreview.onload = async function(e) {
+                            vm.image = e.target.result
+
+
+
+                            let data = {
+                                image: vm.image,
+                                index: i,
+                                id: id
+                            }
+
+                            await vm.$axios.$post('/api/product/create/images', data)
+                                .then(async function (response) {
+                                        counter++
+                                })
+                                .catch(function (error) {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Попробуйте еще раз!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                    console.log(error);
+                                    throw error
+                                })
+                        }
+                        
+                        if(this.image) {
+                            console.log(this.image)
+                            await readerPreview.readAsDataURL(this.image);
+                        } else {
+                            console.log('image dont true', vm.image)
+
+                            let data = {
+                                image: vm.image,
+                                index: i,
+                                id: id
+                            }
+
+                            await vm.$axios.$post('/api/product/create/images', data)
+                                .then(async function (response) {
+                                        counter++
+                                })
+                                .catch(function (error) {
+                                    vm.messageStatus = 'При загрузке произошла ошибка! Попробуйте еще раз!'
+                                    checkError = error
+                                    setTimeout(vm.overlayOffError, 1000)
+                                    console.log(error);
+                                    throw error
+                                })
+                        }
+                        
                     } else {
                         return checkError
                     }
@@ -445,9 +476,6 @@
                                                 newId = response.otherFieldImage[k]._id
                                         })
                                         .catch(function (error) {
-                                            // handle error
-                                            // vm.message = 'error'
-                                            // vm.loading = false
                                             vm.messageStatus = 'При загрузке произошла ошибка!'
                                             checkError = error
                                             setTimeout(vm.overlayOffError, 1000)
@@ -479,9 +507,6 @@
                                                                 counter++
                                                     })
                                                     .catch(function (error) {
-                                                        // handle error
-                                                        // vm.message = 'error'
-                                                        // vm.loading = false
                                                         vm.messageStatus = 'При загрузке произошла ошибка!'
                                                         checkError = error
                                                         setTimeout(vm.overlayOffError, 1000)
@@ -495,9 +520,6 @@
                                         }
                             })
                             .catch(function (error) {
-                                // handle error
-                                // vm.message = 'error'
-                                // vm.loading = false
                                 vm.messageStatus = 'При загрузке произошла ошибка!'
                                 checkError = error
                                 setTimeout(vm.overlayOffError, 1000)
@@ -508,7 +530,6 @@
                         return checkError
                     }
                     
-                    console.log('k = ', k)
                     if(k + 1 === this.otherFieldImage.length) {
                         this.progressValue = 100
                         this.messageStatus = 'Загрузка завершена!'
@@ -544,7 +565,6 @@
                 }
             },
             async changeImg({mainIndex, image}) {
-                console.log(image)
                 this.img = image
                 this.mainIndex = mainIndex
             },

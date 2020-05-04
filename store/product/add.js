@@ -3,42 +3,15 @@ import Vue from 'vue'
 export const state = () => ({
     data: {
         images: [{
-                file: null,
-                previewImg: null,
-                text: 'Главная картинка'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №2'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №3'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №4'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №5'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №6'
-            }
-        ],
+            file: false,
+            previewImg: false
+        }],
         name: '',
         descr: '',
         price: '',
         article: '',
         discountStatus: false,
-        sizeDiscount: 0,
+        sizeDiscount: '0',
         other: [],
         newFields: [],
         stock: false,
@@ -90,38 +63,11 @@ export const mutations = {
             state.data.newFields = [],
             state.data.other = [],
             this.discountStatus = false,
-            this.sizeDiscount = 0
+            this.sizeDiscount = '0'
         state.data.images = [{
-                file: null,
-                previewImg: null,
-                text: 'Главная картинка'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №2'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №3'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №4'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №5'
-            },
-            {
-                file: null,
-                previewImg: null,
-                text: 'Картинка №6'
-            }
-        ]
+            file: false,
+            previewImg: false
+        }]
     },
     updateDataImage(state, data) {
         state.data.images.splice(data.index, 1, data.data)
@@ -187,6 +133,9 @@ export const mutations = {
     },
     setData(state, data) {
         state.data = data
+    },
+    setImages(state, index) {
+        state.data.images.splice(index, 1)
     }
 }
 
@@ -287,6 +236,9 @@ export const actions = {
     },
     async setCategories({ commit }, value) {
         commit('setCategories', value)
+    },
+    async setImages({ commit }, index) {
+        commit('setImages', index)
     }
 }
 

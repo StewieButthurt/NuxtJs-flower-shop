@@ -50,7 +50,8 @@
             'image',
             'index',
             'globalIndex',
-            'info'
+            'info',
+            'storeUrl'
         ],
         methods: {
             async updateImg() {
@@ -73,7 +74,7 @@
                         let globalIndex = vm.globalIndex
 
 
-                        await vm.$store.dispatch('add-product/updateOtherFieldImage', {data, index, globalIndex})
+                        await vm.$store.dispatch(`${vm.storeUrl}updateOtherFieldImage`, {data, index, globalIndex})
                     }
 
                     await readerPreview.readAsDataURL(this.file);
@@ -84,7 +85,7 @@
                 let index = this.index
                 let globalIndex = this.globalIndex
 
-                await this.$store.dispatch('add-product/removeOtherFieldImage', {index, globalIndex})
+                await this.$store.dispatch(`${this.storeUrl}removeOtherFieldImage`, {index, globalIndex})
             },
             async addImageField() {
                 let data = {
@@ -97,7 +98,7 @@
 
                 let globalIndex = this.globalIndex
 
-                await this.$store.dispatch('add-product/setOtherFieldImage', {data, globalIndex})
+                await this.$store.dispatch(`${this.storeUrl}setOtherFieldImage`, {data, globalIndex})
 
             },
             async updateTitle() {
@@ -105,7 +106,7 @@
                 let globalIndex = this.globalIndex
                 let index = this.index
 
-                await this.$store.dispatch('add-product/updateOtherFieldImageTitle', {title, globalIndex, index})
+                await this.$store.dispatch(`${this.storeUrl}updateOtherFieldImageTitle`, {title, globalIndex, index})
             },
             async clearImage() {
                 let data = {
@@ -116,7 +117,7 @@
                 let index = this.index
                 let globalIndex = this.globalIndex
                 
-                await this.$store.dispatch('add-product/updateOtherFieldImage', {data, index, globalIndex})
+                await this.$store.dispatch(`${this.storeUrl}updateOtherFieldImage`, {data, index, globalIndex})
             }
         }
     }

@@ -19,6 +19,7 @@
             :title="item.title"
             :image="item.image"
             :info="info"
+            :storeUrl="storeUrl"
         />
         <v-row align="center" justify="center">
             <v-btn class="mx-2 mb-5" color="error" @click="removeBlock()">

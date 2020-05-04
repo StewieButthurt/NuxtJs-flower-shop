@@ -15,7 +15,16 @@
                     class="grey darken-4"
                     :eager="true"
                 ></v-img>
-                <v-card-title class="title">{{info.text}}</v-card-title>
+                <v-card-title class="title add-image-filepond-component-card-title">
+                    {{index > 0 ? `Картинка №${index + 1}` : 'Главная картинка'}}
+                    <div 
+                        class="add-image-filepond-component-button"  
+                        @click="clickRemove()"
+                        v-if="index > 0 && info.previewImg"
+                        >
+                        <v-icon>mdi-delete-forever</v-icon>
+                    </div>
+                </v-card-title>
             </v-card>   
         </div>
     </v-fade-transition>
@@ -36,21 +45,6 @@
                 checkDinamImg: null
             }
         },
-        watch: {
-            // checkDinamImg(val) {
-            //     if(val) {
-            //         let vm = this
-            //         async function encodeImg() {
-
-            //             console.log('init encodeBase64')
-
-
-            //         }
-
-            //         encodeImg()
-            //     }
-            // }
-        },
         methods: {
             async changeFile(e) {
                 if(e.target.files.length > 0) {
@@ -61,55 +55,63 @@
                     if(this.file.type === 'image/png' || this.file.type === 'image/jpeg') {
                         this.newImg = URL.createObjectURL(this.file)
 
-                        // await this.encodeBase64(this.file)
-                        
                         let data = {
                             file: this.file,
-                            previewImg: this.file,
-                            text: this.info.text
+                            previewImg: this.file
                         }
 
                         let index = this.index
 
 
                         await this.$store.dispatch(`${this.storeUrl}updateDataImage`, {data, index})
+
+                        if(this.images.length < 6 && this.images.length === this.index + 1) {
+
+                            let newData = {
+                                file: false,
+                                previewImg: false
+                            }
+                            this.$store.dispatch(`${this.storeUrl}setImageField`, newData)
+                        }
                         
                     } else {
                         this.$emit('changeMessage', 'error type')
                     }
 
-                    
-
-                    // console.log(this.newImg)
-
 
                 }
                 
             },
-            // async encodeBase64(file) {
+            async clickRemove() {
+                if(this.images.length > 1) {
+                    if(this.info.previewImg) {
+                        
 
-            //     let readerPreview = new FileReader();
-            //     let vm = this;
+                        this.$store.dispatch(`${this.storeUrl}setImages`, this.index)
 
+                        let counter = 0
 
-            //     readerPreview.onload = async function(e) {
-            //         vm.previewImg = e.target.result
+                        for(let i = 0; i < this.images.length; i++) {
+                            if(this.images[i].previewImg) {
+                                counter++
+                            }
+                        }
 
-            //         let data = {
-            //             file: file,
-            //             previewImg: vm.previewImg,
-            //             text: vm.info.text
-            //         }
+                        if(counter === this.images.length) {
+                            
+                            let newData = {
+                                file: false,
+                                previewImg: false
+                            }
 
-            //         let index = vm.index
-
-
-            //         await vm.$store.dispatch(`${vm.storeUrl}updateDataImage`, {data, index})
-            //     }
-
-            //     await readerPreview.readAsDataURL(file);
-            // }
-            
+                            this.$store.dispatch(`${this.storeUrl}setImageField`, newData)
+                        
+                        }
+                        
+                    
+                    }
+                }
+            }
         },
         computed: {
             getImage() {
@@ -119,6 +121,7 @@
                     if(this.info.previewImg) {
                         if(this.info.previewImg.type) {
                             if(this.info.previewImg.type === 'image/png' || this.info.previewImg.type === 'image/jpeg') {
+                                this.newImg = false
                                 this.newImg = URL.createObjectURL(this.info.previewImg)
                                 return this.newImg
                             } else {
@@ -132,6 +135,9 @@
                     }
                 }
                 
+            },
+            images() {
+                return this.$store.getters[`${this.storeUrl}images`]
             }
         }
     }
@@ -151,6 +157,16 @@
     .add-image-filepond-component-card
         position: relative
         overflow: hidden
+    
+    .add-image-filepond-component-button
+        z-index: 6
+        cursor: pointer
+        transition-duration: .2s
+        opacity: .3
+    
+    .add-image-filepond-component-button:hover
+        transform: scale(1.2)
+        opacity: 1
     
     .add-image-filepond-component-input
         position: absolute
@@ -174,5 +190,11 @@
     #add-image-filepond-component input[type='file'] 
         opacity: 0
         cursor: pointer
+    
+    #add-image-filepond-component .add-image-filepond-component-card-title
+        display: flex
+        justify-content: space-between
+        align-items: center
+
 
 </style>

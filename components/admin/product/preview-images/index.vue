@@ -1,7 +1,7 @@
 <template>
     <div class="preview__swiper-image-item"
-        @mouseenter="mouseEnterImage()"
         :class="{'preview__swiper-image-item-hover' : hoverImage && checkStatusMouse}"
+        @mouseenter="mouseEnterImage()"
     >
         <div 
             class="preview__swiper-image " 
@@ -57,8 +57,23 @@
 </script>
 
 <style lang="sass">
+    
+    .preview__swiper-image-item
+        position: relative
+    
+    .preview__swiper-image-hover
+        position: absolute
+        left: 0px
+        top: 0px
+        width: 120%
+        height: 120%
+        z-index: 2
+
 
     .preview__swiper-image-item-hover
-        border: 2px solid grey
+        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 2px rgba(0, 0, 0, 0.4)
+    
+    .preview__swiper-image
+        z-index: 3
 
 </style>

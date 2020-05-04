@@ -21,6 +21,14 @@ module.exports.fields = async(req, res) => {
             log.warn(`Неудачная попытка добавления нового товара! Товар '${req.body.name}' уже существует!`);
             res.json({ message: 'busy' })
         } else {
+            console.log('price', typeof(req.body.price))
+            console.log('descr', typeof(req.body.descr))
+            console.log('article', typeof(req.body.article))
+            console.log('discountStatus', typeof(req.body.discountStatus))
+            console.log('sizeDiscount', typeof(req.body.sizeDiscount))
+            console.log('stock', typeof(req.body.stock))
+            console.log('bestseller', typeof(req.body.bestseller))
+            console.log('weekPrice', typeof(req.body.weekPrice))
             if (typeof(req.body.price) === 'number' &&
                 typeof(req.body.descr) === 'string' &&
                 typeof(req.body.article) === 'string' &&
@@ -30,6 +38,7 @@ module.exports.fields = async(req, res) => {
                 typeof(req.body.bestseller) === 'boolean' &&
                 typeof(req.body.weekPrice) === 'boolean'
             ) {
+                console.log(1)
                 for (let i = 0; i < req.body.categories.length; i++) {
                     if (typeof(req.body.categories[i]) === 'string') {
 

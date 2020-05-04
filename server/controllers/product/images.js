@@ -11,7 +11,7 @@ const log = SimpleNodeLogger.createSimpleLogger(opts);
 
 module.exports.images = async(req, res) => {
 
-    if (typeof(req.body.image) === 'string' &&
+    if (typeof(req.body.image) === 'string' || typeof(req.body.image) === 'boolean' &&
         typeof(req.body.id) === 'string' &&
         typeof(req.body.index) === 'string' || typeof(req.body.index) === 'number'
     ) {
@@ -23,6 +23,7 @@ module.exports.images = async(req, res) => {
         let createmyfile = `./assets/${id}/img-${index + 1}.png`
         let url
 
+        console.log(image)
 
         let n = image.indexOf(',', 0)
         image = await image.slice(n)

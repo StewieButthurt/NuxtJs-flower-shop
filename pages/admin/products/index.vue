@@ -115,10 +115,10 @@
                 </v-col>
             </v-row> -->
             <v-row align="center" justify="center">
-                <div class="products-image-filepond">
+                <div class="products-image-filepond" v-if="statusImages">
                     <app-product-add-image-filepond 
                         v-for="(item, index) in images"
-                        :key="index"
+                        :key="item.previewImg"
                         :info="item"
                         :index="index"
                         :storeUrl="storeUrl"
@@ -347,6 +347,7 @@
         data() {
             return {
                 message: false,
+                statusImages: true,
                 snackbar: false,
                 text: '',
                 colorBckg: '',
@@ -512,7 +513,7 @@
                 await this.$store.dispatch(`${this.storeUrl}setImageField`, data)
             },
             async clearFields() {
-                await this.$store.dispatch(`${this.storeUrl}clearFields`)
+                window.location.reload(true)
             },
             async addNewField() {
 
