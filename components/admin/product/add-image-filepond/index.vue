@@ -38,19 +38,33 @@
             'info',
             'storeUrl'
         ],
+        async mounted() {
+            if(this.info.previewImg === false) {
+                this.file = false,
+                this.newImg = false
+            }
+        },
+        watch: {
+            images(val) {
+                if(val.length === this.index + 1) {
+                    this.file = false,
+                    this.newImg = false
+                }
+            }
+        },
         data() {
             return {
-                file: null,
-                newImg: null,
-                checkDinamImg: null
+                file: false,
+                newImg: false
             }
         },
         methods: {
             async changeFile(e) {
+                let vm = this
                 if(e.target.files.length > 0) {
+                    this.file = false
                     this.file = e.target.files[0]
-
-                    console.log(this.file)
+                    this.newImg = false
 
                     if(this.file.type === 'image/png' || this.file.type === 'image/jpeg') {
                         this.newImg = URL.createObjectURL(this.file)
@@ -65,13 +79,23 @@
 
                         await this.$store.dispatch(`${this.storeUrl}updateDataImage`, {data, index})
 
-                        if(this.images.length < 6 && this.images.length === this.index + 1) {
+                        let counter = 0
+
+                        for(let i = 0; i < this.images.length; i++) {
+                            if(this.images[i].previewImg) {
+                                counter++
+                            }
+                        }
+
+                        if(this.images.length < 6 && this.images.length === counter) {
 
                             let newData = {
                                 file: false,
                                 previewImg: false
                             }
-                            this.$store.dispatch(`${this.storeUrl}setImageField`, newData)
+
+                            vm.$store.dispatch(`${vm.storeUrl}setImageField`, newData)
+
                         }
                         
                     } else {
@@ -86,7 +110,8 @@
                 if(this.images.length > 1) {
                     if(this.info.previewImg) {
                         
-
+                        this.newImg = false
+                        
                         this.$store.dispatch(`${this.storeUrl}setImages`, this.index)
 
                         let counter = 0
@@ -98,7 +123,7 @@
                         }
 
                         if(counter === this.images.length) {
-                            
+                            this.newImg = false
                             let newData = {
                                 file: false,
                                 previewImg: false
@@ -118,17 +143,17 @@
                 if(this.newImg) {
                     return this.newImg
                 } else {
-                    if(this.info.previewImg) {
-                        if(this.info.previewImg.type) {
-                            if(this.info.previewImg.type === 'image/png' || this.info.previewImg.type === 'image/jpeg') {
+                    if(this.previewImg) {
+                        if(this.previewImg.type) {
+                            if(this.previewImg.type === 'image/png' || this.previewImg.type === 'image/jpeg') {
                                 this.newImg = false
-                                this.newImg = URL.createObjectURL(this.info.previewImg)
+                                this.newImg = URL.createObjectURL(this.previewImg)
                                 return this.newImg
                             } else {
                                 return require('~/assets/' + 'newAdd.jpg')
                             }
                         } else {
-                            return require('~/assets/' + `${this.info.previewImg}`)
+                            return require('~/assets/' + `${this.previewImg}`)
                         }
                     } else {
                         return require('~/assets/' + 'newAdd.jpg')
@@ -138,6 +163,9 @@
             },
             images() {
                 return this.$store.getters[`${this.storeUrl}images`]
+            },
+            previewImg() {
+                return this.info.previewImg
             }
         }
     }

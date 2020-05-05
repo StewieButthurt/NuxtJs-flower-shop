@@ -115,10 +115,10 @@
                 </v-col>
             </v-row> -->
             <v-row align="center" justify="center">
-                <div class="products-image-filepond" v-if="statusImages">
+                <div class="products-image-filepond">
                     <app-product-add-image-filepond 
                         v-for="(item, index) in images"
-                        :key="item.previewImg"
+                        :key="index"
                         :info="item"
                         :index="index"
                         :storeUrl="storeUrl"
@@ -347,7 +347,6 @@
         data() {
             return {
                 message: false,
-                statusImages: true,
                 snackbar: false,
                 text: '',
                 colorBckg: '',
