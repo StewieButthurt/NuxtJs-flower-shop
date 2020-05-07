@@ -136,6 +136,13 @@ export const mutations = {
     },
     setImages(state, index) {
         state.data.images.splice(index, 1)
+    },
+    imagesFilter(state) {
+        for (let i = 0; i < state.data.images.length; i++) {
+            if (!state.data.images[i].previewImg) {
+                state.data.images.splice(i, 1)
+            }
+        }
     }
 }
 
@@ -239,6 +246,9 @@ export const actions = {
     },
     async setImages({ commit }, index) {
         commit('setImages', index)
+    },
+    async imagesFilter({ commit }) {
+        commit('imagesFilter')
     }
 }
 

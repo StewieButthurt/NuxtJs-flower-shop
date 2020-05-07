@@ -153,7 +153,7 @@
                 <v-btn class="mx-2 mt-5" 
                     color="teal"
                     :loading="loading"
-                    @click="sendForm()"
+                    @click="sendData()"
                     >
                         <v-icon class="mr-2">mdi-content-save</v-icon>
                         Сохранить
@@ -216,6 +216,7 @@
                 img: null,
                 rating: 0,
                 counterProducts: 1,
+                counterImage: 0,
                 mainIndex: '',
                 zoomStatus: false,
                 x: '',
@@ -233,7 +234,10 @@
                 loading: false,
                 overlay: false,
                 messageStatus: 'Начало загрузки...',
-                progressValue: 0
+                progressValue: 0,
+                checkErrorForm: false,
+                checkErrorImage: false,
+
             }
         },
         computed: {
@@ -297,13 +301,21 @@
 
         },
         methods: {
-            async sendForm() {
+            async sendData() {
+                
+                // reset notifications
+
                 this.message = false
                 this.snackbar = false
                 this.progressValue = 0
+                this.checkErrorForm = false
+                this.checkErrorImage = false
+
+                // show overlay
 
                 this.overlay = true
-                let vm = this
+
+                //preparation data
 
                 let fields = {
                     name: this.name,
@@ -320,134 +332,113 @@
                     weekPrice: this.weekPrice,
                 }
 
+                //send form
+
+                let resultForm,
+                    resultImage;
+
+                resultForm = await this.sendForm(fields)
+
+                console.log(`Результат SendForm - ${resultForm}`)
+
+                if(resultForm) {
+                    resultImage = await this.sendImage(resultForm)
+                }
+
+                if(resultImage) {
+                    console.log(`Пока всек ок: ${resultImage}`)
+                } else {
+                    console.log(`ЕБАННЫЙ РОТ БЛЯТЬ!`)
+                }
+
+                
+
+                
+            },
+            async sendForm(fields) {
+
+                let vm = this
+                let result;
+
                 this.progressValue = 40
                 this.messageStatus = 'Загрузка основных данных...'
 
-                await this.$axios.$post('/api/product/create/fields', fields)
+                return await this.$axios.$post('/api/product/create/fields', fields)
                     .then(async function (response) {
-                                if(response.message === 'error validate name') {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Название товара не прошло проверку!'
-                                    checkError = error
+                                vm.messageStatus = response.message 
+                                
+                                if(response.error === 'true') {
+                                    console.log(`Бэкенд ошибка: ${vm.messageStatus}`)
+                                    vm.checkErrorForm = true
                                     setTimeout(vm.overlayOffError, 1000)
-                                } else if(response.message === 'busy') {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Название занято!'
-                                    checkError = error
-                                    setTimeout(vm.overlayOffError, 1000)
-                                } else if(response.message === 'Field Categories error') {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Категории не прошли проверку!'
-                                    checkError = error
-                                    setTimeout(vm.overlayOffError, 1000)
-                                } else if(response.message === 'Field Other error') {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Описание товара не прошло проверку!'
-                                    checkError = error
-                                    setTimeout(vm.overlayOffError, 1000)
-                                } else if(response.message === 'Field newFields error') {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Дополнительные поля (пример с керамикой) не прошли проверку!'
-                                    checkError = error
-                                    setTimeout(vm.overlayOffError, 1000)
-                                } else if(response.message === 'Field newFields.descr error') {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Дополнительные поля (пример с керамикой) не прошли проверку!'
-                                    checkError = error
-                                    setTimeout(vm.overlayOffError, 1000)
-                                } else if(response.message === 'error save') {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Неудалось сохранить данные в базе!'
-                                    checkError = error
-                                    setTimeout(vm.overlayOffError, 1000)
-                                } else if(response.message === 'main info validate error') {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Основные данные о товаре не прошли проверку!'
-                                    checkError = error
-                                    setTimeout(vm.overlayOffError, 1000)
+                                    return false
                                 } else {
+                                    console.log(`Отправка основных данных успешна: ${vm.messageStatus}`)
+                                    vm.checkErrorForm = false
                                     let id = response.product._id
-                                    vm.sendImage(id)
+                                    return id
                                 }
                     })
                     .catch(function (error) {
-                        vm.messageStatus = 'При загрузке произошла ошибка! Название занято!'
+                        console.log('Упс! Что то пошло не так!')
+                        vm.messageStatus = 'Упс! Что то пошло не так!'
                         setTimeout(vm.overlayOffError, 1000)
                         console.log(error);
                     })
             },
             async sendImage(id) {
                 let vm = this
-                let counter = 0
-                let checkError = false
+
+                await this.$store.dispatch(`${this.storeUrl}imagesFilter`)
+
 
                 for(let i = 0; i < this.images.length; i++) {
 
                     this.image = this.images[i].previewImg
                     
+                    this.messageStatus = `Загрузка картинок ${i + 1} из ${this.images.length}...`
+
+                    var readerPreview = new FileReader();
+
+                    readerPreview.onload = async function(e) {
+                         let data = {
+                            image: e.target.result,
+                            index: i,
+                            id: id
+                        }
+
+                        await vm.$axios.$post('/api/product/create/images', data)
+                        .then(function (response) {
+                                vm.counterImage++
+                                console.log(`counter ++`)
+                        })
+                        .catch(function (error) {
+                            vm.messageStatus = 'При загрузке произошла ошибка! Попробуйте еще раз!'
+                            vm.checkErrorImage = error
+                            setTimeout(vm.overlayOffError, 1000)
+                            console.log(error);
+                            throw error
+                        })
+
+
+                        if(vm.counterImage === vm.images.length) {
+                            vm.progressValue = 60
+
+                            if(vm.otherFieldImage.length > 0) {
+                                vm.sendOtherImage(id)
+                            } else {
+                                vm.messageStatus = 'Загрузка завершена'
+                                vm.progressValue = 100
+                                setTimeout(vm.overlayOff, 1000)
+                            }
+                            
+                        }
+                         
+                    }
+
+                    await readerPreview.readAsDataURL(this.image);
+
                     
-                    if(checkError === false) {
-                        this.messageStatus = `Загрузка картинок ${i + 1} из ${this.images.length}...`
-
-                        var readerPreview = new FileReader();
-
-                        readerPreview.onload = async function(e) {
-                            vm.image = e.target.result
-
-
-
-                            let data = {
-                                image: vm.image,
-                                index: i,
-                                id: id
-                            }
-
-                            await vm.$axios.$post('/api/product/create/images', data)
-                                .then(async function (response) {
-                                        counter++
-                                })
-                                .catch(function (error) {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Попробуйте еще раз!'
-                                    checkError = error
-                                    setTimeout(vm.overlayOffError, 1000)
-                                    console.log(error);
-                                    throw error
-                                })
-                        }
-                        
-                        if(this.image) {
-                            console.log(this.image)
-                            await readerPreview.readAsDataURL(this.image);
-                        } else {
-                            console.log('image dont true', vm.image)
-
-                            let data = {
-                                image: vm.image,
-                                index: i,
-                                id: id
-                            }
-
-                            await vm.$axios.$post('/api/product/create/images', data)
-                                .then(async function (response) {
-                                        counter++
-                                })
-                                .catch(function (error) {
-                                    vm.messageStatus = 'При загрузке произошла ошибка! Попробуйте еще раз!'
-                                    checkError = error
-                                    setTimeout(vm.overlayOffError, 1000)
-                                    console.log(error);
-                                    throw error
-                                })
-                        }
-                        
-                    } else {
-                        return checkError
-                    }
-
-                    if(counter === this.images.length) {
-                        this.progressValue = 60
-
-                        if(this.otherFieldImage.length > 0) {
-                            this.sendOtherImage(id)
-                        } else {
-                            this.messageStatus = 'Загрузка завершена'
-                            this.progressValue = 100
-                            setTimeout(this.overlayOff, 1000)
-                        }
-                        
-                    }
                 }
             
             },
@@ -603,7 +594,7 @@
             },
             async redirectMenuEdit() {
                 this.$router.push('/admin/products/')
-            },
+            }
         },
         watch: {
             message(val) {

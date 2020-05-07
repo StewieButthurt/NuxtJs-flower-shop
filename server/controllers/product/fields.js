@@ -19,7 +19,7 @@ module.exports.fields = async(req, res) => {
         const name = await Product.findOne({ name: req.body.name })
         if (name) {
             log.warn(`Неудачная попытка добавления нового товара! Товар '${req.body.name}' уже существует!`);
-            res.json({ message: 'busy' })
+            res.json({ message: 'При загрузке произошла ошибка! Название занято!', error: 'true' })
         } else {
             console.log('price', typeof(req.body.price))
             console.log('descr', typeof(req.body.descr))
@@ -45,7 +45,7 @@ module.exports.fields = async(req, res) => {
                     } else {
                         log.warn(`Неудачная попытка добавления основной информации о товаре 
                         '${req.body.name}'! Данные не прошли валидацию! Field Categories error!`);
-                        res.json({ message: 'Field Categories error' })
+                        res.json({ message: 'При загрузке произошла ошибка! Категории не прошли проверку!', error: 'true' })
                     }
 
                 }
@@ -58,7 +58,7 @@ module.exports.fields = async(req, res) => {
                     } else {
                         log.warn(`Неудачная попытка добавления основной информации о товаре 
                         '${req.body.name}'! Данные не прошли валидацию! Field Other error`);
-                        res.json({ message: 'Field Other error' })
+                        res.json({ message: 'При загрузке произошла ошибка! Описание товара не прошло проверку!', error: 'true' })
                     }
                 }
 
@@ -72,13 +72,13 @@ module.exports.fields = async(req, res) => {
                             } else {
                                 log.warn(`Неудачная попытка добавления основной информации о товаре 
                                 '${req.body.name}'! Данные не прошли валидацию! Field newFields.descr error`);
-                                res.json({ message: 'Field newFields.descr error' })
+                                res.json({ message: 'При загрузке произошла ошибка! Дополнительные поля (пример с керамикой) не прошли проверку!', error: 'true' })
                             }
                         }
                     } else {
                         log.warn(`Неудачная попытка добавления основной информации о товаре 
                         '${req.body.name}'! Данные не прошли валидацию! Field newFields error`);
-                        res.json({ message: 'Field newFields error' })
+                        res.json({ message: 'При загрузке произошла ошибка! Дополнительные поля (пример с керамикой) не прошли проверку!', error: 'true' })
                     }
                 }
 
@@ -102,20 +102,20 @@ module.exports.fields = async(req, res) => {
 
                     log.info(`Успешное добавление основной информации о товаре!'${req.body.name}'`);
 
-                    res.status(201).json({ product })
+                    res.json({ product: product, message: 'Основные данные загружены!', error: 'false' })
                 } catch (e) {
                     log.warn(`Неудачная попытка добавления основной информации о товаре '${req.body.name}'! Ошибка обращения к базе!`);
-                    res.json({ message: 'error save' })
+                    res.json({ message: 'При загрузке произошла ошибка! Неудалось сохранить данные в базе!', error: 'true' })
                 }
             } else {
                 log.warn(`Неудачная попытка добавления основной информации о товаре '${req.body.name}'! Данные не прошли валидацию!`);
-                res.json({ message: 'main info validate error' })
+                res.json({ message: 'При загрузке произошла ошибка! Основные данные о товаре не прошли проверку!', error: 'true' })
             }
 
         }
 
     } else {
         log.warn(`Неудачная попытка добавления основной информации о товаре '${req.body.name}'! Данные не прошли валидацию!`);
-        res.json({ message: 'error validate name' })
+        res.json({ message: 'При загрузке произошла ошибка! Название товара не прошло проверку!', error: 'true' })
     }
 }
