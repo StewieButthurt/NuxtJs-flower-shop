@@ -16,11 +16,11 @@
                     :eager="true"
                 ></v-img>
                 <v-card-title class="title add-image-filepond-component-card-title">
-                    {{index > 0 ? `Картинка №${index + 1}` : 'Главная картинка'}}
+                    {{index > 0 ? `Картинка №${index + 1}` : firstImageName}}
                     <div 
                         class="add-image-filepond-component-button"  
                         @click="clickRemove()"
-                        v-if="index > 0 && info.previewImg"
+                        v-if="index > 0 && previewImg"
                         >
                         <v-icon>mdi-delete-forever</v-icon>
                     </div>
@@ -35,11 +35,13 @@
     export default {
         props: [
             'index',
-            'info',
-            'storeUrl'
+            'storeUrl',
+            'previewImg',
+            'firstImageName',
+            'images'
         ],
         async mounted() {
-            if(this.info.previewImg === false) {
+            if(this.previewImg === false) {
                 this.file = false,
                 this.newImg = false
             }
@@ -69,34 +71,11 @@
                     if(this.file.type === 'image/png' || this.file.type === 'image/jpeg') {
                         this.newImg = URL.createObjectURL(this.file)
 
-                        let data = {
+                        this.$emit('add', {
                             file: this.file,
-                            previewImg: this.file
-                        }
-
-                        let index = this.index
-
-
-                        await this.$store.dispatch(`${this.storeUrl}updateDataImage`, {data, index})
-
-                        let counter = 0
-
-                        for(let i = 0; i < this.images.length; i++) {
-                            if(this.images[i].previewImg) {
-                                counter++
-                            }
-                        }
-
-                        if(this.images.length < 6 && this.images.length === counter) {
-
-                            let newData = {
-                                file: false,
-                                previewImg: false
-                            }
-
-                            vm.$store.dispatch(`${vm.storeUrl}setImageField`, newData)
-
-                        }
+                            previewImg: this.file,
+                            index: this.index
+                        })
                         
                     } else {
                         this.$emit('changeMessage', 'error type')
@@ -108,32 +87,12 @@
             },
             async clickRemove() {
                 if(this.images.length > 1) {
-                    if(this.info.previewImg) {
+                    if(this.previewImg) {
                         
                         this.newImg = false
-                        
-                        this.$store.dispatch(`${this.storeUrl}setImages`, this.index)
 
-                        let counter = 0
-
-                        for(let i = 0; i < this.images.length; i++) {
-                            if(this.images[i].previewImg) {
-                                counter++
-                            }
-                        }
-
-                        if(counter === this.images.length) {
-                            this.newImg = false
-                            let newData = {
-                                file: false,
-                                previewImg: false
-                            }
-
-                            this.$store.dispatch(`${this.storeUrl}setImageField`, newData)
-                        
-                        }
-                        
-                    
+                        this.$emit('remove', this.index)
+                                            
                     }
                 }
             }
@@ -160,12 +119,6 @@
                     }
                 }
                 
-            },
-            images() {
-                return this.$store.getters[`${this.storeUrl}images`]
-            },
-            previewImg() {
-                return this.info.previewImg
             }
         }
     }

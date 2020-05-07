@@ -119,10 +119,14 @@
                     <app-product-add-image-filepond 
                         v-for="(item, index) in images"
                         :key="index"
-                        :info="item"
+                        :images="images"
+                        :previewImg="item.previewImg"
+                        :firstImageName="'Главная картинка'"
                         :index="index"
                         :storeUrl="storeUrl"
                         @changeMessage="changeMessage"
+                        @remove="removeImageFilePond"
+                        @add="addImageFilePond"
                     />
                 </div>
             </v-row>
@@ -574,6 +578,59 @@
             async changeMessage(value) {
                 console.log(1)
                 this.message = value
+            },
+            async removeImageFilePond(index) {
+
+                await this.$store.dispatch(`${this.storeUrl}setImages`, index)
+
+                let counter = 0
+
+                for(let i = 0; i < this.images.length; i++) {
+                    if(this.images[i].previewImg) {
+                        counter++
+                    }
+                }
+
+                if(counter === this.images.length) {
+                    
+                    let newData = {
+                        file: false,
+                        previewImg: false
+                    }
+
+                    this.$store.dispatch(`${this.storeUrl}setImageField`, newData)
+                
+                }
+            },
+            async addImageFilePond({file, previewImg, index}) {
+
+                let data = {
+                    file: file,
+                    previewImg: file
+                }
+
+                await this.$store.dispatch(`${this.storeUrl}updateDataImage`, {data, index})
+
+                let counter = 0
+
+                for(let i = 0; i < this.images.length; i++) {
+                    if(this.images[i].previewImg) {
+                        counter++
+                    }
+                }
+
+                if(this.images.length < 6 && this.images.length === counter) {
+
+                    let newData = {
+                        file: false,
+                        previewImg: false
+                    }
+
+                    this.$store.dispatch(`${this.storeUrl}setImageField`, newData)
+
+                }
+
+
             }
         }
     }
