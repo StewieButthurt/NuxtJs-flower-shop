@@ -8,57 +8,28 @@
                     </div>
                 </v-col>
             </v-row>
-            <v-row align="center" justify="center">
-                <v-col cols="12" sm="9" md="7" style="max-width: 700px">
-                    <v-text-field
-                    prepend-inner-icon="mdi-format-title"
-                    label="Название товара"
-                    v-model="localName"
-                    @blur="updateName(localName)"
-                    ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row align="center" justify="center">
-                <v-col cols="12" sm="9" md="7" style="max-width: 700px">
-                    <v-text-field
-                    prepend-inner-icon="mdi-currency-rub"
-                    label="Цена товара (Пример: 2000)"
-                    v-model="localPrice"
-                    @blur="updatePrice()"
-                    ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row align="center" justify="center">
-                <v-col cols="12" sm="9" md="7" style="max-width: 700px">
-                    <v-textarea
-                        name="input-7-1"
-                        :auto-grow="true"
-                        :dense="true"
-                        prepend-inner-icon="mdi-grease-pencil"
-                        label="Описание товара"
-                        value=""
-                        v-model="localDescr"
-                        @blur="updateDescr(localDescr)"
-                    ></v-textarea>
-                </v-col>
-            </v-row>
-            <v-row align="center" justify="center">
-                <v-col cols="12" sm="9" md="7" style="max-width: 700px">
-                    <v-text-field 
-                    prepend-inner-icon="mdi-file-document"
-                    label="Артикул (Например: 7623BJ7)"
-                    v-model="localArticle"
-                    @blur="updateArticle(localArticle)"
-                    ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row align="center" justify="center">
-                <v-col cols="12" sm="9" md="7" style="max-width: 700px">
-                    <app-product-add-categories 
-                      :storeUrl="storeUrl"  
-                    />
-                </v-col>
-            </v-row>
+
+            <app-name-product 
+                :storeUrl="storeUrl"
+            />
+
+            <app-price-product 
+                :storeUrl="storeUrl"
+            />
+
+            <app-descr-product 
+                :storeUrl="storeUrl"
+            />
+            
+            <app-article-product 
+                :storeUrl="storeUrl"
+            />
+
+            <app-categories-product 
+                :storeUrl="storeUrl"
+            />
+            
+            
             <v-row align="center" justify="center">
                 <v-col cols="12" sm="9" md="7" align="center" justify="center" style="max-width: 700px" >
                         <v-text-field 
@@ -102,18 +73,6 @@
                     ></v-switch>
                 </v-col>
             </v-row>
-            <!-- <v-row align="center" justify="center">
-                <v-col align="center" justify="center" cols="12" sm="9" md="7" >
-                        <app-product-add-image 
-                            v-for="(item, index) in images"
-                            :key="index"
-                            :previewImageLocal="item.previewImg"
-                            :fileLocal="item.file"
-                            :index="index"
-                            :storeUrl="storeUrl"  
-                        />
-                </v-col>
-            </v-row> -->
             <v-row align="center" justify="center">
                 <div class="products-image-filepond">
                     <app-product-add-image-filepond 
@@ -314,13 +273,16 @@
 
 <script>
 
+    const AppNameProduct = () => import('~/components/admin/product/main/name-product/index.vue')
+    const AppPriceProduct = () => import('~/components/admin/product/main/price-product/index.vue')
+    const AppDescrProduct = () => import('~/components/admin/product/main/descr-product/index.vue')
+    const AppArticleProduct = () => import('~/components/admin/product/main/article-product/index.vue')
+    const AppCategoriesProduct = () => import('~/components/admin/product/main/categories-product/index.vue')
     const AppProductCharacteristics = () => import('~/components/admin/product/characteristics/index.vue')
-    const AppProductAddImage = () => import('~/components/admin/product/add-image/index.vue')
     const AppProductAddImageFilepond = () => import('~/components/admin/product/add-image-filepond/index.vue')
     const AppProductAddNewField = () => import('~/components/admin/product/add-new-field/index.vue')
     const AppProductOtherFieldExampleImage = () => import('~/components/admin/product/other-field-example-image/index.vue')
     const AppProductOtherFieldWithImage = () => import('~/components/admin/product/other-field-with-image/index.vue')
-    const AppProductAddCategories = () => import('~/components/admin/categories/product-add-categories/index.vue')
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
 
     export default {
@@ -339,13 +301,16 @@
             
         // },
         components: {
+            AppNameProduct,
+            AppPriceProduct,
+            AppDescrProduct,
+            AppArticleProduct,
+            AppCategoriesProduct,
             AppProductCharacteristics,
-            AppProductAddImage,
             AppProductAddImageFilepond,
             AppProductAddNewField,
             AppProductOtherFieldExampleImage,
             AppProductOtherFieldWithImage,
-            AppProductAddCategories,
             AppSnackbars
         },
         data() {
@@ -356,10 +321,6 @@
                 colorBckg: '',
                 colorBtn: '',
                 storeUrl: 'product/add/',
-                localName: '',
-                localPrice: '',
-                localDescr: '',
-                localArticle: '',
                 localStock: false,
                 localWeekPrice: false,
                 localDiscountStatus: false,
@@ -421,9 +382,6 @@
         },
         async mounted() {
             this.localName = this.name
-            this.localPrice = this.price
-            this.localDescr = this.descr
-            this.localArticle = this.article
             this.localDiscountStatus = this.discountStatus
             this.localDiscount = this.sizeDiscount
             this.localStock = this.stock
@@ -447,18 +405,6 @@
             },
             images() {
                 return this.$store.getters[`${this.storeUrl}images`]
-            },
-            name() {
-                return this.$store.getters[`${this.storeUrl}name`]
-            },
-            price() {
-                return this.$store.getters[`${this.storeUrl}price`]
-            },
-            descr() {
-                return this.$store.getters[`${this.storeUrl}descr`]
-            },
-            article() {
-                return this.$store.getters[`${this.storeUrl}article`]
             },
             discountStatus() {
                 return this.$store.getters[`${this.storeUrl}discountStatus`]
@@ -527,25 +473,6 @@
                 }
 
                 this.$store.dispatch(`${this.storeUrl}setNewFields`, data)
-            },
-            async updateName(name) {
-                this.$store.dispatch(`${this.storeUrl}setName`, name)
-            },
-            async updatePrice() {
-                this.localPrice = parseInt(this.localPrice)
-
-                if(this.localPrice) {
-                    this.$store.dispatch(`${this.storeUrl}setPrice`, this.localPrice)
-                } else {
-                    this.localPrice = ''
-                }
-                
-            },
-            async updateDescr(descr) {
-                this.$store.dispatch(`${this.storeUrl}setDescr`, descr)
-            },
-            async updateArticle(article) {
-                this.$store.dispatch(`${this.storeUrl}setArticle`, article)
             },
             async updateDiscount() {
                 this.localDiscount = this.localDiscount.replace(/[^\d]/g, '')

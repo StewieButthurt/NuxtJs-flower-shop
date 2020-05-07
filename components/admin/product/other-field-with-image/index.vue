@@ -72,6 +72,7 @@
         display: flex
         flex-direction: column
         border: 1px solid black
+        animation: product-other-field-with-image .6s
     
     .product-other-field-with-image__line
         height: 1px
@@ -79,4 +80,11 @@
     
     .product-other-field-with-image__text-wrapper
         padding: 20px
+    
+    @keyframes product-other-field-with-image
+        0%
+            opacity: 0
+        100%
+            opacity: 1
+
 </style>
