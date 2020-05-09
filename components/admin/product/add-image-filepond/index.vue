@@ -15,16 +15,33 @@
                     class="grey darken-4"
                     :eager="true"
                 ></v-img>
-                <v-card-title class="title add-image-filepond-component-card-title">
+                <v-card-title v-if="!writeText" class="add-image-filepond-component-card-title">
                     {{index > 0 ? `Картинка №${index + 1}` : firstImageName}}
                     <div 
                         class="add-image-filepond-component-button"  
                         @click="clickRemove()"
-                        v-if="index > 0 && previewImg"
                         >
                         <v-icon>mdi-delete-forever</v-icon>
                     </div>
                 </v-card-title>
+                <v-card-title v-if="writeText" class="add-image-filepond-component-card-title">
+                    <v-text-field 
+                        :label="label ? label : ''"
+                        v-model="localTitle"
+                        class="add-image-filepond__title"
+                        @blur="$emit('updateTitleImage', {
+                            title: localTitle,
+                            index: index
+                        })"
+                    ></v-text-field>
+                    <div 
+                        class="add-image-filepond-component-button"  
+                        @click="clickRemove()"
+                        >
+                        <v-icon>mdi-delete-forever</v-icon>
+                    </div>
+                </v-card-title>
+
             </v-card>   
         </div>
     </v-fade-transition>
@@ -38,12 +55,19 @@
             'storeUrl',
             'previewImg',
             'firstImageName',
-            'images'
+            'images',
+            'writeText',
+            'title',
+            'label'
         ],
         async mounted() {
             if(this.previewImg === false) {
                 this.file = false,
                 this.newImg = false
+            }
+
+            if(this.title) {
+                this.localTitle = this.title
             }
         },
         watch: {
@@ -52,12 +76,16 @@
                     this.file = false,
                     this.newImg = false
                 }
+            },
+            title(val) {
+                this.localTitle = val
             }
         },
         data() {
             return {
                 file: false,
-                newImg: false
+                newImg: false,
+                localTitle: ''
             }
         },
         methods: {
@@ -172,10 +200,9 @@
         opacity: 0
         cursor: pointer
     
-    #add-image-filepond-component .add-image-filepond-component-card-title
-        display: flex
-        justify-content: space-between
-        align-items: center
+    .add-image-filepond-component-card-title
+        font-size: 21px
+    
 
 
 </style>

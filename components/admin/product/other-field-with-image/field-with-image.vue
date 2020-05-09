@@ -82,10 +82,10 @@
 
             },
             async removeImageField() {
-                let index = this.index
-                let globalIndex = this.globalIndex
-
-                await this.$store.dispatch(`${this.storeUrl}removeOtherFieldImage`, {index, globalIndex})
+                await this.$store.dispatch(`${this.storeUrl}removeOtherFieldImage`, {
+                    index: this.index, 
+                    globalIndex: this.globalIndex
+                })
             },
             async addImageField() {
                 let data = {
@@ -102,11 +102,11 @@
 
             },
             async updateTitle() {
-                let title = this.localTitle
-                let globalIndex = this.globalIndex
-                let index = this.index
-
-                await this.$store.dispatch(`${this.storeUrl}updateOtherFieldImageTitle`, {title, globalIndex, index})
+                await this.$store.dispatch(`${this.storeUrl}updateOtherFieldImageTitle`, {
+                    title: this.localTitle, 
+                    globalIndex: this.globalIndex, 
+                    index: this.index
+                })
             },
             async clearImage() {
                 let data = {

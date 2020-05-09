@@ -1,5 +1,7 @@
 <template>
-    <div class="product-characteristics" id="product-characteristics">
+    <div class="product-characteristics" 
+        id="product-characteristics"
+        >
         <div class="product-characteristics__fields">
             <v-text-field 
             prepend-inner-icon="mdi-format-title"
@@ -25,7 +27,8 @@
         data() {
             return {
                 title: '',
-                descr: ''
+                descr: '',
+                animateStatus: false
             }
         },
         watch: {
@@ -75,4 +78,7 @@
     #product-characteristics .product-characteristics__field
         +xs-block
             width: 100%
+    
+        
+    
 </style>
