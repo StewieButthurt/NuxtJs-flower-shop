@@ -34,16 +34,20 @@
             </client-only>
             <client-only>
                 <v-row align="center" justify="center">
-                    <v-col align="center" justify="center" cols="12" sm="9" md="7" style="max-width: 700px">
+                    <v-col align="center" justify="center" cols="12" sm="9" md="7" style="max-width: 700px; padding: 0px">
                             <transition-group name="other-field-input">
                                 <app-product-add-new-field 
                                     v-for="(item, index) in newFields"
-                                    :key="item.title"
+                                    :key="item.token"
+                                    :fields="newFields"
                                     :title="item.title"
                                     :descr="item.descr"
                                     :index="index"
                                     :statusButton="item.statusButton"
                                     :storeUrl="storeUrl"
+                                    @update="update"
+                                    @remove="remove"
+                                    @add="add"
                                 />
                             </transition-group>
                     </v-col>
@@ -83,7 +87,27 @@
                 let data = {
                     statusButton: true,
                     title: '',
-                    descr: []
+                    descr: [],
+                    token: `${Math.random()}`
+                }
+
+                this.$store.dispatch(`${this.storeUrl}setNewFields`, data)
+            },
+            async update({descr, index, title}) {
+                if(descr) {
+                    this.$store.dispatch(`${this.storeUrl}updateNewFieldDescr`, {descr, index})
+                } else if(title) {
+                    this.$store.dispatch(`${this.storeUrl}updateNewFieldTitle`, {title, index})
+                }
+            },
+            async remove({index}) {
+                this.$store.dispatch(`${this.storeUrl}removeNewField`, index)
+            },
+            async add() {
+                let data = {
+                    title: '',
+                    descr: [],
+                    token: `${Math.random()}`
                 }
 
                 this.$store.dispatch(`${this.storeUrl}setNewFields`, data)
@@ -105,16 +129,15 @@
         margin-top: 0px
     
     .other-field-input-enter-active
-        animation: product-other-field-input .5s
+        animation: product-other-field-input .5s ease-in-out forwards
 
     .other-field-input-leave-active
-        animation: product-other-field-input .3s linear reverse 
+        animation: product-other-field-input .5s ease-in-out forwards reverse  
     
     @keyframes product-other-field-input
         0%
-            opacity: 0
+            overflow: hidden
             height: 0px
         100%
-            opacity: 1
             height: 150px
 </style>

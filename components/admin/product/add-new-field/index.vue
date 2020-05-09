@@ -25,7 +25,7 @@
         <v-btn class="mx-2 mt-5 ml-5" dark color="indigo" small @click="removeField()" max-width="50px">
             <v-icon dark>mdi-delete-forever</v-icon>
         </v-btn>
-        <v-btn  v-if="newFields.length === index + 1" class="mx-2 mt-5 ml-6" fab small color="indigo" @click="addNewField()">
+        <v-btn  v-if="fields.length === index + 1" class="mx-2 mt-5 ml-6" fab small color="indigo" @click="addNewField()">
             <v-icon>mdi-plus</v-icon>
         </v-btn>
     </v-row>
@@ -37,8 +37,8 @@
             'title',
             'descr',
             'index',
-            'statusButton',
-            'storeUrl'
+            'storeUrl',
+            'fields'
         ],
         mounted() {
             this.localTitle = this.title,
@@ -53,13 +53,16 @@
         },
         watch: {
             localDescr(val) {
-                let index = this.index
-                this.$store.dispatch(`${this.storeUrl}updateNewFieldDescr`, {val, index})
+                this.$emit('update', {
+                    index: this.index,
+                    descr: val
+                })
             },
             localTitle(val) {
-                let title = this.localTitle
-                let index = this.index
-                this.$store.dispatch(`${this.storeUrl}updateNewFieldTitle`, {title, index})
+                this.$emit('update', {
+                    index: this.index,
+                    title: this.localTitle
+                })
             }
         },
         methods: {
@@ -67,18 +70,14 @@
                 this.localDescr.push(this.search)
             },
             async removeField() {
-                let index = this.index
-                this.$store.dispatch(`${this.storeUrl}removeNewField`, index)
+                this.$emit('remove', {
+                    index: this.index
+                })
             },
             async addNewField() {
 
-                let data = {
-                    statusButton: true,
-                    title: '',
-                    descr: []
-                }
+                this.$emit('add')
 
-                this.$store.dispatch(`${this.storeUrl}setNewFields`, data)
             }
         },
         computed: {
@@ -88,9 +87,6 @@
                 } else {
                     return false
                 }
-            },
-            newFields() {
-                return this.$store.getters[`${this.storeUrl}newFields`]
             },
             items() {
                 return this.localDescr

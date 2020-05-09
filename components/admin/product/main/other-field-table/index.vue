@@ -45,7 +45,7 @@
                             </transition-group>
                     </v-col>
                 </v-row>
-                <v-btn v-if="newFields.length === 0" class="mx-2 mt-5 mb-1 ml-6" fab small color="indigo" @click="addNewFieldWithImage()">
+                <v-btn  class="mx-2 mt-5 mb-1 ml-6" fab small color="indigo" @click="addNewFieldWithImage()">
                     <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </client-only>

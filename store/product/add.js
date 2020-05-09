@@ -85,7 +85,7 @@ export const mutations = {
         arr.push(data)
     },
     updateNewFieldDescr(state, info) {
-        state.data.newFields[info.index].descr = info.val
+        state.data.newFields[info.index].descr = info.descr
     },
     removeNewField(state, index) {
         let arr = state.data.newFields

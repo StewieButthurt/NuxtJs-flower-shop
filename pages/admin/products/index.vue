@@ -147,13 +147,6 @@
             }
         },
         computed: {
-            statusImage() {
-                    if(this.images[0].previewImg !== null) {
-                        return true
-                    } else {
-                        return false
-                    }
-            },
             images() {
                 return this.$store.getters[`${this.storeUrl}images`]
             }

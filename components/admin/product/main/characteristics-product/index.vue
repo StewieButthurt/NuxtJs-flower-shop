@@ -51,11 +51,13 @@
                 <transition-group name="fade-in">
                     <app-product-characteristics 
                         v-for="(item, index) in other"
-                        :key="item.title"
+                        :key="item.token"
                         :titleLocal="item.title"
                         :descrLocal="item.descr"
                         :index="index"
                         :storeUrl="storeUrl"
+                        @update="update"
+                        @remove="remove"
                     />
                 </transition-group>
             </v-col>
@@ -98,11 +100,33 @@
             other() {
                 return this.$store.getters[`${this.storeUrl}other`]
             },
+            name() {
+                return this.$store.getters[`${this.storeUrl}name`]
+            },
+            price() {
+                return this.$store.getters[`${this.storeUrl}price`]
+            },
+            images() {
+                return this.$store.getters[`${this.storeUrl}images`]
+            },
+            descr() {
+                return this.$store.getters[`${this.storeUrl}descr`]
+            },
+            article() {
+                return this.$store.getters[`${this.storeUrl}article`]
+            },
+            statusImage() {
+                    if(this.images[0].previewImg) {
+                        return true
+                    } else {
+                        return false
+                    }
+            },
             checkFields() {
                 if( this.name !== '' &&
                     this.price !== '' &&
                     this.descr !== '' &&
-                    this.article !== '' && 
+                    this.article !== '' &&
                     this.statusImage 
                 ) 
                 {
@@ -119,10 +143,21 @@
             async addField() {
                 let data = {
                     title: '',
-                    descr: ''
+                    descr: '',
+                    token: `${Math.random()}`
                 }
 
                 this.$store.dispatch(`${this.storeUrl}setField`, data)
+            },
+            async update({title, descr, index}) {
+                if(title) {
+                    this.$store.dispatch(`${this.storeUrl}setOtherTitle`, {index, title})
+                } else if(descr) {
+                    this.$store.dispatch(`${this.storeUrl}setOtherDescr`, {index, descr})
+                }
+            },
+            async remove({index}) {
+                this.$store.dispatch(`${this.storeUrl}removeField`, index)
             }
         }
     }
@@ -152,16 +187,15 @@
         background-color: #e8e8e8
     
     .fade-in-enter-active
-        animation: fade-in .5s
+        animation: fade-in .5s ease-in-out forwards
 
     .fade-in-leave-active
-        animation: fade-in .3s linear reverse  
+        animation: fade-in .5s ease-in-out forwards reverse  
     
     @keyframes fade-in
         0%
-            opacity: 0
+            overflow: hidden
             height: 0px
         100%
-            opacity: 1
-            height: 160px
+            height: 165px
 </style>

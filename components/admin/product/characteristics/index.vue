@@ -27,20 +27,21 @@
         data() {
             return {
                 title: '',
-                descr: '',
-                animateStatus: false
+                descr: ''
             }
         },
         watch: {
             title(val) {
-                let index = this.index
-                let title = this.title
-                this.$store.dispatch(`${this.storeUrl}setOtherTitle`, {index, title})
+                this.$emit('update', {
+                    index: this.index,
+                    title: this.title
+                })
             },
             descr(val) {
-                let index = this.index
-                let descr = this.descr
-                this.$store.dispatch(`${this.storeUrl}setOtherDescr`, {index, descr})
+                this.$emit('update', {
+                    index: this.index,
+                    descr: this.descr
+                })
             }
         },
         props: [
@@ -55,8 +56,14 @@
         },
         methods: {
             async removeField() {
-                let index = this.index
-                this.$store.dispatch(`${this.storeUrl}removeField`, index)
+                await this.$emit('remove', {
+                    index: this.index
+                })
+            }
+        },
+        watch: {
+            index(val) {
+                console.log(val)
             }
         }
     }
@@ -65,7 +72,6 @@
 <style lang="sass">
     .product-characteristics
         display: flex
-        padding: 12px
         align-items: center
         width: 100%
         max-width: 550px
@@ -74,6 +80,7 @@
         display: flex
         flex-direction: column
         width: 100%
+        margin: 12px
     
     #product-characteristics .product-characteristics__field
         +xs-block
