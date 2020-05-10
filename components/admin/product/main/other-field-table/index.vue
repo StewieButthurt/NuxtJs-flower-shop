@@ -54,8 +54,8 @@
 </template>
 
 <script>
-    const AppProductOtherFieldExampleImage = () => import('~/components/admin/product/other-field-example-image/index.vue')
-    const AppProductOtherFieldWithImage = () => import('~/components/admin/product/other-field-with-image/index.vue')
+    const AppProductOtherFieldExampleImage = () => import('~/components/admin/product/main/other-field-table/example.vue')
+    const AppProductOtherFieldWithImage = () => import('~/components/admin/product/main/other-field-table/field-image.vue')
 
     export default {
         data() {

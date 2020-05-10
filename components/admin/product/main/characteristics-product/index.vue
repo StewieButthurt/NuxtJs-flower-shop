@@ -82,7 +82,7 @@
 
 <script>
     
-    const AppProductCharacteristics = () => import('~/components/admin/product/characteristics/index.vue')
+    const AppProductCharacteristics = () => import('~/components/admin/product/main/characteristics-product/characteristics.vue')
 
     export default {
         data() {

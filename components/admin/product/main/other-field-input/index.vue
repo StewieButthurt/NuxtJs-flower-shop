@@ -59,7 +59,7 @@
 
 <script>
 
-    const AppProductAddNewField = () => import('~/components/admin/product/add-new-field/index.vue')
+    const AppProductAddNewField = () => import('~/components/admin/product/main/other-field-input/add-new-field.vue')
 
     export default {
         data() {

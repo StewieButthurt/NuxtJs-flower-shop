@@ -51,7 +51,7 @@
 
 <script>
     const AppFieldWithImage = () => import('~/components/admin/product/other-field-with-image/field-with-image.vue')
-    const AppProductAddImageFilepond = () => import('~/components/admin/product/add-image-filepond/index.vue')
+    const AppProductAddImageFilepond = () => import('~/components/admin/product/main/main-images-product/images-filepond.vue')
 
 
     export default {
