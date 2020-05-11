@@ -136,6 +136,7 @@
                 app
                 color="#0E1D28"
                 dark
+                style="z-index: 20"
                 >
                 <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
                 <v-toolbar-title>Панель администратора</v-toolbar-title>

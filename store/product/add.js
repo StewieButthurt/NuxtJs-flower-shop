@@ -4,7 +4,8 @@ export const state = () => ({
     data: {
         images: [{
             file: false,
-            previewImg: false
+            previewImg: false,
+            token: `${Math.random()}`
         }],
         name: '',
         descr: '',
@@ -66,7 +67,8 @@ export const mutations = {
             this.sizeDiscount = '0'
         state.data.images = [{
             file: false,
-            previewImg: false
+            previewImg: false,
+            token: `${Math.random()}`
         }]
     },
     updateDataImage(state, data) {

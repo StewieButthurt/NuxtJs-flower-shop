@@ -129,10 +129,10 @@
         margin-top: 0px
     
     .other-field-input-enter-active
-        animation: product-other-field-input .5s ease-in-out forwards
+        animation: product-other-field-input .5s ease-in-out normal forwards
 
     .other-field-input-leave-active
-        animation: product-other-field-input .5s ease-in-out forwards reverse  
+        animation: product-other-field-input .5s ease-in-out reverse forwards
     
     @keyframes product-other-field-input
         0%

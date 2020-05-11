@@ -34,20 +34,35 @@
                             <transition-group name="other-field-image">
                                 <app-product-other-field-with-image 
                                     v-for="(item, index) in otherFieldImage"
-                                    :key="item.title"
+                                    :key="item.token"
                                     :title="item.title"
                                     :info="item.info"
                                     :index="index"
                                     :storeUrl="storeUrl"
-                                    @removeBlock="removeBlock"
                                     @updateTitle="updateTitle"
                                 />
                             </transition-group>
                     </v-col>
                 </v-row>
-                <v-btn  class="mx-2 mt-5 mb-1 ml-6" fab small color="indigo" @click="addNewFieldWithImage()">
-                    <v-icon>mdi-plus</v-icon>
-                </v-btn>
+                <div class="other-field-table__button mx-2 mt-5 mb-1 ml-6" @click="addNewFieldWithImage()">
+                    <svg  enable-background="new 0 0 511.81 511.81" viewBox="0 0 511.81 511.81" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m391.81 136.01v150.8l-67.588 208.99h-324.222v-495.79h260.609z" fill="#ccf1ff"/>
+                        <path d="m391.81 136.01v150.8l-67.588 208.99h-128.317v-495.79h64.704z" fill="#ade7ff"/>
+                        <path d="m391.81 136.01h-131.201v-136z" fill="#80d6ff"/>
+                        <circle cx="391.81" cy="391.8" fill="#62de59" r="120"/>
+                        <path d="m391.81 511.8c66.168 0 120-53.832 120-120s-53.832-120-120-120z" fill="#3cc569"/>
+                        <path d="m436.81 376.3v30h-30.67v30.5h-30v-30.5h-29.33v-30h29.33v-30.5h30v30.5z" fill="#fff"/>
+                        <path d="m436.81 376.3v30h-30.67v30.5h-14.33v-91h14.33v30.5z" fill="#daf5ff"/>
+                        <path d="m72.17 196.467h247.289v30h-247.289z" fill="#fff"/>
+                        <path d="m195.813 196.467h123.646v30h-123.646z" fill="#f6f9fa"/>
+                            <g fill="#fff">
+                                <path d="m72.17 136.467h123.735v30h-123.735z"/>
+                                <path d="m72.17 316.467h123.735v30h-123.735z"/>
+                                <path d="m72.17 256.467h173.649v30h-173.649z"/>
+                            </g>
+                        <path d="m195.813 256.467h50.006v30h-50.006z" fill="#f6f9fa"/>
+                    </svg>
+                </div>
             </client-only>
         </v-col>
     </v-row>
@@ -109,13 +124,11 @@
                                 previewImg: null
                             }
                         }
-                    ]
+                    ],
+                    token: `${Math.random()}`
                 }
 
                 this.$store.dispatch(`${this.storeUrl}addNewFieldWithImage`, data)
-            },
-            async removeBlock(index) {
-                await this.$store.dispatch(`${this.storeUrl}removeOtherFieldWithImageBlock`, index)
             },
             async updateTitle({title, index}) {
                 this.$store.dispatch(`${this.storeUrl}updateOtherFieldTitle`, {title, index})
@@ -124,9 +137,6 @@
         computed: {
             otherFieldImage() {
                 return this.$store.getters[`${this.storeUrl}otherFieldImage`]
-            },
-            newFields() {
-                return this.$store.getters[`${this.storeUrl}newFields`]
             }
         }
     }
@@ -145,16 +155,26 @@
         margin-top: 0px
     
     .other-field-image-enter-active
-        animation: field-image .5s linear
+        animation: field-image 1s ease-in-out normal forwards
 
     .other-field-image-leave-active
-        animation: field-image .3s linear reverse 
+        animation: field-image 1s ease-in-out reverse forwards
     
     @keyframes field-image
         0%
             opacity: 0
             height: 0px
         100%
+            height: 550px
             opacity: 1
-            height: 600px
+    
+    .other-field-table__button
+        width: 40px
+        height: 50px
+        cursor: pointer
+    
+    .other-field-table__button svg
+        width: 100%
+        height: 100%
+
 </style>

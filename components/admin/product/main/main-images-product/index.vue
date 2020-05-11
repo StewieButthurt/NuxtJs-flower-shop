@@ -1,6 +1,6 @@
 <template>
     <v-row align="center" justify="center">
-        <div class="products-image-filepond">
+        <div class="products-image-filepond" id="products-image-filepond">
             <app-product-add-image-filepond 
                 v-for="(item, index) in images"
                 :key="index"
@@ -104,8 +104,15 @@
         margin: 0 auto
         display: flex
         flex-wrap: wrap
-        justify-content: space-between
+        justify-content: center
         +xs-block
             flex-direction: column
             align-items: center
+    
+    #products-image-filepond .add-image-filepond-component
+        +size(4)
+        margin: 10px 20px
+    
+    #products-image-filepond .add-image-filepond-component-card-title
+        font-size: 16px
 </style>

@@ -1,56 +1,46 @@
 <template>
-    <div class="product-other-field-with-image mt-10" id="product-other-field-with-image">
-        <div class="product-other-field-with-image__text-wrapper">
-            <v-text-field 
-                prepend-inner-icon="mdi-format-title"
-                label="Название (Например: 'Цвет')"
-                v-model="localTitle"
-                class="product-characteristics__field"
-                @blur="$emit('updateTitle', {
-                    title: localTitle,
-                    index: index
-                })"
-            ></v-text-field>
-        </div>
-        <div class="product-other-field-with-image__line">
-        </div>
-        <!-- <app-field-with-image 
-            v-for="(item, index) in info"
-            :key="item.title"
-            :index="index"
-            :globalIndex="globalIndex"
-            :title="item.title"
-            :image="item.image"
-            :info="info"
-            :storeUrl="storeUrl"
-        /> -->
-        <v-row align="center" justify="center">
-            <app-product-add-image-filepond 
-                v-for="(item, index) in info"
-                :key="index"
-                :images="info"
-                :previewImg="item.image.previewImg"
-                :firstImageName="'Главная картинка'"
-                :writeText="true"
-                :label="localTitle"
-                :index="index"
-                :storeUrl="storeUrl"
-                @changeMessage="changeMessage"
-                @remove="removeImageFilePond"
-                @add="addImageFilePond"
-            />
-        </v-row>
-        <v-row align="center" justify="center">
-            <v-btn class="mx-2 mb-5" color="error" @click="$emit('removeBlock', index)">
-                <v-icon class="mr-2">mdi-delete-forever</v-icon>
-                Удалить этот блок
-            </v-btn>
-        </v-row>
+    <div class="product-other-field-with-image-wrapper" id="product-other-field-with-image">
+        <v-card class="product-other-field-with-image">
+            <div class="product-other-field-with-image__text-wrapper">
+                <v-text-field 
+                    prepend-inner-icon="mdi-format-title"
+                    label="Название (Например: 'Цвет')"
+                    solo
+                    v-model="localTitle"
+                    class="product-characteristics__field"
+                    @blur="$emit('updateTitle', {
+                        title: localTitle,
+                        index: index
+                    })"
+                ></v-text-field>
+            </div>
+            <v-row align="center" justify="center">
+                <app-product-add-image-filepond 
+                    v-for="(item, index) in info"
+                    :key="item.token"
+                    :images="info"
+                    :previewImg="item.image.previewImg"
+                    :firstImageName="'Главная картинка'"
+                    :writeText="true"
+                    :label="localTitle"
+                    :iconClose="true"
+                    :index="index"
+                    :storeUrl="storeUrl"
+                    @changeMessage="changeMessage"
+                    @remove="removeImageFilePond"
+                    @add="addImageFilePond"
+                />
+            </v-row>
+            <v-row align="center" justify="end" id="field-image-button">
+                <v-icon class="mx-2 mb-5 mt-10 mr-5 field-image-button" size="30px" @click="removeBlock(index)">
+                    mdi-delete-forever
+                </v-icon>
+            </v-row>
+        </v-card>
     </div>
 </template>
 
 <script>
-    const AppFieldWithImage = () => import('~/components/admin/product/other-field-with-image/field-with-image.vue')
     const AppProductAddImageFilepond = () => import('~/components/admin/product/main/main-images-product/images-filepond.vue')
 
 
@@ -60,7 +50,6 @@
             this.globalIndex = this.index
         },
         components: {
-            AppFieldWithImage,
             AppProductAddImageFilepond
         },
         data() {
@@ -101,7 +90,8 @@
                         image: {
                             file: null,
                             previewImg: null
-                        }
+                        },
+                        token: `${Math.random()}`
                     }
 
                     let globalIndex = this.globalIndex
@@ -113,7 +103,8 @@
             async addImageFilePond({file, previewImg, index}) {
                 let data = {
                     file: file,
-                    previewImg: previewImg
+                    previewImg: previewImg,
+                    token: `${Math.random()}`
                 }
 
                 // let index = 0
@@ -137,7 +128,8 @@
                         image: {
                             file: null,
                             previewImg: null
-                        }
+                        },
+                        token: `${Math.random()}`
                     }
 
                     let globalIndex = this.globalIndex
@@ -146,22 +138,25 @@
 
                 }
  
+            },
+            async removeBlock(index) {
+               
+               await this.$store.dispatch(`${this.storeUrl}removeOtherFieldWithImageBlock`, index)
+                
             }
         }
     }
 </script>
 
 <style lang="sass">
-
+    
+    // .product-other-field-with-image-wrapper
+        // overflow: hidden
+        // padding-top: 20px
     .product-other-field-with-image
         display: flex
         flex-direction: column
-        border: 1px solid black
-        animation: product-other-field-with-image .6s
-    
-    .product-other-field-with-image__line
-        height: 1px
-        background-color: black
+        margin-top: 40px
     
     .product-other-field-with-image__text-wrapper
         padding: 20px
@@ -183,6 +178,14 @@
     #product-other-field-with-image .add-image-filepond__title
         z-index: 7
     
+    #field-image-button .theme--light.v-icon
+        color: red
+        opacity: .5
+        
+    #field-image-button .theme--light.v-icon:hover
+        transform: scale(1.2)
+        opacity: 1
 
-
+    
+    
 </style>
