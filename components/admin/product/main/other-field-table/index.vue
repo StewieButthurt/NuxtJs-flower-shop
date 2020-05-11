@@ -169,9 +169,13 @@
             opacity: 1
     
     .other-field-table__button
-        width: 40px
-        height: 50px
+        width: 30px
+        height: 40px
         cursor: pointer
+        transition-duration: .2s
+    
+    .other-field-table__button:hover
+        transform: scale(1.2)
     
     .other-field-table__button svg
         width: 100%
