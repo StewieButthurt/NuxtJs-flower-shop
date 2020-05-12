@@ -1,7 +1,6 @@
 <template>
     <div class="preview-container" id="preview-container">
         <div class="preview-wrapper">
-
             <div class="preview__swiper-descr">
 
                 <app-swiper 
@@ -14,39 +13,13 @@
                     @mouseEnterImage="mouseEnterImage"
                 />
 
-
-
-
-                
-
             </div>
-            <div class="preview__specifications">
-                <div class="preview__specifications-tabs">
-                    <v-tabs
-                        color="black"
-                    >
-                        <v-tab @click="clickDescr()">Описание</v-tab>
-                        <v-tab @click="clickReviews()">Отзывы</v-tab>
-                    </v-tabs>
-                    <div class="preview__specifications-tabs-line">
-                    </div>
-                </div>
-                <transition name="itemIn" mode="out-in">
-                    <div key="vtabDescr" class="preview__characterisctics-wrapper" v-if="vtabDescr">
-                        <app-preview-characteristics 
-                            v-for="(item, index) in other"
-                            :key="item.title"
-                            :index="index"
-                            :title="item.title"
-                            :descr="item.descr"
-                            :storeUrl="storeUrl"
-                        />
-                    </div>
-                    <div key="vtabReviews" class="preview__characterisctics-wrapper" v-if="vtabReviews">
-                        Здесь будут отзывы
-                    </div>
-                </transition>
-            </div>
+
+
+            <app-specifications 
+                :storeUrl="storeUrl"
+            />
+
             <v-row justify="center" align="center">
                 <v-btn class="mx-2 mt-5" 
                     dark
@@ -91,6 +64,7 @@
 <script>
     const AppSwiper = () => import('~/components/admin/product/preview/swiper/index.vue')
     const AppDescription = () => import('~/components/admin/product/preview/description/index.vue')
+    const AppSpecifications = () => import('~/components/admin/product/preview/specifications/index.vue')
     const AppProductOtherField = () => import('~/components/admin/product/other-field/index.vue')
     const AppPreviewCharacteristics = () => import('~/components/admin/product/characteristics/preview-characteristics.vue')
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
@@ -104,6 +78,7 @@
         components: {
             AppSwiper,
             AppDescription,
+            AppSpecifications,
             AppProductOtherField,
             AppPreviewCharacteristics,
             AppSnackbars
@@ -120,8 +95,6 @@
                 counterImage: 0,
                 x: '',
                 y: '',
-                vtabDescr: true,
-                vtabReviews: false,
                 text: '',
                 colorBtn: '',
                 colorBckg: '',
@@ -139,9 +112,6 @@
         computed: {
             images() {
                 return this.$store.getters['product/add/images']
-            },
-            other() {
-                return this.$store.getters['product/add/other']
             },
             categories() {
                 return this.$store.getters['product/add/categories']
@@ -414,15 +384,6 @@
             async getImages() {
                 await this.$store.dispatch('image-preview/getImage')
             },
-            async clickDescr() {
-                this.vtabReviews = false
-                this.vtabDescr = true
-
-            },
-            async clickReviews() {
-                this.vtabDescr = false
-                this.vtabReviews = true
-            },
             async changeSnackbar(value) {
                 this.snackbar = value
             },
@@ -478,32 +439,6 @@
         margin-left: 1%
         margin-right: 1%
         cursor: pointer
-    
-    .preview__specifications
-        +size(11)
-        +size-md(10)
-        +md-block
-            padding: 0.8rem
-        display: flex
-        flex-direction: column
-        +size-xs(12)
-    
-    .preview__specifications-tabs
-        position: relative
-        margin-top: 70px
-    
-    .preview__specifications-tabs-line
-        position: absolute
-        top: 48px
-        height: 1px
-        background-color: #C8C8C8
-        width: 100%
-    
-    .preview__characterisctics-wrapper
-        display: flex
-        flex-direction: column
-        margin-top: 30px
-        max-width: 961px
     
     .itemIn-enter-active, .itemIn-leave-active 
         transition: opacity .3s
