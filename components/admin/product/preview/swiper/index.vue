@@ -28,9 +28,8 @@
             </div>
             <div class="preview__swiper-images-wrapper">
                 <app-product-preview-images 
-                    v-for="(item, index) in images"
+                    v-for="(item, index) in imagesFilterArray"
                     :key="index"
-                    v-if="item.previewImg"
                     :image="item.previewImg"
                     :index="index"
                     :mainIndex="mainIndex"
@@ -96,6 +95,17 @@
                 }
                 
             },
+            imagesFilterArray() {
+                let arr = [];
+
+                for(let i = 0; i < this.images.length; i++) {
+                    if(this.images[i].previewImg) {
+                        arr.push(this.images[i])
+                    }
+                }
+
+                return arr
+            }
         },
         methods: {
             async zoomImg(event) {
@@ -128,6 +138,7 @@
 
     .preview__swiper
         display: flex
+        height: fit-content
         flex-direction: column
         align-items: center
         max-width: 450px
@@ -168,6 +179,7 @@
         top: 3px
         right: 3px
         cursor: pointer
+        z-index: 7
     
     .preview__swiper-info
         display: flex
@@ -178,6 +190,7 @@
         padding-left: 10px
         padding-right: 10px
         cursor: pointer
+        z-index: 7
     
     .preview__swiper-info-stock
         width: 130px
