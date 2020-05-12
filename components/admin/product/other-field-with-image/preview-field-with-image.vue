@@ -11,7 +11,7 @@
         <div class="preview-field-with-image-item__images">
             <app-preview-image 
                 v-for="(item, index) in info"
-                :key="item.title"
+                :key="item.token"
                 :index="index"
                 :globalIndex="globalIndex"
                 :title="item.title"

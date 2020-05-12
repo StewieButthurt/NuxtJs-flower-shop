@@ -48,8 +48,8 @@
         ],
         methods: {
             async remove (item) {
-              await this.chips.splice(this.chips.indexOf(item), 1)
-              this.chips = [...this.chips]
+              await this.$store.dispatch(`${this.storeUrl}removeCategories`, item)
+              this.chips = this.getCategories
             }
         },
         watch: {

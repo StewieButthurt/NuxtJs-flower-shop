@@ -133,6 +133,9 @@ export const mutations = {
     setCategories(state, value) {
         state.data.categories = value
     },
+    removeCategories(state, value) {
+        state.data.categories.splice(state.data.categories.indexOf(value), 1)
+    },
     setData(state, data) {
         state.data = data
     },
@@ -245,6 +248,9 @@ export const actions = {
     },
     async setCategories({ commit }, value) {
         commit('setCategories', value)
+    },
+    async removeCategories({ commit }, value) {
+        commit('removeCategories', value)
     },
     async setImages({ commit }, index) {
         commit('setImages', index)

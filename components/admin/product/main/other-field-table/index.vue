@@ -122,7 +122,8 @@
                             image: {
                                 file: null,
                                 previewImg: null
-                            }
+                            },
+                            token: `${Math.random()}`
                         }
                     ],
                     token: `${Math.random()}`
