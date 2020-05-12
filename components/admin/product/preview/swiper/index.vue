@@ -47,15 +47,11 @@
     const AppProductPreviewImages = () => import('~/components/admin/product/preview-images/index.vue')
 
     export default {
-        async mounted() {
-            this.img = this.images[0].previewImg
-        },
         data() {
             return {
                 zoomStatus: false,
                 bottom: 0,
                 right: 0,
-                img: null,
                 mainIndex: '',
                 resultSize: 'cover'
             }
@@ -68,36 +64,22 @@
         ],
         computed: {
             images() {
-                return this.$store.getters[`${storeUrl}images`]
-            },
-            mainImg() {
-                if(this.img) {
-                    if( typeof this.img === 'object') {
-                        if(this.img.type === 'image/png' || this.img.type === 'image/jpeg') {
-                            return URL.createObjectURL(this.img)
-                        } 
-                    } else if(typeof this.img === 'string'){
-                        return require('~/assets/' + this.img)                   
-                    }
-                } else {
-                    return ''
-                }
-                
+                return this.$store.getters[`${this.storeUrl}images`]
             },
             discountStatus() {
-                return this.$store.getters[`${storeUrl}discountStatus`]
+                return this.$store.getters[`${this.storeUrl}discountStatus`]
             },
             sizeDiscount() {
-                return this.$store.getters[`${storeUrl}sizeDiscount`]
+                return this.$store.getters[`${this.storeUrl}sizeDiscount`]
             },
             stock() {
-                return this.$store.getters[`${storeUrl}stock`]
+                return this.$store.getters[`${this.storeUrl}stock`]
             },
             bestseller() {
-                return this.$store.getters[`${storeUrl}bestseller`]
+                return this.$store.getters[`${this.storeUrl}bestseller`]
             },
             weekPrice() {
-                return this.$store.getters[`${storeUrl}weekPrice`]
+                return this.$store.getters[`${this.storeUrl}weekPrice`]
             },
         },
         methods: {
@@ -120,7 +102,7 @@
                 this.right = 0
             },
             async changeImg({mainIndex, image}) {
-                this.img = image
+                this.$emit('changeImg', image)
                 this.mainIndex = mainIndex
             }
         }
