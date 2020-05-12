@@ -41,7 +41,7 @@
         },
         computed: {
             other() {
-                return this.$store.getters[`${storeUrl}other`]
+                return this.$store.getters[`${this.storeUrl}other`]
             }
         },
         methods: {

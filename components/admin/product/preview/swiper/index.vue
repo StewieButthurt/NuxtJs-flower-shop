@@ -60,7 +60,8 @@
             AppProductPreviewImages
         },
         props: [
-            'storeUrl'
+            'storeUrl',
+            'img'
         ],
         computed: {
             images() {
@@ -80,6 +81,20 @@
             },
             weekPrice() {
                 return this.$store.getters[`${this.storeUrl}weekPrice`]
+            },
+            mainImg() {
+                if(this.img) {
+                    if( typeof this.img === 'object') {
+                        if(this.img.type === 'image/png' || this.img.type === 'image/jpeg') {
+                            return URL.createObjectURL(this.img)
+                        } 
+                    } else if(typeof this.img === 'string'){
+                        return require('~/assets/' + this.img)                   
+                    }
+                } else {
+                    return ''
+                }
+                
             },
         },
         methods: {
