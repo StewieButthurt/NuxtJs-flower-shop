@@ -10,7 +10,7 @@
         </div>
         <div class="preview-field-with-image-item__images">
             <app-preview-image 
-                v-for="(item, index) in info"
+                v-for="(item, index) in imageFilter"
                 :key="item.token"
                 :index="index"
                 :globalIndex="globalIndex"
@@ -46,6 +46,19 @@
                 this.globalIndex = index
                 this.name = name
                 this.$emit('mouseEnterImage', img)
+            }
+        },
+        computed: {
+            imageFilter() {
+                let arr = [];
+
+                for(let i = 0; i < this.info.length; i++) {
+                    if(this.info[i].image.previewImg) {
+                        arr.push(this.info[i])
+                    }
+                }
+                
+                return arr
             }
         }
     }

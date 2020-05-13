@@ -29,6 +29,7 @@
                     @changeMessage="changeMessage"
                     @remove="removeImageFilePond"
                     @add="addImageFilePond"
+                    @updateTitleImage="updateTitleImage"
                 />
             </v-row>
             <v-row align="center" justify="end" id="field-image-button">
@@ -143,6 +144,13 @@
                
                await this.$store.dispatch(`${this.storeUrl}removeOtherFieldWithImageBlock`, index)
                 
+            },
+            async updateTitleImage({title, index}) {
+                this.$store.dispatch(`${this.storeUrl}updateOtherFieldImageTitle`, {
+                    title: title, 
+                    globalIndex: this.globalIndex, 
+                    index: index
+                })
             }
         }
     }

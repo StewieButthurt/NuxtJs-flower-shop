@@ -64,8 +64,6 @@
     const AppDescription = () => import('~/components/admin/product/preview/description/index.vue')
     const AppSpecifications = () => import('~/components/admin/product/preview/specifications/index.vue')
     const AppButtons  = () => import('~/components/admin/product/preview/buttons/index.vue')
-    const AppProductOtherField = () => import('~/components/admin/product/other-field/index.vue')
-    const AppPreviewCharacteristics = () => import('~/components/admin/product/characteristics/preview-characteristics.vue')
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
 
 
@@ -79,8 +77,6 @@
             AppDescription,
             AppSpecifications,
             AppButtons,
-            AppProductOtherField,
-            AppPreviewCharacteristics,
             AppSnackbars
         },
         middleware: 'checkData',

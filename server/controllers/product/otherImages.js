@@ -30,63 +30,92 @@ module.exports.otherImages = async(req, res) => {
         let createmyfile = `./assets/${id}/${newId}/img-${index + 1}.png`
         let url
 
-        let n = image.indexOf(',', 0)
-        image = await image.slice(n)
-        image = await Buffer.from(image, 'base64')
-        image = await Jimp.read(image)
-        image = image.quality(60)
-        image = await image.getBufferAsync(Jimp.AUTO)
-        image = image.toString('base64')
+        if (image.indexOf(',', 0) !== -1) {
 
-        fs.access(mypath, fs.F_OK, (err) => {
-            if (err) {
-                fs.mkdir(mypath, { recursive: true }, (err) => {
-                    if (err) {
-                        throw err
-                    } else {
-                        newWriteFile()
-                    }
-                });
-            } else {
-                newWriteFile()
-            }
-        })
+            let n = image.indexOf(',', 0)
+            image = await image.slice(n)
+            image = await Buffer.from(image, 'base64')
+            image = await Jimp.read(image)
+            image = image.quality(60)
+            image = await image.getBufferAsync(Jimp.AUTO)
+            image = image.toString('base64')
 
-
-        async function newWriteFile() {
-            fsExtra.writeFile(`./assets/${id}/${newId}/img-${index + 1}.png`, image, 'base64', async function(err) {
+            fs.access(mypath, fs.F_OK, (err) => {
                 if (err) {
-                    throw err;
+                    fs.mkdir(mypath, { recursive: true }, (err) => {
+                        if (err) {
+                            throw err
+                        } else {
+                            newWriteFile()
+                        }
+                    });
                 } else {
-                    url = `${id}/${newId}/img-${index + 1}.png`
-
-
-                    try {
-                        const product = await Product.updateOne({
-                            _id: req.body.id,
-                            'otherFieldImage._id': newId
-                        }, {
-                            $push: {
-                                'otherFieldImage.$.info': {
-                                    "image": {
-                                        "previewImg": `${url}`
-                                    },
-                                    "title": `${title}`
-                                }
-                            }
-                        })
-
-                        log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
-
-                        res.json(product)
-
-                    } catch (e) {
-                        log.warn(`Неудачная попытка добавления дополнительной картинки для товара '${req.body.id}'!`);
-                        res.status(500).json(e)
-                    }
+                    newWriteFile()
                 }
-
             })
+
+
+            async function newWriteFile() {
+                fsExtra.writeFile(`./assets/${id}/${newId}/img-${index + 1}.png`, image, 'base64', async function(err) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        url = `${id}/${newId}/img-${index + 1}.png`
+
+
+                        try {
+                            const product = await Product.updateOne({
+                                _id: req.body.id,
+                                'otherFieldImage._id': newId
+                            }, {
+                                $push: {
+                                    'otherFieldImage.$.info': {
+                                        "image": {
+                                            "previewImg": `${url}`
+                                        },
+                                        "title": `${title}`
+                                    }
+                                }
+                            })
+
+                            log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
+
+                            res.json(product)
+
+                        } catch (e) {
+                            log.warn(`Неудачная попытка добавления дополнительной картинки для товара '${req.body.id}'!`);
+                            res.status(500).json(e)
+                        }
+                    }
+
+                })
+            }
+        } else {
+            url = `${id}/${newId}/img-${index + 1}.png`
+
+            try {
+                const product = await Product.updateOne({
+                    _id: req.body.id,
+                    'otherFieldImage._id': newId
+                }, {
+                    $push: {
+                        'otherFieldImage.$.info': {
+                            "image": {
+                                "previewImg": `${url}`
+                            },
+                            "title": `${title}`
+                        }
+                    }
+                })
+
+                log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
+
+                res.json(product)
+
+            } catch (e) {
+                log.warn(`Неудачная попытка добавления дополнительной картинки для товара '${req.body.id}'!`);
+                res.status(500).json(e)
+            }
         }
 
     } else {

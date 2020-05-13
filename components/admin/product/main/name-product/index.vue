@@ -13,6 +13,9 @@
 
 <script>
     export default {
+        async mounted() {
+            this.localName = this.name
+        },
         data() {
             return {
                 localName: '',

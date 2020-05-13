@@ -7,7 +7,7 @@
     >
         <div 
             class="preview-field-with-image-item__image"
-            :style="{ backgroundImage: `url(${image.previewImg})`, backgroundPosition: 'center center', backgroundSize: 'cover' }"
+            :style="{ backgroundImage: `url(${getImage})`, backgroundPosition: 'center center', backgroundSize: 'cover' }"
         >
 
         </div>
@@ -18,7 +18,8 @@
     export default {
         data() {
             return {
-                hoverImage: false
+                hoverImage: false,
+                newImg: false
             }
         },
         props: [
@@ -35,6 +36,21 @@
                 let img = this.image.previewImg
                 this.$emit('mouseEnterImage', {index, name, img})
             }
+        },
+        computed: {
+            getImage() {
+                if(this.image.previewImg.type) {
+                    if(this.image.previewImg.type === 'image/png' || this.image.previewImg.type === 'image/jpeg') {
+                        this.newImg = false
+                        this.newImg = URL.createObjectURL(this.image.previewImg)
+                        return this.newImg
+                    } else {
+                        return require('~/assets/' + 'newAdd.jpg')
+                    }
+                } else {
+                    return require('~/assets/' + `${this.image.previewImg}`)
+                }
+            }
         }
     }
 </script>
@@ -49,5 +65,5 @@
         width: 100%
 
     .preview-field-with-image-item__image-wrapper-hover
-        border: 2px solid grey
+        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 2px rgba(0, 0, 0, 0.4)
 </style>

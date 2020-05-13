@@ -29,6 +29,9 @@
 </template>
 
 <script>
+
+    const AppPreviewCharacteristics = () => import('~/components/admin/product/characteristics/preview-characteristics.vue')
+
     export default {
         props: [
             'storeUrl'
@@ -54,6 +57,9 @@
                 this.vtabDescr = false
                 this.vtabReviews = true
             }
+        },
+        components: {
+            AppPreviewCharacteristics
         }
     }
 </script>

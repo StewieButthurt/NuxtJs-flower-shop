@@ -60,11 +60,6 @@
                     index: this.index
                 })
             }
-        },
-        watch: {
-            index(val) {
-                console.log(val)
-            }
         }
     }
 </script>
