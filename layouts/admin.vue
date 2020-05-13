@@ -4,7 +4,7 @@
                 <v-navigation-drawer
                 v-model="drawer"
                 app
-                style="max-height: 100%"
+                style="max-height: 100%; z-index: 21"
                 >
                     <v-list dense>
                         <div id="admin-expansion-panels-on-elem" style="border-bottom: thin solid; border-top: none; border-color: rgba(0, 0, 0, 0.12)">
