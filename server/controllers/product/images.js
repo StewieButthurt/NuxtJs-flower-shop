@@ -23,56 +23,78 @@ module.exports.images = async(req, res) => {
         let createmyfile = `./assets/${id}/img-${index + 1}.png`
         let url
 
-        let n = image.indexOf(',', 0)
-        image = await image.slice(n)
-        image = await Buffer.from(image, 'base64')
-        image = await Jimp.read(image)
-        image = image.quality(60)
-        image = await image.getBufferAsync(Jimp.AUTO)
-        image = image.toString('base64')
+        if (image.indexOf(',', 0) !== -1) {
 
-        fs.access(mypath, fs.F_OK, (err) => {
-            if (err) {
-                fs.mkdir(mypath, { recursive: true }, (err) => {
-                    if (err) {
-                        throw err
-                    } else {
-                        newWriteFile()
-                    }
-                });
-            } else {
-                newWriteFile()
-            }
-        })
+            let n = image.indexOf(',', 0)
+            image = await image.slice(n)
+            image = await Buffer.from(image, 'base64')
+            image = await Jimp.read(image)
+            image = await image.quality(60)
+            image = await image.getBufferAsync(Jimp.AUTO)
+            image = await image.toString('base64')
 
 
-
-        async function newWriteFile() {
-            fsExtra.writeFile(`./assets/${id}/img-${index + 1}.png`, image, 'base64', async function(err) {
+            fs.access(mypath, fs.F_OK, (err) => {
                 if (err) {
-                    throw err;
+                    fs.mkdir(mypath, { recursive: true }, (err) => {
+                        if (err) {
+                            throw err
+                        } else {
+                            newWriteFile()
+                        }
+                    });
                 } else {
-                    url = `${id}/img-${index + 1}.png`
-
-                    try {
-                        const product = await Product.updateOne({ _id: req.body.id }, {
-                            $push: {
-                                images: {
-                                    previewImg: url
-                                }
-                            }
-                        })
-                        log.info(`Успешное добавление картинки для товара '${req.body.id}'!`);
-                        res.json(product)
-
-                    } catch (e) {
-                        log.warn(`Неудачная попытка добавления картинки для товара '${req.body.id}'!`);
-                        res.status(500).json(e)
-                    }
+                    newWriteFile()
                 }
-
             })
+
+
+            async function newWriteFile() {
+                fsExtra.writeFile(`./assets/${id}/img-${index + 1}.png`, image, 'base64', async function(err) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        url = `${id}/img-${index + 1}.png`
+
+                        try {
+                            const product = await Product.updateOne({ _id: req.body.id }, {
+                                $push: {
+                                    images: {
+                                        previewImg: url
+                                    }
+                                }
+                            })
+                            log.info(`Успешное добавление картинки для товара '${req.body.id}'!`);
+                            res.json(product)
+
+                        } catch (e) {
+                            log.warn(`Неудачная попытка добавления картинки для товара '${req.body.id}'!`);
+                            res.status(500).json(e)
+                        }
+                    }
+
+                })
+            }
+        } else {
+            try {
+                const product = await Product.updateOne({ _id: req.body.id }, {
+                    $push: {
+                        images: {
+                            previewImg: image
+                        }
+                    }
+                })
+                log.info(`Успешное добавление картинки для товара '${req.body.id}'!`);
+                res.json(product)
+
+            } catch (e) {
+                log.warn(`Неудачная попытка добавления картинки для товара '${req.body.id}'!`);
+                res.status(500).json(e)
+            }
         }
+
+
+
 
     } else {
         log.warn(`images данные не прошли проверку`);

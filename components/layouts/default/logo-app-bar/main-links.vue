@@ -173,7 +173,7 @@
 <style lang="sass">
 
     .main-links__link
-        font-family: 'Rubik-Medium', sans-serif
+        font-family: 'Rubik-Regular', sans-serif
         font-weight: normal
 
     

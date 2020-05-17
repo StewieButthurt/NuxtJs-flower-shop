@@ -43,6 +43,7 @@
     "nuxt-compress": "^1.1.0",
     "nuxt-lazy-load": "^1.0.9",
     "nuxt-seo-module": "^1.0.0",
+    "nuxt-trailingslash-module": "^1.1.0",
     "nuxt-vuex-localstorage": "^1.2.6",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
@@ -56,7 +57,7 @@
     "@mdi/font": "^4.9.95",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/vuetify": "^1.0.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "nodemon": "^2.0.3",
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2"

@@ -76,6 +76,7 @@
 
     const AppProductPrice = () => import('~/components/admin/product/price/index.vue')
     const AppPreviewFieldWithImage = () => import('~/components/admin/product/other-field-with-image/preview-field-with-image.vue')
+    const AppProductOtherField = () => import('~/components/admin/product/other-field/index.vue')
 
     export default {
         data() {
@@ -124,7 +125,8 @@
         },
         components: {
             AppProductPrice,
-            AppPreviewFieldWithImage
+            AppPreviewFieldWithImage,
+            AppProductOtherField
         }
     }
 </script>

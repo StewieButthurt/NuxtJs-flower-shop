@@ -137,6 +137,8 @@
 
                 resultForm = await this.sendForm(fields)
 
+                //send images
+
                 if(resultForm) {
                     resultImage = await this.sendImage(resultForm)
                 }
@@ -148,46 +150,38 @@
                 let result;
 
                 // change loading bar
-                this.$emit('changeProgressValue', 40)
+                await this.$emit('changeProgressValue', 40)
 
                 //change message status
-                this.$emit('changeMessageStatus', 'Загрузка основных данных...')
+                await this.$emit('changeMessageStatus', 'Загрузка основных данных...')
 
-                return await this.$axios.$post('/api/product/create/fields', fields)
-                    .then(async function (response) {
+                try {
+                   const responseFields = await this.$axios.$post('/api/product/create/fields', fields)
+                   await this.$emit('changeMessageStatus', responseFields.message )
 
-                        //change message status
-                        vm.$emit('changeMessageStatus', response.message )
-                        
-                        if(response.error === 'true') {
+                   if(responseFields.error === 'true') {
 
-                            vm.$emit('changeCheckErrorForm', true)
-
-                            setTimeout(() => {
-                                vm.$emit('overlayOffError')
-                            }, 1000);
-
-                            return false
-
-                        } else {
-                            vm.$emit('changeCheckErrorForm', false)
-                            let id = response.product._id
-                            return id
-                        }
-                    })
-                    .catch(function (error) {
-
-                        console.log('Упс! Что то пошло не так!')
-
-                        vm.$emit('changeMessageStatus', 'Упс! Что то пошло не так!' )
+                        await this.$emit('changeCheckErrorForm', true)
 
                         setTimeout(() => {
                             vm.$emit('overlayOffError')
                         }, 1000);
 
-                        console.log(error);
+                        return false
+                   } else {
+                        this.$emit('changeCheckErrorForm', false)
+                        let id = responseFields.product._id
+                        return id
+                   }
+                } catch(e) {
+                    console.error('Error: Упс! Что то пошло не так!', e)
 
-                    })
+                    this.$emit('changeMessageStatus', 'Упс! Что то пошло не так!' )
+
+                    setTimeout(() => {
+                        vm.$emit('overlayOffError')
+                    }, 1000);
+                }
             },
             async sendImage(id) {
                 let vm = this
@@ -199,7 +193,7 @@
 
                     this.image = this.images[i].previewImg
 
-                    this.$emit('changeMessageStatus', `Загрузка картинок ${i + 1} из ${this.images.length}...` )
+                    await this.$emit('changeMessageStatus', `Загрузка картинок ${i + 1} из ${this.images.length}...` )
 
                     if(typeof this.image === 'object') {
 
@@ -213,37 +207,32 @@
                                     id: id
                                 }
 
-                                await vm.$axios.$post('/api/product/create/images', data)
-                                .then(function (response) {
-                                        vm.counterImage++
-                                        console.log(`counter ++`)
-                                })
-                                .catch(function (error) {
+                                try {
+                                    const responseImages = await vm.$axios.$post('/api/product/create/images', data)
+                                    vm.counterImage++
+                                } catch(e) {
+                                    await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
 
-                                    vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
-
-                                    vm.$emit('changeCheckErrorImage', error)
+                                    await vm.$emit('changeCheckErrorImage', e)
 
                                     setTimeout(() => {
                                         vm.$emit('overlayOffError')
                                     }, 1000);
 
-                                    console.log(error);
-
-                                    throw error
-                                })
+                                    console.error(e);
+                                }
 
 
                                 if(vm.counterImage === vm.images.length) {
 
-                                    vm.$emit('changeProgressValue', 60)
+                                    await vm.$emit('changeProgressValue', 60)
 
                                     if(vm.otherFieldImage.length > 0) {
-                                        vm.sendOtherImage(id)
+                                        await vm.sendOtherImage(id)
                                     } else {
-                                        vm.$emit('changeMessageStatus', 'Загрузка завершена' )
+                                        await vm.$emit('changeMessageStatus', 'Загрузка завершена' )
 
-                                        vm.$emit('changeProgressValue', 100)
+                                        await vm.$emit('changeProgressValue', 100)
 
                                         setTimeout(() => {
                                             vm.$emit('overlayOff')
@@ -263,37 +252,31 @@
                                     index: i,
                                     id: id
                                 }
-
-                                await vm.$axios.$post('/api/product/create/images', data)
-                                .then(function (response) {
-                                        vm.counterImage++
-                                })
-                                .catch(function (error) {
-
-                                    vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
-
-                                    vm.$emit('changeCheckErrorImage', error)
+                                
+                                try {
+                                    const responseImages = await vm.$axios.$post('/api/product/create/images', data)
+                                    vm.counterImage++
+                                } catch(e) {
+                                    await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
+                                    await vm.$emit('changeCheckErrorImage', error)
 
                                     setTimeout(() => {
                                         vm.$emit('overlayOffError')
                                     }, 1000);
 
-                                    console.log(error);
-
-                                    throw error
-                                })
-
-
+                                    console.error('Error:', e);
+                                }
+                                
                                 if(vm.counterImage === vm.images.length) {
 
-                                    vm.$emit('changeProgressValue', 60)
+                                    await vm.$emit('changeProgressValue', 60)
 
                                     if(vm.otherFieldImage.length > 0) {
-                                        vm.sendOtherImage(id)
+                                        await vm.sendOtherImage(id)
                                     } else {
-                                        vm.$emit('changeMessageStatus', 'Загрузка завершена' )
+                                        await vm.$emit('changeMessageStatus', 'Загрузка завершена' )
 
-                                        vm.$emit('changeProgressValue', 100)
+                                        await vm.$emit('changeProgressValue', 100)
 
                                         setTimeout(() => {
                                             vm.$emit('overlayOff')
@@ -325,152 +308,117 @@
                         title: otherImage.title
                     }
                     if(checkError === false) {
-                        await this.$axios.$post('/api/product/create/other-image-title', data)
-                            .then(async function (response) {
-                                vm.$emit('changeMessageStatus', 'Подготовка загрузки дополнительных изображений...' )
-                                
-                                await vm.$axios.$get('/api/product/get-product-id', {params : { id: mainId }})
-                                    .then(async function (response) {
-                                            newId = response.otherFieldImage[k]._id
-                                    })
-                                    .catch(function (error) {
+                        try {
+                            const responseImageTitle = await this.$axios.$post('/api/product/create/other-image-title', data)
+                            await this.$emit('changeMessageStatus', 'Подготовка загрузки дополнительных изображений...' )
+                            const responseProductId = await this.$axios.$get('/api/product/get-product-id', {params : { id: mainId }})
+                            newId = responseProductId.otherFieldImage[k]._id
 
-                                        vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
+                            for(let i = 0; i < otherImage.info.length; i++) {
+                                let image = otherImage.info[i].image.previewImg
 
-                                        checkError = error
+                                var readerPreview = new FileReader();
 
-                                        setTimeout(() => {
-                                            vm.$emit('overlayOffError')
-                                        }, 1000);
+                                if(typeof image === "object") {
 
-                                        console.log(error);
+                                    if(image.type === 'image/png' || image.type === 'image/jpeg') {
 
-                                        throw error
+                                        readerPreview.onload = async function(e) {
 
-                                    })
-
-                                    
-
-                                for(let i = 0; i < otherImage.info.length; i++) {
-
-                                        let image = otherImage.info[i].image.previewImg
-
-                                        var readerPreview = new FileReader();
-
-                                        if(typeof image === "object") {
-                                            if(image.type === 'image/png' || image.type === 'image/jpeg') {
-                                                readerPreview.onload = async function(e) {
-
-                                                    if(checkError === false) {
-
-                                                        vm.$emit('changeMessageStatus', `Загрузка картинок из раздела '${otherImage.title}'  ${i + 1} из ${otherImage.info.length}...` )
-                                                        
-                                                        data = {
-                                                            image: e.target.result,
-                                                            id: id,
-                                                            newId: newId,
-                                                            title: otherImage.info[i].title,
-                                                            index: i,
-                                                            globalIndex: k
-                                                        }
-
-                                                        await vm.$axios.$post('/api/product/create/other-images', data)
-                                                            .then(async function (response) {
-                                                                        counter++
-                                                            })
-                                                            .catch(function (error) {
-                                                                vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
-
-                                                                checkError = error
-
-                                                                setTimeout(() => {
-                                                                    vm.$emit('overlayOffError')
-                                                                }, 1000);
-
-                                                                console.log(error);
-
-                                                                throw error
-                                                            })
-                                                    } else {
-                                                        return checkError
-                                                    }
-                                                }
-
-                                                await readerPreview.readAsDataURL(image);
-
-                                            } else {
-                                                vm.$emit('changeMessageStatus', `При загрузке произошла ошибка! Неверный формат у '${image.name}'` )
-
-                                                checkError = error
-
-                                                setTimeout(() => {
-                                                    vm.$emit('overlayOffError')
-                                                }, 1000);
-
-                                                console.log(error);
-
-                                                throw error
-                                            }
-                                        } else {
                                             if(checkError === false) {
+                                                await vm.$emit('changeMessageStatus', `Загрузка картинок из раздела '${otherImage.title}'  ${i + 1} из ${otherImage.info.length}...` )
 
-                                                vm.$emit('changeMessageStatus', `Загрузка картинок из раздела '${otherImage.title}'  ${i + 1} из ${otherImage.info.length}...` )
-                                                
                                                 data = {
-                                                    image: image,
+                                                    image: e.target.result,
                                                     id: id,
                                                     newId: newId,
                                                     title: otherImage.info[i].title,
                                                     index: i,
                                                     globalIndex: k
                                                 }
+                                                
+                                                try {
+                                                    const responseOtherImages = await vm.$axios.$post('/api/product/create/other-images', data)
+                                                    counter++
+                                                } catch(e) {
+                                                    await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
+                                                    checkError = e
 
-                                                await vm.$axios.$post('/api/product/create/other-images', data)
-                                                    .then(async function (response) {
-                                                                counter++
-                                                    })
-                                                    .catch(function (error) {
-                                                        vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
+                                                    setTimeout(() => {
+                                                        vm.$emit('overlayOffError')
+                                                    }, 1000);
 
-                                                        checkError = error
-
-                                                        setTimeout(() => {
-                                                            vm.$emit('overlayOffError')
-                                                        }, 1000);
-
-                                                        console.log(error);
-
-                                                        throw error
-                                                    })
+                                                    console.error('Error:', e);
+                                                }
                                             } else {
                                                 return checkError
                                             }
+
                                         }
-                                        
+
+                                        await readerPreview.readAsDataURL(image);
+                                    } else {
+                                        await vm.$emit('changeMessageStatus', `При загрузке произошла ошибка! Неверный формат у '${image.name}'` )
+
+                                        checkError = 'При загрузке произошла ошибка!'
+
+                                        setTimeout(() => {
+                                            vm.$emit('overlayOffError')
+                                        }, 1000);
+
+                                        console.error('Error:', checkError);
                                     }
-                            })
-                            .catch(function (error) {
-                                vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
+                                } else {
+                                    if(checkError === false) {
 
-                                checkError = error
+                                        await vm.$emit('changeMessageStatus', `Загрузка картинок из раздела '${otherImage.title}'  ${i + 1} из ${otherImage.info.length}...` )
+                                        
+                                        data = {
+                                            image: image,
+                                            id: id,
+                                            newId: newId,
+                                            title: otherImage.info[i].title,
+                                            index: i,
+                                            globalIndex: k
+                                        }
 
-                                setTimeout(() => {
-                                    vm.$emit('overlayOffError')
-                                }, 1000);
+                                        try {
+                                            const responseOtherImages = await vm.$axios.$post('/api/product/create/other-images', data)
+                                            counter++
+                                        } catch(e) {
+                                            await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
+                                            checkError = e
+                                            setTimeout(() => {
+                                                vm.$emit('overlayOffError')
+                                            }, 1000);
+                                            console.error('Error:', e)
+                                        }
+                                    } else {
+                                        return checkError
+                                    }
 
-                                console.log(error);
+                                }
+                            }
+                        } catch(e) {
+                            await this.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
+                            checkError = e
 
-                                throw error
-                            })
+                            setTimeout(() => {
+                                vm.$emit('overlayOffError')
+                            }, 1000);
+
+                            console.error('Error:', e)
+                        }
+                        
                     } else {
                         return checkError
                     }
                     
                     if(k + 1 === this.otherFieldImage.length) {
 
-                        vm.$emit('changeProgressValue', 100)
+                        await vm.$emit('changeProgressValue', 100)
 
-                        vm.$emit('changeMessageStatus', 'Загрузка завершена!' )
+                        await vm.$emit('changeMessageStatus', 'Загрузка завершена!' )
 
                         setTimeout(() => {
                             vm.$emit('overlayOff')

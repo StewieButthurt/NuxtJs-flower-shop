@@ -36,9 +36,9 @@ module.exports.otherImages = async(req, res) => {
             image = await image.slice(n)
             image = await Buffer.from(image, 'base64')
             image = await Jimp.read(image)
-            image = image.quality(60)
+            image = await image.quality(60)
             image = await image.getBufferAsync(Jimp.AUTO)
-            image = image.toString('base64')
+            image = await image.toString('base64')
 
             fs.access(mypath, fs.F_OK, (err) => {
                 if (err) {
@@ -91,7 +91,6 @@ module.exports.otherImages = async(req, res) => {
                 })
             }
         } else {
-            url = `${id}/${newId}/img-${index + 1}.png`
 
             try {
                 const product = await Product.updateOne({
@@ -101,7 +100,7 @@ module.exports.otherImages = async(req, res) => {
                     $push: {
                         'otherFieldImage.$.info': {
                             "image": {
-                                "previewImg": `${url}`
+                                "previewImg": `${image}`
                             },
                             "title": `${title}`
                         }

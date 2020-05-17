@@ -1,13 +1,13 @@
 export const state = () => ({
-	mainLinks: [],
-    categories: []   
+    mainLinks: [],
+    categories: []
 })
 
 export const mutations = {
-	changeStatus(state, {status, index}) {
+    changeStatus(state, { status, index }) {
         state.mainLinks[index].status = status
     },
-    changeCategoriesStatus(state, {status, index}) {
+    changeCategoriesStatus(state, { status, index }) {
         state.categories[index].status = status
     },
     setMainLinks(state, menu) {
@@ -19,15 +19,15 @@ export const mutations = {
 }
 
 export const actions = {
-    async changeStatus({commit}, {status, index}) {
-        commit('changeStatus', {status, index})
+    async changeStatus({ commit }, { status, index }) {
+        commit('changeStatus', { status, index })
     },
-    async changeCategoriesStatus({commit}, {status, index}) {
-        commit('changeCategoriesStatus', {status, index})
+    async changeCategoriesStatus({ commit }, { status, index }) {
+        commit('changeCategoriesStatus', { status, index })
     }
 }
 
 export const getters = {
-	mainLinks: state => state.mainLinks,
-	categories: state => state.categories
+    mainLinks: state => state.mainLinks,
+    categories: state => state.categories
 }

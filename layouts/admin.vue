@@ -187,7 +187,7 @@
 <style lang="sass">
 
     #inspire
-        font-family: "Rubik-Regular", sans-serif
+        font-family: 'Rubik-Regular', sans-serif
 
     #inspire .v-content__wrap
         max-width: 1920px

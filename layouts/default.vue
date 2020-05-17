@@ -104,7 +104,7 @@ export default {
     font-weight: 500
   
   .default__fonts-rubik
-    font-family: 'Rubik-Medium', sans-serif
+    font-family: 'Rubik-Regular', sans-serif
     font-weight: normal
 
 </style>
