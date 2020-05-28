@@ -12,8 +12,13 @@
 </template>
 
 <script>
+    const getPriceStore = () => import('~/store/modules/product/price.js')
+
     export default {
         async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}price`]) {
+                await this.$store.registerModule('price', getPriceStore)
+            }
             this.localPrice = this.price
         },
         data() {
@@ -34,7 +39,7 @@
                 this.localPrice = parseInt(this.localPrice)
 
                 if(this.localPrice) {
-                    this.$store.dispatch(`${this.storeUrl}setPrice`, this.localPrice)
+                    this.$store.dispatch(`${this.storeUrl}set`, this.localPrice)
                 } else {
                     this.localPrice = ''
                 }

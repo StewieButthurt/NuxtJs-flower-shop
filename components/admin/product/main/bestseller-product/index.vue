@@ -11,8 +11,13 @@
 </template>
 
 <script>
+    const getBestsellerStore = () => import('~/store/modules/product/bestseller.js')
+
     export default {
         async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}bestseller`]) {
+                await this.$store.registerModule('bestseller', getBestsellerStore)
+            }
             this.localBestseller = this.bestseller
         },
         props: [
@@ -25,7 +30,7 @@
         },
         watch: {
             localBestseller(val) {
-                this.$store.dispatch(`${this.storeUrl}setBestseller`, val)
+                this.$store.dispatch(`${this.storeUrl}set`, val)
             }
         },
         computed: {

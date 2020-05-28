@@ -117,19 +117,19 @@
                 return this.$store.getters[`${this.storeUrl}other`]
             },
             name() {
-                return this.$store.getters[`${this.storeUrl}name`]
+                return this.$store.getters[`modules/product/name/name`]
             },
             price() {
-                return this.$store.getters[`${this.storeUrl}price`]
+                return this.$store.getters[`modules/product/price/price`]
             },
             images() {
-                return this.$store.getters[`${this.storeUrl}images`]
+                return this.$store.getters[`modules/product/images/images`]
             },
             descr() {
-                return this.$store.getters[`${this.storeUrl}descr`]
+                return this.$store.getters[`modules/product/descr/descr`]
             },
             article() {
-                return this.$store.getters[`${this.storeUrl}article`]
+                return this.$store.getters[`modules/product/article/article`]
             },
             statusImage() {
                     if(this.images[0].previewImg) {

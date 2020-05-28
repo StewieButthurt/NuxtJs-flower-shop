@@ -12,8 +12,13 @@
 </template>
 
 <script>
+    const getNameStore = () => import('~/store/modules/product/name.js')
+
     export default {
         async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}name`]) {
+                await this.$store.registerModule('name', getNameStore)
+            }
             this.localName = this.name
         },
         data() {
@@ -28,10 +33,11 @@
             name() {
                 return this.$store.getters[`${this.storeUrl}name`]
             }
+            
         },
         methods: {
             async updateName(name) {
-                this.$store.dispatch(`${this.storeUrl}setName`, name)
+                this.$store.dispatch(`${this.storeUrl}set`, name)
             }
         }
     }

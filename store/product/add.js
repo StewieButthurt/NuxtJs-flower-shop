@@ -2,46 +2,13 @@ import Vue from 'vue'
 
 export const state = () => ({
     data: {
-        images: [{
-            file: false,
-            previewImg: false,
-            token: `${Math.random()}`
-        }],
-        name: '',
-        descr: '',
-        price: '',
-        article: '',
-        discountStatus: false,
-        sizeDiscount: '0',
         other: [],
         newFields: [],
-        stock: false,
-        bestseller: false,
-        weekPrice: false,
         otherFieldImage: [],
-        categories: []
     }
 })
 
 export const mutations = {
-    setName(state, name) {
-        state.data.name = name
-    },
-    setDescr(state, descr) {
-        state.data.descr = descr
-    },
-    setPrice(state, price) {
-        state.data.price = price
-    },
-    setArticle(state, article) {
-        state.data.article = article
-    },
-    setDiscount(state, discount) {
-        state.data.sizeDiscount = discount
-    },
-    setDiscountStatus(state, discountStatus) {
-        state.data.discountStatus = discountStatus
-    },
     setOtherTitle(state, info) {
         state.data.other[info.index].title = info.title
     },
@@ -71,17 +38,6 @@ export const mutations = {
             token: `${Math.random()}`
         }]
     },
-    updateDataImage(state, data) {
-        state.data.images.splice(data.index, 1, data.data)
-    },
-    setImageField(state, data) {
-        let arr = state.data.images
-        arr.push(data)
-    },
-    removeImageField(state, index) {
-        let arr = state.data.images
-        arr.splice(index, 1)
-    },
     setNewFields(state, data) {
         let arr = state.data.newFields
         arr.push(data)
@@ -95,15 +51,6 @@ export const mutations = {
     },
     updateNewFieldTitle(state, data) {
         state.data.newFields[data.index].title = data.title
-    },
-    setStock(state, stock) {
-        state.data.stock = stock
-    },
-    setBestseller(state, bestseller) {
-        state.data.bestseller = bestseller
-    },
-    setWeekPrice(state, weekPrice) {
-        state.data.weekPrice = weekPrice
     },
     addNewFieldWithImage(state, data) {
         state.data.otherFieldImage.push(data)
@@ -130,24 +77,8 @@ export const mutations = {
     updateOtherFieldImageTitle(state, { title, globalIndex, index }) {
         state.data.otherFieldImage[globalIndex].info[index].title = title
     },
-    setCategories(state, value) {
-        state.data.categories = value
-    },
-    removeCategories(state, value) {
-        state.data.categories.splice(state.data.categories.indexOf(value), 1)
-    },
     setData(state, data) {
         state.data = data
-    },
-    setImages(state, index) {
-        state.data.images.splice(index, 1)
-    },
-    imagesFilter(state) {
-        for (let i = 0; i < state.data.images.length; i++) {
-            if (!state.data.images[i].previewImg) {
-                state.data.images.splice(i, 1)
-            }
-        }
     }
 }
 
@@ -155,23 +86,8 @@ export const actions = {
     async setData({ commit }, data) {
         commit('setData', data)
     },
-    async setName({ commit }, name) {
-        commit('setName', name)
-    },
-    async setPrice({ commit }, price) {
-        commit('setPrice', price)
-    },
-    async setDescr({ commit }, descr) {
-        commit('setDescr', descr)
-    },
-    async setArticle({ commit }, article) {
-        commit('setArticle', article)
-    },
     async setDiscount({ commit }, discount) {
         commit('setDiscount', discount)
-    },
-    async setDiscountStatus({ commit }, val) {
-        commit('setDiscountStatus', val)
     },
     async setOtherTitle({ commit }, info) {
         commit('setOtherTitle', info)
@@ -194,16 +110,6 @@ export const actions = {
     async setImagesPreview({ commit }, info) {
         commit('setImagesPreview', info)
     },
-    async setImageField({ commit }, data) {
-        commit('setImageField', data)
-    },
-    async updateDataImage({ commit }, data) {
-        commit('updateDataImage', data)
-    },
-    async removeImageField({ commit }, index) {
-        commit('removeImageField', index)
-    },
-
     async setNewFields({ commit }, data) {
         commit('setNewFields', data)
     },
@@ -215,15 +121,6 @@ export const actions = {
     },
     async updateNewFieldTitle({ commit }, data) {
         commit('updateNewFieldTitle', data)
-    },
-    async setStock({ commit }, stock) {
-        commit('setStock', stock)
-    },
-    async setBestseller({ commit }, bestseller) {
-        commit('setBestseller', bestseller)
-    },
-    async setWeekPrice({ commit }, weekPrice) {
-        commit('setWeekPrice', weekPrice)
     },
     async addNewFieldWithImage({ commit }, data) {
         commit('addNewFieldWithImage', data)
@@ -245,35 +142,13 @@ export const actions = {
     },
     async updateOtherFieldImageTitle({ commit }, { title, globalIndex, index }) {
         commit('updateOtherFieldImageTitle', { title, globalIndex, index })
-    },
-    async setCategories({ commit }, value) {
-        commit('setCategories', value)
-    },
-    async removeCategories({ commit }, value) {
-        commit('removeCategories', value)
-    },
-    async setImages({ commit }, index) {
-        commit('setImages', index)
-    },
-    async imagesFilter({ commit }) {
-        commit('imagesFilter')
     }
 }
 
 export const getters = {
     data: state => state.data,
     newFields: state => state.data.newFields,
-    name: state => state.data.name,
-    descr: state => state.data.descr,
-    price: state => state.data.price,
     images: state => state.data.images,
-    article: state => state.data.article,
-    discountStatus: state => state.data.discountStatus,
-    sizeDiscount: state => state.data.sizeDiscount,
     other: state => state.data.other,
-    stock: state => state.data.stock,
-    bestseller: state => state.data.bestseller,
-    weekPrice: state => state.data.weekPrice,
     otherFieldImage: state => state.data.otherFieldImage,
-    categories: state => state.data.categories
 }

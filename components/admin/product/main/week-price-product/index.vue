@@ -11,8 +11,13 @@
 </template>
 
 <script>
+    const getWeekPriceStore = () => import('~/store/modules/product/weekPrice.js')
+
     export default {
         async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}weekPrice`]) {
+                await this.$store.registerModule('weekPrice', getWeekPriceStore)
+            }
             this.localWeekPrice = this.weekPrice
         },
         props: [
@@ -25,7 +30,7 @@
         },
         watch: {
             localWeekPrice(val) {
-                this.$store.dispatch(`${this.storeUrl}setWeekPrice`, val)
+                this.$store.dispatch(`${this.storeUrl}set`, val)
             }
         },
         computed: {

@@ -20,8 +20,14 @@
 <script>
     
     const AppProductAddImageFilepond = () => import('~/components/admin/product/main/main-images-product/images-filepond.vue')
+    const getImagesStore = () => import('~/store/modules/product/images.js')
 
     export default {
+        async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}images`]) {
+                await this.$store.registerModule('images', getImagesStore)
+            }
+        },
         data() {
             return {
 

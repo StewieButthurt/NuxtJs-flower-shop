@@ -10,43 +10,43 @@
             </v-row>
 
             <app-name-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/name/`"
             />
 
             <app-price-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/price/`"
             />
 
             <app-descr-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/descr/`"
             />
             
             <app-article-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/article/`"
             />
 
             <app-categories-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/categories/`"
             />
 
             <app-discount-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/discount/`"
             />
 
             <app-stock-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/stock/`"
             />
 
             <app-bestseller-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/bestseller/`"
             />
 
             <app-week-price-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/weekPrice/`"
             />
 
             <app-main-images-product 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/images/`"
                 @changeMessage="changeMessage"
             />
 
@@ -62,9 +62,6 @@
                 :storeUrl="storeUrl"
             />
 
-            
-            
-            
             <app-snackbars 
                 :snackbar="snackbar"
                 :text="text"

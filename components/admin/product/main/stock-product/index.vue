@@ -11,8 +11,13 @@
 </template>
 
 <script>
+    const getStockStore = () => import('~/store/modules/product/stock.js')
+
     export default {
         async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}stock`]) {
+                await this.$store.registerModule('stock', getStockStore)
+            }
             this.localStock = this.stock
         },
         data() {
@@ -30,7 +35,7 @@
         ],
         watch: {
             localStock(val) {
-                this.$store.dispatch(`${this.storeUrl}setStock`, val)
+                this.$store.dispatch(`${this.storeUrl}set`, val)
             }
         }
         

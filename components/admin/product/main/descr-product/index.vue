@@ -16,8 +16,13 @@
 </template>
 
 <script>
+    const getDescrStore = () => import('~/store/modules/product/descr.js')
+
     export default {
         async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}descr`]) {
+                await this.$store.registerModule('descr', getDescrStore)
+            }
             this.localDescr = this.descr
         },
         data() {
@@ -35,7 +40,7 @@
         },
         methods: {
             async updateDescr(descr) {
-                this.$store.dispatch(`${this.storeUrl}setDescr`, descr)
+                this.$store.dispatch(`${this.storeUrl}set`, descr)
             }
         }
     }

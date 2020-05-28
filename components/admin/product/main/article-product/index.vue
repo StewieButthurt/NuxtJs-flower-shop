@@ -12,8 +12,13 @@
 </template>
 
 <script>
+    const getArticleStore = () => import('~/store/modules/product/article.js')
+
     export default {
         async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}article`]) {
+                await this.$store.registerModule('article', getArticleStore)
+            }
             this.localArticle = this.article
         },
         data() {
@@ -31,7 +36,7 @@
         },
         methods: {
             async updateArticle(article) {
-                this.$store.dispatch(`${this.storeUrl}setArticle`, article)
+                this.$store.dispatch(`${this.storeUrl}set`, article)
             }
         }
     }

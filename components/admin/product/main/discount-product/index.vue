@@ -18,8 +18,15 @@
 </template>
 
 <script>
+    const getDiscountStore = () => import('~/store/modules/product/discount.js')
+
     export default {
         async mounted() {
+
+            if(!this.$store.getters[`${this.storeUrl}sizeDiscount`]) {
+                await this.$store.registerModule('discount', getDiscountStore)
+            }
+
             this.localDiscount = this.sizeDiscount,
             this.localDiscountStatus = this.discountStatus
         },
@@ -42,13 +49,13 @@
         },
         watch: {
             localDiscountStatus(val) {
-                this.$store.dispatch(`${this.storeUrl}setDiscountStatus`, val)
+                this.$store.dispatch(`${this.storeUrl}setStatus`, val)
             }
         },
         methods: {
             async updateDiscount() {
                 this.localDiscount = this.localDiscount.replace(/[^\d]/g, '')
-                this.$store.dispatch(`${this.storeUrl}setDiscount`, this.localDiscount)
+                this.$store.dispatch(`${this.storeUrl}set`, this.localDiscount)
             }
         }
     }

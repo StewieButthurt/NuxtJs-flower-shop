@@ -24,8 +24,14 @@
 </template>
 
 <script>
+    const getCategoriesStore = () => import('~/store/modules/product/categories.js')
+
     export default {
         async mounted() {
+          if(!this.$store.getters[`${this.storeUrl}categories`]) {
+            await this.$store.registerModule('categories', getCategoriesStore)
+          }
+          
           let items = await this.$axios.$get('/api/categories/')
           
           let arr = [];
@@ -48,13 +54,13 @@
         ],
         methods: {
             async remove (item) {
-              await this.$store.dispatch(`${this.storeUrl}removeCategories`, item)
+              await this.$store.dispatch(`${this.storeUrl}remove`, item)
               this.chips = this.getCategories
             }
         },
         watch: {
             chips(val) {
-                this.$store.dispatch(`${this.storeUrl}setCategories`, val)
+                this.$store.dispatch(`${this.storeUrl}set`, val)
             }
         },
         computed: {
