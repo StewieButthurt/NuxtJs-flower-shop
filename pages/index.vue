@@ -16,6 +16,8 @@
 const AppMainSlider = () => import('~/components/main-page/slider/index.vue')
 const AppServices = () => import('~/components/main-page/services/index.vue')
 const AppLinksWithImages = () => import('~/components/main-page/links-with-images/index.vue')
+const getCategoriesStore = () => import('~/store/modules/main-page/categories.js')
+const getMenuStore = () => import('~/store/modules/main-page/menu.js')
 
 
 export default {
@@ -32,14 +34,17 @@ export default {
     ]
   },
   async fetch ({ store, $axios}) {
-    if(store.getters['layouts-links/mainLinks'].length === 0) {
+    store.registerModule('categories', getCategoriesStore)
+    store.registerModule('menu', getMenuStore)
+
+    if(store.getters['modules/main-page/menu/menu'].length === 0) {
       let menu = await $axios.$get('/api/menu')
-      store.commit('layouts-links/setMainLinks', menu)
+      store.commit('modules/main-page/menu/set', menu)
     }
 
-    if(store.getters['layouts-links/categories'].length === 0) {
+    if(store.getters['modules/main-page/categories/categories'].length === 0) {
       let categories = await $axios.$get('/api/categories')
-      store.commit('layouts-links/setCategories', categories)
+      store.commit('modules/main-page/categories/set', categories)
     }
   }
 }

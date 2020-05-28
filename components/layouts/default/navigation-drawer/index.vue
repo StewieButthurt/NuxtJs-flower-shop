@@ -20,7 +20,7 @@
             title="Каталог"
           />
           <app-redirect 
-            v-for="(item, index) in mainLinks"
+            v-for="(item, index) in menu"
             :key="item.title"
             :index="index"
             :link="item.link"
@@ -68,7 +68,7 @@
         },
         props: [
             'drawer',
-            'mainLinks',
+            'menu',
             'categories'
         ],
         components: {

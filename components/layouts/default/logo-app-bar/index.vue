@@ -14,7 +14,7 @@
         </div>
         <div  id="default__menu-settings" style="width: 100%; height: 23px; overflow: hidden">
           <app-main-links 
-            v-for="(item, index) in mainLinks"
+            v-for="(item, index) in menu"
             :key="item.index"
             :title="item.title"
             :link="item.link"
@@ -62,7 +62,7 @@
             }
         },
         props: [
-            'mainLinks',
+            'menu',
             'windowSize'
         ],
         methods: {
@@ -73,9 +73,9 @@
         computed: {
             falseMaimLinks() {
                 let arr = [];
-                for(let i = 0; i < this.mainLinks.length; i++) {
-                    if(this.mainLinks[i].status === false) {
-                    arr.push(this.mainLinks[i])
+                for(let i = 0; i < this.menu.length; i++) {
+                    if(this.menu[i].status === false) {
+                    arr.push(this.menu[i])
                     }
                 }
 

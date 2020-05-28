@@ -259,7 +259,7 @@
                     password: this.password
                   }
                   this.$router.push('/login')
-                  await this.$store.dispatch('auth/login', formData)
+                  await this.$store.dispatch('modules/auth/login', formData)
                   this.loading = false
                   this.$router.push('/admin/home/')
                 } catch (e) {

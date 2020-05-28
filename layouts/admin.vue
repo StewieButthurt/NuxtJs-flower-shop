@@ -102,6 +102,13 @@
                                             </v-list-item-title>
                                         </v-list-item-content>
                                     </v-list-item>
+                                    <v-list-item nuxt to="/admin/products-premoderation">
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                                    Премодерация
+                                            </v-list-item-title>
+                                        </v-list-item-content>
+                                    </v-list-item>
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
                         </v-expansion-panels>
@@ -159,7 +166,7 @@
                 </v-content>
                 <v-footer
                 color="#0E1D28"
-                style="position: relative"
+                style="position: relative; z-index: 25"
                 app
                 >
                 <span class="white--text">&copy; Developed by Vyacheslav Nosov 2020</span>
@@ -178,7 +185,7 @@
         methods: {
             async logOut() {
                 await this.$router.push('/')
-				this.$store.dispatch('auth/logout')
+				this.$store.dispatch('modules/auth/logout')
             }
         }
     }

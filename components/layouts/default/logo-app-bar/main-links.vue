@@ -58,20 +58,20 @@
             },
             checkStatus() {
                 if(this.index > 11) {
-                    this.$store.dispatch('layouts-links/changeStatus', {
+                    this.$store.dispatch('modules/main-page/menu/changeStatus', {
                         index: this.index,
                         status: false
                     })
                     return this.status
                 } else if (this.index === 0) {
                     if(this.x > 533) {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -79,13 +79,13 @@
                     }
                 } else if(this.index === 1) {
                     if(this.x > 725) {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -93,13 +93,13 @@
                     }
                 } else if(this.index === 2) {
                     if(this.x > 922) {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -107,13 +107,13 @@
                     }
                 } else if(this.index === 3) {
                     if(this.x > 1120) {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -121,13 +121,13 @@
                     }
                 } else if(this.index === 4) {
                     if(this.x > 1330) {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -135,13 +135,13 @@
                     }
                 } else if(this.index === 5) {
                     if(this.x > 1545) {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -149,13 +149,13 @@
                     }
                 } else if(this.index === 6) {
                     if(this.x > 1745) {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeStatus', {
+                        this.$store.dispatch('modules/main-page/menu/changeStatus', {
                             index: this.index,
                             status: false
                         })

@@ -25,20 +25,20 @@
         computed: {
             checkStatus() {
                 if(this.index > 11) {
-                    this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                    this.$store.dispatch('modules/main-page/categories/changeStatus', {
                         index: this.index,
                         status: false
                     })
                     return this.status
                 } else if (this.index === 0) {
                     if(this.x > 355) {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -46,13 +46,13 @@
                     }
                 } else if(this.index === 1) {
                     if(this.x > 617) {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -60,13 +60,13 @@
                     }
                 } else if(this.index === 2) {
                     if(this.x > 867) {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -74,13 +74,13 @@
                     }
                 } else if(this.index === 3) {
                     if(this.x > 1107) {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -88,13 +88,13 @@
                     }
                 } else if(this.index === 4) {
                     if(this.x > 1347) {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -102,13 +102,13 @@
                     }
                 } else if(this.index === 5) {
                     if(this.x > 1589) {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: false
                         })
@@ -116,13 +116,13 @@
                     }
                 } else if(this.index === 6) {
                     if(this.x > 1840) {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: true
                         })
                         return this.status
                     } else {
-                        this.$store.dispatch('layouts-links/changeCategoriesStatus', {
+                        this.$store.dispatch('modules/main-page/categories/changeStatus', {
                             index: this.index,
                             status: false
                         })

@@ -4,7 +4,7 @@
 
       <app-navigation-drawer 
         :drawer="drawer"
-        :mainLinks="mainLinks"
+        :menu="menu"
         :categories="categories"
         @changeDrawer="changeDrawer"
       />
@@ -12,7 +12,7 @@
       <app-call-bar />
 
       <app-logo-bar 
-        :mainLinks="mainLinks"
+        :menu="menu"
         :windowSize="windowSize"
       /> 
 
@@ -49,6 +49,7 @@ const AppLogoBar = () => import('~/components/layouts/default/logo-app-bar/index
 const AppSearchBar = () => import('~/components/layouts/default/search-app-bar/index.vue')
 const AppLinksCategoriesBar = () => import('~/components/layouts/default/links-categories-bar/index.vue')
 
+
 export default {
   data () {
     return {
@@ -78,11 +79,11 @@ export default {
     AppLinksCategoriesBar
   },
   computed: {
-    mainLinks() {
-      return this.$store.getters['layouts-links/mainLinks']
+    menu() {
+      return this.$store.getters['modules/main-page/menu/menu']
     },
     categories() {
-      return this.$store.getters['layouts-links/categories']
+      return this.$store.getters['modules/main-page/categories/categories']
     }
   }
 }
