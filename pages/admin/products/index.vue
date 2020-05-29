@@ -51,7 +51,7 @@
             />
 
             <app-other-field-table 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/otherFieldImages/`"
             />
 
             <app-other-field-input 

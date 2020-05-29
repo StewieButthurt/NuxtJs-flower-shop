@@ -71,8 +71,14 @@
 <script>
     const AppProductOtherFieldExampleImage = () => import('~/components/admin/product/main/other-field-table/example.vue')
     const AppProductOtherFieldWithImage = () => import('~/components/admin/product/main/other-field-table/field-image.vue')
+    const getOtherFieldImagesStore = () => import('~/store/modules/product/otherFieldImages.js')
 
     export default {
+        async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}otherFieldImage`]) {
+                await this.$store.registerModule('otherFieldImages', getOtherFieldImagesStore)
+            }
+        },
         data() {
             return {
                 colorExample: 'Синий',

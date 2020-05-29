@@ -22,6 +22,7 @@
                     :previewImg="item.image.previewImg"
                     :firstImageName="'Главная картинка'"
                     :writeText="true"
+                    :title="item.title"
                     :label="localTitle"
                     :iconClose="true"
                     :index="index"
@@ -43,10 +44,15 @@
 
 <script>
     const AppProductAddImageFilepond = () => import('~/components/admin/product/main/main-images-product/images-filepond.vue')
+    const getOtherFieldImagesStore = () => import('~/store/modules/product/otherFieldImages.js')
 
 
     export default {
         async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}otherFieldImage`]) {
+                await this.$store.registerModule('otherFieldImages', getOtherFieldImagesStore)
+            }
+
             this.localTitle = this.title
             this.globalIndex = this.index
         },
@@ -158,9 +164,6 @@
 
 <style lang="sass">
     
-    // .product-other-field-with-image-wrapper
-        // overflow: hidden
-        // padding-top: 20px
     .product-other-field-with-image
         display: flex
         flex-direction: column

@@ -4,7 +4,6 @@ export const state = () => ({
     data: {
         other: [],
         newFields: [],
-        otherFieldImage: [],
     }
 })
 
@@ -52,31 +51,6 @@ export const mutations = {
     updateNewFieldTitle(state, data) {
         state.data.newFields[data.index].title = data.title
     },
-    addNewFieldWithImage(state, data) {
-        state.data.otherFieldImage.push(data)
-    },
-    updateOtherFieldImage(state, { data, index, globalIndex }) {
-        // console.log(globalIndex)
-        state.data.otherFieldImage[globalIndex].info[index].image = {
-            file: data.file,
-            previewImg: data.previewImg
-        }
-    },
-    setOtherFieldImage(state, { data, globalIndex }) {
-        state.data.otherFieldImage[globalIndex].info.push(data)
-    },
-    removeOtherFieldImage(state, { index, globalIndex }) {
-        state.data.otherFieldImage[globalIndex].info.splice(index, 1)
-    },
-    removeOtherFieldWithImageBlock(state, index) {
-        state.data.otherFieldImage.splice(index, 1)
-    },
-    updateOtherFieldTitle(state, { title, index }) {
-        state.data.otherFieldImage[index].title = title
-    },
-    updateOtherFieldImageTitle(state, { title, globalIndex, index }) {
-        state.data.otherFieldImage[globalIndex].info[index].title = title
-    },
     setData(state, data) {
         state.data = data
     }
@@ -122,33 +96,10 @@ export const actions = {
     async updateNewFieldTitle({ commit }, data) {
         commit('updateNewFieldTitle', data)
     },
-    async addNewFieldWithImage({ commit }, data) {
-        commit('addNewFieldWithImage', data)
-    },
-    async updateOtherFieldImage({ commit }, { data, index, globalIndex }) {
-        commit('updateOtherFieldImage', { data, index, globalIndex })
-    },
-    async setOtherFieldImage({ commit }, { data, globalIndex }) {
-        commit('setOtherFieldImage', { data, globalIndex })
-    },
-    async removeOtherFieldImage({ commit }, { index, globalIndex }) {
-        commit('removeOtherFieldImage', { index, globalIndex })
-    },
-    async removeOtherFieldWithImageBlock({ commit }, index) {
-        commit('removeOtherFieldWithImageBlock', index)
-    },
-    async updateOtherFieldTitle({ commit }, { title, index }) {
-        commit('updateOtherFieldTitle', { title, index })
-    },
-    async updateOtherFieldImageTitle({ commit }, { title, globalIndex, index }) {
-        commit('updateOtherFieldImageTitle', { title, globalIndex, index })
-    }
 }
 
 export const getters = {
     data: state => state.data,
     newFields: state => state.data.newFields,
-    images: state => state.data.images,
     other: state => state.data.other,
-    otherFieldImage: state => state.data.otherFieldImage,
 }
