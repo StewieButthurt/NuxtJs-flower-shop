@@ -60,8 +60,14 @@
 <script>
 
     const AppProductAddNewField = () => import('~/components/admin/product/main/other-field-input/add-new-field.vue')
+    const getNewFieldsStore = () => import('~/store/modules/product/newFields.js')
 
     export default {
+        async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}newFields`]) {
+                await this.$store.registerModule('newFields', getNewFieldsStore)
+            }
+        },
         data() {
             return {
                 exampleItems: [

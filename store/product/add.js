@@ -37,20 +37,6 @@ export const mutations = {
             token: `${Math.random()}`
         }]
     },
-    setNewFields(state, data) {
-        let arr = state.data.newFields
-        arr.push(data)
-    },
-    updateNewFieldDescr(state, info) {
-        state.data.newFields[info.index].descr = info.descr
-    },
-    removeNewField(state, index) {
-        let arr = state.data.newFields
-        arr.splice(index, 1)
-    },
-    updateNewFieldTitle(state, data) {
-        state.data.newFields[data.index].title = data.title
-    },
     setData(state, data) {
         state.data = data
     }
@@ -84,22 +70,9 @@ export const actions = {
     async setImagesPreview({ commit }, info) {
         commit('setImagesPreview', info)
     },
-    async setNewFields({ commit }, data) {
-        commit('setNewFields', data)
-    },
-    async updateNewFieldDescr({ commit }, info) {
-        commit('updateNewFieldDescr', info)
-    },
-    async removeNewField({ commit }, index) {
-        commit('removeNewField', index)
-    },
-    async updateNewFieldTitle({ commit }, data) {
-        commit('updateNewFieldTitle', data)
-    },
 }
 
 export const getters = {
     data: state => state.data,
-    newFields: state => state.data.newFields,
     other: state => state.data.other,
 }

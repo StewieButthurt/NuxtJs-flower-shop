@@ -55,7 +55,7 @@
             />
 
             <app-other-field-input 
-                :storeUrl="storeUrl"
+                :storeUrl="`modules/product/newFields/`"
             />
 
             <app-characteristics-product 
