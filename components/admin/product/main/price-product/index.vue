@@ -16,7 +16,7 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}price`]) {
+            if(!this.$store.getters['modules/product/price/price']) {
                 await this.$store.registerModule('price', getPriceStore)
             }
             this.localPrice = this.price
@@ -26,12 +26,9 @@
                 localPrice: ''
             }
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             price() {
-                return this.$store.getters[`${this.storeUrl}price`]
+                return this.$store.getters['modules/product/price/price']
             }
         },
         methods: {
@@ -39,7 +36,7 @@
                 this.localPrice = parseInt(this.localPrice)
 
                 if(this.localPrice) {
-                    this.$store.dispatch(`${this.storeUrl}set`, this.localPrice)
+                    this.$store.dispatch('modules/product/price/set', this.localPrice)
                 } else {
                     this.localPrice = ''
                 }

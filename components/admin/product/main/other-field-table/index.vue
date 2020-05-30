@@ -38,7 +38,6 @@
                                     :title="item.title"
                                     :info="item.info"
                                     :index="index"
-                                    :storeUrl="storeUrl"
                                     @updateTitle="updateTitle"
                                 />
                             </transition-group>
@@ -75,7 +74,7 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}otherFieldImage`]) {
+            if(!this.$store.getters['modules/product/otherFieldImages/otherFieldImage']) {
                 await this.$store.registerModule('otherFieldImages', getOtherFieldImagesStore)
             }
         },
@@ -107,9 +106,6 @@
                 ]
             }
         },
-        props: [
-            'storeUrl'
-        ],
         components: {
             AppProductOtherFieldExampleImage,
             AppProductOtherFieldWithImage,
@@ -135,15 +131,15 @@
                     token: `${Math.random()}`
                 }
 
-                this.$store.dispatch(`${this.storeUrl}addNewFieldWithImage`, data)
+                this.$store.dispatch('modules/product/otherFieldImages/addNewFieldWithImage', data)
             },
             async updateTitle({title, index}) {
-                this.$store.dispatch(`${this.storeUrl}updateOtherFieldTitle`, {title, index})
+                this.$store.dispatch('modules/product/otherFieldImages/updateOtherFieldTitle', {title, index})
             }
         },
         computed: {
             otherFieldImage() {
-                return this.$store.getters[`${this.storeUrl}otherFieldImage`]
+                return this.$store.getters['modules/product/otherFieldImages/otherFieldImage']
             }
         }
     }

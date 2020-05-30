@@ -44,7 +44,6 @@
                                     :descr="item.descr"
                                     :index="index"
                                     :statusButton="item.statusButton"
-                                    :storeUrl="storeUrl"
                                     @update="update"
                                     @remove="remove"
                                     @add="add"
@@ -64,7 +63,7 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}newFields`]) {
+            if(!this.$store.getters[`modules/product/newFields/newFields`]) {
                 await this.$store.registerModule('newFields', getNewFieldsStore)
             }
         },
@@ -84,7 +83,7 @@
         ],
         computed: {
             newFields() {
-                return this.$store.getters[`${this.storeUrl}newFields`]
+                return this.$store.getters[`modules/product/newFields/newFields`]
             }
         },
         methods: {
@@ -97,17 +96,17 @@
                     token: `${Math.random()}`
                 }
 
-                this.$store.dispatch(`${this.storeUrl}setNewFields`, data)
+                this.$store.dispatch(`modules/product/newFields/setNewFields`, data)
             },
             async update({descr, index, title}) {
                 if(descr) {
-                    this.$store.dispatch(`${this.storeUrl}updateNewFieldDescr`, {descr, index})
+                    this.$store.dispatch(`modules/product/newFields/updateNewFieldDescr`, {descr, index})
                 } else if(title) {
-                    this.$store.dispatch(`${this.storeUrl}updateNewFieldTitle`, {title, index})
+                    this.$store.dispatch(`modules/product/newFields/updateNewFieldTitle`, {title, index})
                 }
             },
             async remove({index}) {
-                this.$store.dispatch(`${this.storeUrl}removeNewField`, index)
+                this.$store.dispatch(`modules/product/newFields/removeNewField`, index)
             },
             async add() {
                 let data = {
@@ -116,7 +115,7 @@
                     token: `${Math.random()}`
                 }
 
-                this.$store.dispatch(`${this.storeUrl}setNewFields`, data)
+                this.$store.dispatch(`modules/product/newFields/setNewFields`, data)
             }
         }
     }

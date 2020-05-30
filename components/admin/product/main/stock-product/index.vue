@@ -15,7 +15,7 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}stock`]) {
+            if(!this.$store.getters['modules/product/stock/stock']) {
                 await this.$store.registerModule('stock', getStockStore)
             }
             this.localStock = this.stock
@@ -27,15 +27,12 @@
         },
         computed: {
             stock() {
-                return this.$store.getters[`${this.storeUrl}stock`]
+                return this.$store.getters['modules/product/stock/stock']
             }
         },
-        props: [
-            'storeUrl'
-        ],
         watch: {
             localStock(val) {
-                this.$store.dispatch(`${this.storeUrl}set`, val)
+                this.$store.dispatch(`modules/product/stock/set`, val)
             }
         }
         

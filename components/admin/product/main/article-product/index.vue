@@ -16,7 +16,7 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}article`]) {
+            if(!this.$store.getters['modules/product/article/article']) {
                 await this.$store.registerModule('article', getArticleStore)
             }
             this.localArticle = this.article
@@ -26,17 +26,14 @@
                 localArticle: '',
             }
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             article() {
-                return this.$store.getters[`${this.storeUrl}article`]
+                return this.$store.getters['modules/product/article/article']
             }
         },
         methods: {
             async updateArticle(article) {
-                this.$store.dispatch(`${this.storeUrl}set`, article)
+                this.$store.dispatch('modules/product/article/set', article)
             }
         }
     }

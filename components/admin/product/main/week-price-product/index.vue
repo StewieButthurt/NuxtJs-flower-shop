@@ -15,14 +15,11 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}weekPrice`]) {
+            if(!this.$store.getters['modules/product/weekPrice/weekPrice']) {
                 await this.$store.registerModule('weekPrice', getWeekPriceStore)
             }
             this.localWeekPrice = this.weekPrice
         },
-        props: [
-            'storeUrl'
-        ],
         data() {
             return {
                 localWeekPrice: false
@@ -30,12 +27,12 @@
         },
         watch: {
             localWeekPrice(val) {
-                this.$store.dispatch(`${this.storeUrl}set`, val)
+                this.$store.dispatch('modules/product/weekPrice/set', val)
             }
         },
         computed: {
             weekPrice() {
-                return this.$store.getters[`${this.storeUrl}weekPrice`]
+                return this.$store.getters['modules/product/weekPrice/weekPrice']
             }
         }
     }

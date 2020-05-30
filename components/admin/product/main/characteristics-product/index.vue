@@ -55,7 +55,6 @@
                         :titleLocal="item.title"
                         :descrLocal="item.descr"
                         :index="index"
-                        :storeUrl="storeUrl"
                         @update="update"
                         @remove="remove"
                     />
@@ -103,19 +102,16 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}other`]) {
+            if(!this.$store.getters[`modules/product/other/other`]) {
                 await this.$store.registerModule('other', getOtherStore)
             }
         },
         components: {
             AppProductCharacteristics
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             other() {
-                return this.$store.getters[`${this.storeUrl}other`]
+                return this.$store.getters[`modules/product/other/other`]
             },
             name() {
                 return this.$store.getters[`modules/product/name/name`]
@@ -164,17 +160,17 @@
                     token: `${Math.random()}`
                 }
 
-                this.$store.dispatch(`${this.storeUrl}setField`, data)
+                this.$store.dispatch(`modules/product/other/setField`, data)
             },
             async update({title, descr, index}) {
                 if(title) {
-                    this.$store.dispatch(`${this.storeUrl}setOtherTitle`, {index, title})
+                    this.$store.dispatch(`modules/product/other/setOtherTitle`, {index, title})
                 } else if(descr) {
-                    this.$store.dispatch(`${this.storeUrl}setOtherDescr`, {index, descr})
+                    this.$store.dispatch(`modules/product/other/setOtherDescr`, {index, descr})
                 }
             },
             async remove({index}) {
-                this.$store.dispatch(`${this.storeUrl}removeField`, index)
+                this.$store.dispatch(`modules/product/other/removeField`, index)
             }
         }
     }

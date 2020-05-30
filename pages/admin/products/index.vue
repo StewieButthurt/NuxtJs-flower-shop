@@ -9,58 +9,33 @@
                 </v-col>
             </v-row>
 
-            <app-name-product 
-                :storeUrl="keys.name"
-            />
+            <app-name-product />
 
-            <app-price-product 
-                :storeUrl="keys.price"
-            />
+            <app-price-product />
 
-            <app-descr-product 
-                :storeUrl="keys.descr"
-            />
+            <app-descr-product />
             
-            <app-article-product 
-                :storeUrl="keys.article"
-            />
+            <app-article-product />
 
-            <app-categories-product 
-                :storeUrl="keys.categories"
-            />
+            <app-categories-product />
 
-            <app-discount-product 
-                :storeUrl="keys.discount"
-            />
+            <app-discount-product />
 
-            <app-stock-product 
-                :storeUrl="keys.stock"
-            />
+            <app-stock-product />
 
-            <app-bestseller-product 
-                :storeUrl="keys.bestseller"
-            />
+            <app-bestseller-product />
 
-            <app-week-price-product 
-                :storeUrl="keys.weekPrice"
-            />
+            <app-week-price-product />
 
             <app-main-images-product 
-                :storeUrl="keys.images"
                 @changeMessage="changeMessage"
             />
 
-            <app-other-field-table 
-                :storeUrl="keys.otherFieldImages"
-            />
+            <app-other-field-table />
 
-            <app-other-field-input 
-                :storeUrl="keys.newFields"
-            />
+            <app-other-field-input />
 
-            <app-characteristics-product 
-                :storeUrl="keys.other"
-            />
+            <app-characteristics-product />
 
             <app-snackbars 
                 :snackbar="snackbar"
@@ -74,7 +49,6 @@
 </template>
 
 <script>
-    const StoreProductKeys = require('~/store/modules/product/keys.js')
     const AppNameProduct = () => import('~/components/admin/product/main/name-product/index.vue')
     const AppPriceProduct = () => import('~/components/admin/product/main/price-product/index.vue')
     const AppDescrProduct = () => import('~/components/admin/product/main/descr-product/index.vue')
@@ -127,8 +101,7 @@
                 snackbar: false,
                 text: '',
                 colorBckg: '',
-                colorBtn: '',
-                keys: StoreProductKeys
+                colorBtn: ''
             }
         },
         watch: {
@@ -141,15 +114,7 @@
                 }
             }
         },
-        computed: {
-            images() {
-                return this.$store.getters[`${keys.images}images`]
-            }
-        },
         methods: {
-            async setImageField(data) {
-                await this.$store.dispatch(`${keys.images}setImageField`, data)
-            },
             async changeSnackbar(value) {
                 this.snackbar = value
                 this.message = false

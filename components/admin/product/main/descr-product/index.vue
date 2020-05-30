@@ -20,7 +20,7 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}descr`]) {
+            if(!this.$store.getters['modules/product/descr/descr']) {
                 await this.$store.registerModule('descr', getDescrStore)
             }
             this.localDescr = this.descr
@@ -30,17 +30,14 @@
                 localDescr: ''
             }
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             descr() {
-                return this.$store.getters[`${this.storeUrl}descr`]
+                return this.$store.getters['modules/product/descr/descr']
             }
         },
         methods: {
             async updateDescr(descr) {
-                this.$store.dispatch(`${this.storeUrl}set`, descr)
+                this.$store.dispatch('modules/product/descr/set', descr)
             }
         }
     }

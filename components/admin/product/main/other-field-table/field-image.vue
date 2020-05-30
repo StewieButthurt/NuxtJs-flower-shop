@@ -26,7 +26,6 @@
                     :label="localTitle"
                     :iconClose="true"
                     :index="index"
-                    :storeUrl="storeUrl"
                     @changeMessage="changeMessage"
                     @remove="removeImageFilePond"
                     @add="addImageFilePond"
@@ -49,7 +48,7 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}otherFieldImage`]) {
+            if(!this.$store.getters[`modules/product/otherFieldImages/therFieldImage`]) {
                 await this.$store.registerModule('otherFieldImages', getOtherFieldImagesStore)
             }
 
@@ -68,8 +67,7 @@
         props: [
             'title',
             'info',
-            'index',
-            'storeUrl'
+            'index'
         ],
         methods: {
             async changeMessage(value) {
@@ -77,7 +75,7 @@
             },
             async removeImageFilePond(index) {
 
-                await this.$store.dispatch(`${this.storeUrl}removeOtherFieldImage`, {
+                await this.$store.dispatch('modules/product/otherFieldImages/removeOtherFieldImage', {
                     index: index, 
                     globalIndex: this.globalIndex
                 })
@@ -103,7 +101,7 @@
 
                     let globalIndex = this.globalIndex
 
-                    await this.$store.dispatch(`${this.storeUrl}setOtherFieldImage`, {data, globalIndex})
+                    await this.$store.dispatch('modules/product/otherFieldImages/setOtherFieldImage', {data, globalIndex})
 
                 }
             },
@@ -118,7 +116,7 @@
                 let globalIndex = this.globalIndex
 
 
-                await this.$store.dispatch(`${this.storeUrl}updateOtherFieldImage`, {data, index, globalIndex})
+                await this.$store.dispatch('modules/product/otherFieldImages/updateOtherFieldImage', {data, index, globalIndex})
 
                 let counter = 0
 
@@ -141,18 +139,18 @@
 
                     let globalIndex = this.globalIndex
 
-                    await this.$store.dispatch(`${this.storeUrl}setOtherFieldImage`, {data, globalIndex})
+                    await this.$store.dispatch('modules/product/otherFieldImages/setOtherFieldImage', {data, globalIndex})
 
                 }
  
             },
             async removeBlock(index) {
                
-               await this.$store.dispatch(`${this.storeUrl}removeOtherFieldWithImageBlock`, index)
+               await this.$store.dispatch('modules/product/otherFieldImages/removeOtherFieldWithImageBlock', index)
                 
             },
             async updateTitleImage({title, index}) {
-                this.$store.dispatch(`${this.storeUrl}updateOtherFieldImageTitle`, {
+                this.$store.dispatch('modules/product/otherFieldImages/updateOtherFieldImageTitle', {
                     title: title, 
                     globalIndex: this.globalIndex, 
                     index: index

@@ -15,14 +15,11 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}bestseller`]) {
+            if(!this.$store.getters['modules/product/bestseller/bestseller']) {
                 await this.$store.registerModule('bestseller', getBestsellerStore)
             }
             this.localBestseller = this.bestseller
         },
-        props: [
-            'storeUrl'
-        ],
         data() {
             return {
                 localBestseller: false
@@ -30,12 +27,12 @@
         },
         watch: {
             localBestseller(val) {
-                this.$store.dispatch(`${this.storeUrl}set`, val)
+                this.$store.dispatch('modules/product/bestseller/set', val)
             }
         },
         computed: {
             bestseller() {
-                return this.$store.getters[`${this.storeUrl}bestseller`]
+                return this.$store.getters['modules/product/bestseller/bestseller']
             }
         }
     }

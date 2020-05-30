@@ -16,7 +16,7 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}name`]) {
+            if(!this.$store.getters[`modules/product/name/name`]) {
                 await this.$store.registerModule('name', getNameStore)
             }
             this.localName = this.name
@@ -26,18 +26,14 @@
                 localName: '',
             }
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             name() {
-                return this.$store.getters[`${this.storeUrl}name`]
+                return this.$store.getters[`modules/product/name/name`]
             }
-            
         },
         methods: {
             async updateName(name) {
-                this.$store.dispatch(`${this.storeUrl}set`, name)
+                this.$store.dispatch(`modules/product/name/set`, name)
             }
         }
     }

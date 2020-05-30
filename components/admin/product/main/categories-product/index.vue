@@ -1,9 +1,7 @@
 <template>
     <v-row align="center" justify="center">
         <v-col cols="12" sm="9" md="7" style="max-width: 700px">
-            <app-product-add-categories 
-                :storeUrl="storeUrl"  
-            />
+            <app-product-add-categories />
         </v-col>
     </v-row>
 </template>
@@ -15,10 +13,7 @@
     export default {
         components: {
             AppProductAddCategories
-        },
-        props: [
-            'storeUrl'
-        ]
+        }
     }
 </script>
 

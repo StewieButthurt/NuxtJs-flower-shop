@@ -4,7 +4,7 @@
             <div class="preview__swiper-descr">
 
                 <app-swiper 
-                    :storeUrl="storeUrl"
+                    :keys="keys"
                     :img="img"
                     @changeImg="changeImg"
                 />
@@ -108,6 +108,9 @@
             },
             categories() {
                 return this.$store.getters['product/add/categories']
+            },
+            keys() {
+                return this.$store.getters[`modules/product/keys/keys`]
             }
         },
         methods: {

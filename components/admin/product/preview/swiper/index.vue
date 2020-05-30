@@ -42,7 +42,7 @@
 </template>
 
 <script>
-
+    
     const AppProductPreviewImages = () => import('~/components/admin/product/preview-images/index.vue')
 
     export default {
@@ -59,27 +59,27 @@
             AppProductPreviewImages
         },
         props: [
-            'storeUrl',
+            'keys',
             'img'
         ],
         computed: {
             images() {
-                return this.$store.getters[`${this.storeUrl}images`]
+                return this.$store.getters[`${this.keys.images}images`]
             },
             discountStatus() {
-                return this.$store.getters[`${this.storeUrl}discountStatus`]
+                return this.$store.getters[`${this.keys.discount}discountStatus`]
             },
             sizeDiscount() {
-                return this.$store.getters[`${this.storeUrl}sizeDiscount`]
+                return this.$store.getters[`${this.keys.discount}sizeDiscount`]
             },
             stock() {
-                return this.$store.getters[`${this.storeUrl}stock`]
+                return this.$store.getters[`${this.keys.stock}stock`]
             },
             bestseller() {
-                return this.$store.getters[`${this.storeUrl}bestseller`]
+                return this.$store.getters[`${this.keys.bestseller}bestseller`]
             },
             weekPrice() {
-                return this.$store.getters[`${this.storeUrl}weekPrice`]
+                return this.$store.getters[`${this.keys.weekPrice}weekPrice`]
             },
             mainImg() {
                 if(this.img) {

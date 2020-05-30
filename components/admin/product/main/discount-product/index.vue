@@ -23,7 +23,7 @@
     export default {
         async mounted() {
 
-            if(!this.$store.getters[`${this.storeUrl}sizeDiscount`]) {
+            if(!this.$store.getters['modules/product/discount/sizeDiscount']) {
                 await this.$store.registerModule('discount', getDiscountStore)
             }
 
@@ -36,26 +36,23 @@
                 localDiscountStatus: false,
             }
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             sizeDiscount() {
-                return this.$store.getters[`${this.storeUrl}sizeDiscount`]
+                return this.$store.getters['modules/product/discount/sizeDiscount']
             },
             discountStatus() {
-                return this.$store.getters[`${this.storeUrl}discountStatus`]
+                return this.$store.getters['modules/product/discount/discountStatus']
             }
         },
         watch: {
             localDiscountStatus(val) {
-                this.$store.dispatch(`${this.storeUrl}setStatus`, val)
+                this.$store.dispatch('modules/product/discount/setStatus', val)
             }
         },
         methods: {
             async updateDiscount() {
                 this.localDiscount = this.localDiscount.replace(/[^\d]/g, '')
-                this.$store.dispatch(`${this.storeUrl}set`, this.localDiscount)
+                this.$store.dispatch('modules/product/discount/set', this.localDiscount)
             }
         }
     }

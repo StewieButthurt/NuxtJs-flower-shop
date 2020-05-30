@@ -8,7 +8,6 @@
                 :previewImg="item.previewImg"
                 :firstImageName="'Главная картинка'"
                 :index="index"
-                :storeUrl="storeUrl"
                 @changeMessage="changeMessage"
                 @remove="removeImageFilePond"
                 @add="addImageFilePond"
@@ -24,7 +23,7 @@
 
     export default {
         async mounted() {
-            if(!this.$store.getters[`${this.storeUrl}images`]) {
+            if(!this.$store.getters[`modules/product/images/images`]) {
                 await this.$store.registerModule('images', getImagesStore)
             }
         },
@@ -36,12 +35,9 @@
         components: {
             AppProductAddImageFilepond
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             images() {
-                return this.$store.getters[`${this.storeUrl}images`]
+                return this.$store.getters[`modules/product/images/images`]
             }
         },
         methods: {
@@ -50,7 +46,7 @@
             },
             async removeImageFilePond(index) {
 
-                await this.$store.dispatch(`${this.storeUrl}setImages`, index)
+                await this.$store.dispatch('modules/product/images/setImages', index)
 
                 let counter = 0
 
@@ -67,7 +63,7 @@
                         previewImg: false
                     }
 
-                    this.$store.dispatch(`${this.storeUrl}setImageField`, newData)
+                    this.$store.dispatch('modules/product/images/setImageField', newData)
                 
                 }
             },
@@ -78,7 +74,7 @@
                     previewImg: file
                 }
 
-                await this.$store.dispatch(`${this.storeUrl}updateDataImage`, {data, index})
+                await this.$store.dispatch('modules/product/images/updateDataImage', {data, index})
 
                 let counter = 0
 
@@ -95,7 +91,7 @@
                         previewImg: false
                     }
 
-                    this.$store.dispatch(`${this.storeUrl}setImageField`, newData)
+                    this.$store.dispatch('modules/product/images/setImageField', newData)
 
                 }
             }

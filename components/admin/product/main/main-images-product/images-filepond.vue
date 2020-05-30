@@ -60,7 +60,6 @@
     export default {
         props: [
             'index',
-            'storeUrl',
             'previewImg',
             'firstImageName',
             'images',

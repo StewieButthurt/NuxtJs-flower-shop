@@ -28,7 +28,7 @@
 
     export default {
         async mounted() {
-          if(!this.$store.getters[`${this.storeUrl}categories`]) {
+          if(!this.$store.getters['modules/product/categories/categories']) {
             await this.$store.registerModule('categories', getCategoriesStore)
           }
           
@@ -49,23 +49,20 @@
                 items: []
             }
         },
-        props: [
-          'storeUrl'
-        ],
         methods: {
             async remove (item) {
-              await this.$store.dispatch(`${this.storeUrl}remove`, item)
+              await this.$store.dispatch('modules/product/categories/remove', item)
               this.chips = this.getCategories
             }
         },
         watch: {
             chips(val) {
-                this.$store.dispatch(`${this.storeUrl}set`, val)
+                this.$store.dispatch('modules/product/categories/set', val)
             }
         },
         computed: {
           getCategories() {
-            return this.$store.getters[`${this.storeUrl}categories`]
+            return this.$store.getters['modules/product/categories/categories']
           }
         }
     }

@@ -37,7 +37,6 @@
             'title',
             'descr',
             'index',
-            'storeUrl',
             'fields'
         ],
         mounted() {

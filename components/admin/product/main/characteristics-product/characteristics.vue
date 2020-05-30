@@ -47,8 +47,7 @@
         props: [
             'index',
             'titleLocal',
-            'descrLocal',
-            'storeUrl'
+            'descrLocal'
         ],
         mounted() {
             this.title = this.titleLocal,
