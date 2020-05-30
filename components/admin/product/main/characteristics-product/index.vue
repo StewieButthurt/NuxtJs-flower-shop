@@ -99,11 +99,12 @@
 <script>
     
     const AppProductCharacteristics = () => import('~/components/admin/product/main/characteristics-product/characteristics.vue')
+    const getOtherStore = () => import('~/store/modules/product/other.js')
 
     export default {
-        data() {
-            return {
-
+        async mounted() {
+            if(!this.$store.getters[`${this.storeUrl}other`]) {
+                await this.$store.registerModule('other', getOtherStore)
             }
         },
         components: {
