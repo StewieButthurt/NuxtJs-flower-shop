@@ -4,25 +4,20 @@
             <div class="preview__swiper-descr">
 
                 <app-swiper 
-                    :keys="keys"
                     :img="img"
                     @changeImg="changeImg"
                 />
 
                 <app-description 
-                    :storeUrl="storeUrl"
                     @mouseEnterImage="mouseEnterImage"
                 />
 
             </div>
 
 
-            <app-specifications 
-                :storeUrl="storeUrl"
-            />
+            <app-specifications />
 
             <app-buttons 
-                :storeUrl="storeUrl"
                 @resetNotifications="resetNotifications"
                 @overlayChange="overlayChange"
                 @changeProgressValue="changeProgressValue"
@@ -85,7 +80,6 @@
         },
         data() {
             return {
-                storeUrl: 'product/add/',
                 img: null,
                 x: '',
                 y: '',
@@ -104,13 +98,10 @@
         },
         computed: {
             images() {
-                return this.$store.getters['product/add/images']
+                return this.$store.getters['modules/product/images/images']
             },
             categories() {
-                return this.$store.getters['product/add/categories']
-            },
-            keys() {
-                return this.$store.getters[`modules/product/keys/keys`]
+                return this.$store.getters['modules/product/categories/categories']
             }
         },
         methods: {

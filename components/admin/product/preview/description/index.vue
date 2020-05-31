@@ -19,7 +19,6 @@
         <div class="preview__descr-price">
             <app-product-price 
                 :price="price"
-                :storeUrl="storeUrl"
             />
         </div>
         <div class="preview__descr-text">
@@ -85,27 +84,24 @@
                 counterProducts: 1,
             }
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             name() {
-                return this.$store.getters[`${this.storeUrl}name`]
+                return this.$store.getters[`modules/product/name/name`]
             },
             price() {
-                return this.$store.getters[`${this.storeUrl}price`]
+                return this.$store.getters[`modules/product/price/price`]
             },
             descr() {
-                return this.$store.getters[`${this.storeUrl}descr`]
+                return this.$store.getters[`modules/product/descr/descr`]
             },
             article() {
-                return this.$store.getters[`${this.storeUrl}article`]
+                return this.$store.getters[`modules/product/article/article`]
             },
             otherFieldImage() {
-                return this.$store.getters[`${this.storeUrl}otherFieldImage`]
+                return this.$store.getters[`modules/product/otherFieldImages/otherFieldImage`]
             },
             newFields() {
-                return this.$store.getters[`${this.storeUrl}newFields`]
+                return this.$store.getters[`modules/product/newFields/newFields`]
             },
         },
         methods: {

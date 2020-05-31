@@ -18,7 +18,6 @@
                     :index="index"
                     :title="item.title"
                     :descr="item.descr"
-                    :storeUrl="storeUrl"
                 />
             </div>
             <div key="vtabReviews" class="preview__characterisctics-wrapper" v-if="vtabReviews">
@@ -33,9 +32,6 @@
     const AppPreviewCharacteristics = () => import('~/components/admin/product/characteristics/preview-characteristics.vue')
 
     export default {
-        props: [
-            'storeUrl'
-        ],
         data() {
             return {
                 vtabDescr: true,
@@ -44,7 +40,7 @@
         },
         computed: {
             other() {
-                return this.$store.getters[`${this.storeUrl}other`]
+                return this.$store.getters[`modules/product/other/other`]
             }
         },
         methods: {

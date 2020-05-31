@@ -59,27 +59,26 @@
             AppProductPreviewImages
         },
         props: [
-            'keys',
             'img'
         ],
         computed: {
             images() {
-                return this.$store.getters[`${this.keys.images}images`]
+                return this.$store.getters[`modules/product/images/images`]
             },
             discountStatus() {
-                return this.$store.getters[`${this.keys.discount}discountStatus`]
+                return this.$store.getters[`modules/product/discount/discountStatus`]
             },
             sizeDiscount() {
-                return this.$store.getters[`${this.keys.discount}sizeDiscount`]
+                return this.$store.getters[`modules/product/discount/sizeDiscount`]
             },
             stock() {
-                return this.$store.getters[`${this.keys.stock}stock`]
+                return this.$store.getters[`modules/product/stock/stock`]
             },
             bestseller() {
-                return this.$store.getters[`${this.keys.bestseller}bestseller`]
+                return this.$store.getters[`modules/product/bestseller/bestseller`]
             },
             weekPrice() {
-                return this.$store.getters[`${this.keys.weekPrice}weekPrice`]
+                return this.$store.getters[`modules/product/weekPrice/weekPrice`]
             },
             mainImg() {
                 if(this.img) {

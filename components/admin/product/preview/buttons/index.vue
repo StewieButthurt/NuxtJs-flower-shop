@@ -27,51 +27,48 @@
                 counterImage: 0,
             }
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             name() {
-                return this.$store.getters[`${this.storeUrl}name`]
+                return this.$store.getters[`modules/product/name/name`]
             },
             price() {
-                return this.$store.getters[`${this.storeUrl}price`]
+                return this.$store.getters[`modules/product/price/price`]
             },
             descr() {
-                return this.$store.getters[`${this.storeUrl}descr`]
+                return this.$store.getters[`modules/product/descr/descr`]
             },
             article() {
-                return this.$store.getters[`${this.storeUrl}article`]
+                return this.$store.getters[`modules/product/article/article`]
             },
             categories() {
-                return this.$store.getters[`${this.storeUrl}categories`]
+                return this.$store.getters[`modules/product/categories/categories`]
             },
             discountStatus() {
-                return this.$store.getters[`${this.storeUrl}discountStatus`]
+                return this.$store.getters[`modules/product/discount/discountStatus`]
             },
             sizeDiscount() {
-                return this.$store.getters[`${this.storeUrl}sizeDiscount`]
+                return this.$store.getters[`modules/product/discount/sizeDiscount`]
             },
             newFields() {
-                return this.$store.getters[`${this.storeUrl}newFields`]
+                return this.$store.getters[`modules/product/newFields/newFields`]
             },
             other() {
-                return this.$store.getters[`${this.storeUrl}other`]
+                return this.$store.getters[`modules/product/other/other`]
             },
             stock() {
-                return this.$store.getters[`${this.storeUrl}stock`]
+                return this.$store.getters[`modules/product/stock/stock`]
             },
             bestseller() {
-                return this.$store.getters[`${this.storeUrl}bestseller`]
+                return this.$store.getters[`modules/product/bestseller/bestseller`]
             },
             weekPrice() {
-                return this.$store.getters[`${this.storeUrl}weekPrice`]
+                return this.$store.getters[`modules/product/weekPrice/weekPrice`]
             },
             images() {
-                return this.$store.getters[`${this.storeUrl}images`]
+                return this.$store.getters[`modules/product/images/images`]
             },
             otherFieldImage() {
-                return this.$store.getters[`${this.storeUrl}otherFieldImage`]
+                return this.$store.getters[`modules/product/otherFieldImages/otherFieldImage`]
             },
             filterOtherFieldImage() {
                 let arr = [];
@@ -186,7 +183,7 @@
             async sendImage(id) {
                 let vm = this
 
-                await this.$store.dispatch(`${this.storeUrl}imagesFilter`)
+                await this.$store.dispatch(`modules/product/images/imagesFilter`)
 
 
                 for(let i = 0; i < this.images.length; i++) {
