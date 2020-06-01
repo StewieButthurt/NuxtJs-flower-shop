@@ -80,30 +80,6 @@
                     globalIndex: this.globalIndex
                 })
 
-                let counter = 0
-
-                for(let i = 0; i < this.info.length; i++) {
-                    if(this.info[i].image.previewImg) {
-                        counter++
-                    }
-                }
-
-                if(this.info.length === counter) {
-
-                    let data = {
-                        title: '',
-                        image: {
-                            file: null,
-                            previewImg: null
-                        },
-                        token: `${Math.random()}`
-                    }
-
-                    let globalIndex = this.globalIndex
-
-                    await this.$store.dispatch('modules/product/otherFieldImages/setOtherFieldImage', {data, globalIndex})
-
-                }
             },
             async addImageFilePond({file, previewImg, index}) {
                 let data = {
@@ -112,37 +88,11 @@
                     token: `${Math.random()}`
                 }
 
-                // let index = 0
                 let globalIndex = this.globalIndex
 
 
                 await this.$store.dispatch('modules/product/otherFieldImages/updateOtherFieldImage', {data, index, globalIndex})
 
-                let counter = 0
-
-                for(let i = 0; i < this.info.length; i++) {
-                    if(this.info[i].image.previewImg) {
-                        counter++
-                    }
-                }
-
-                if(this.info.length === counter) {
-
-                    let data = {
-                        title: '',
-                        image: {
-                            file: null,
-                            previewImg: null
-                        },
-                        token: `${Math.random()}`
-                    }
-
-                    let globalIndex = this.globalIndex
-
-                    await this.$store.dispatch('modules/product/otherFieldImages/setOtherFieldImage', {data, globalIndex})
-
-                }
- 
             },
             async removeBlock(index) {
                

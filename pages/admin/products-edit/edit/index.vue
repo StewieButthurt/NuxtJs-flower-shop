@@ -67,17 +67,84 @@
     export default {
         layout: 'admin',
         head: {
-            title: 'Панель администратора | Добавление товара'
+            title: 'Панель администратора | Редактирование товара'
+        },
+        middleware: 'edit',
+        async mounted() {
+            let vm = this
+            this.$nextTick(async function() {
+                let id = await vm.$store.getters['modules/product/edit/id']
+            
+                try {
+                    let result = await vm.$axios.$get('/api/product/get-product-id', {params: {id: id}})
+                    console.log(result)
+                    await vm.$store.dispatch('modules/product/name/set', result.name)
+                    await vm.$store.dispatch('modules/product/price/set', result.price)
+                    await vm.$store.dispatch('modules/product/descr/set', result.descr)
+                    await vm.$store.dispatch('modules/product/article/set', result.article)
+                    await vm.$store.dispatch('modules/product/categories/set', result.categories)
+                    await vm.$store.dispatch('modules/product/discount/setStatus', result.discountStatus)
+                    await vm.$store.dispatch('modules/product/discount/set', result.sizeDiscount)
+                    await vm.$store.dispatch('modules/product/stock/set', result.stock)
+                    await vm.$store.dispatch('modules/product/bestseller/set', result.bestseller)
+                    await vm.$store.dispatch('modules/product/weekPrice/set', result.weekPrice)
+                    
+                    for(let i = 0; i < result.images.length; i++) {
+                        let data = {
+                            file: result.images[i].previewImg,
+                            previewImg: result.images[i].previewImg
+                        }
+
+                        await vm.$store.dispatch('modules/product/images/updateDataImage', {data, index: i})
+                    }
+
+                    for(let i = 0; i < result.otherFieldImage.length; i++) {
+
+                        let data = {
+                            title: result.otherFieldImage[i].title,
+                            info: [
+                                {
+                                    title: '',
+                                    image: {
+                                        file: null,
+                                        previewImg: null
+                                    },
+                                    token: `${Math.random()}`
+                                }
+                            ],
+                            token: `${Math.random()}`
+                        }
+                        
+                        await vm.$store.dispatch('modules/product/otherFieldImages/addNewFieldWithImage', data)
+
+                        for(let j = 0; j < result.otherFieldImage[i].info.length; j++) {
+                            let dataInfo = {
+                                file: result.otherFieldImage[i].info[j].image.previewImg,
+                                previewImg: result.otherFieldImage[i].info[j].image.previewImg,
+                                token: `${Math.random()}`
+                            }
+                            await vm.$store.dispatch('modules/product/otherFieldImages/updateOtherFieldImage', 
+                            {data: dataInfo, index: j, globalIndex: i})
+
+                            await vm.$store.dispatch('modules/product/otherFieldImages/updateOtherFieldImageTitle',
+                            {title: result.otherFieldImage[i].info[j].title, globalIndex: i, index: j})
+                        }
+
+                    }
+                    
+                } catch(e) {
+                    console.log(e)
+                }
+            })
+            
         },
         // async validate({ store, redirect, $axios }) {
-
         //     try {
         //         await $axios.$get('/api/auth/admin/token')
         //         return true
         //     } catch(e) {
         //         redirect('/login?message=login')
         //     }
-            
         // },
         components: {
             AppNameProduct,

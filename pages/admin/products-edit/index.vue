@@ -64,7 +64,15 @@
 </template>
 
 <script>
+
+    const getEditStore = () => import('~/store/modules/product/edit.js')
+
     export default {
+        async mounted() {
+            if(!this.$store.getters['modules/product/edit/id']) {
+                await this.$store.registerModule('edit', getEditStore)
+            }
+        },
         layout: 'admin',
         head: {
             title: 'Панель администратора | Редактирование товара'
@@ -94,8 +102,8 @@
         watch: {
             async search (val) {
                 let vm = this
+                this.searchResult = []
                 if(val && val.length > 1) {
-                   this.searchResult = []
                    await this.$axios.$get('/api/product/get-product-search', { params: { search: val } })
                         .then(async function (response) {
 
@@ -140,8 +148,6 @@
                                 
                         })
                         .catch(function (error) {
-                            
-                            
                             console.log(error);
                             throw error
                         })
@@ -150,7 +156,7 @@
                 }
             },
             async select(val) {
-                await this.$store.dispatch('localStorage/setProductEdit', val.id)
+                await this.$store.dispatch('modules/product/edit/setId', val.id)
 
                 this.$router.push('/admin/products-edit/edit')
             }
