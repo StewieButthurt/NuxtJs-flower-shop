@@ -43,7 +43,6 @@
                                     :title="item.title"
                                     :descr="item.descr"
                                     :index="index"
-                                    :statusButton="item.statusButton"
                                     @update="update"
                                     @remove="remove"
                                     @add="add"
@@ -78,9 +77,6 @@
         components: {
             AppProductAddNewField,
         },
-        props: [
-            'storeUrl'
-        ],
         computed: {
             newFields() {
                 return this.$store.getters[`modules/product/newFields/newFields`]
@@ -90,7 +86,6 @@
             async addNewField() {
 
                 let data = {
-                    statusButton: true,
                     title: '',
                     descr: [],
                     token: `${Math.random()}`

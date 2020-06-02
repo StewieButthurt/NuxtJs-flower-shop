@@ -1,22 +1,22 @@
 const state = () => ({
-    id: '',
+    product: null
 
 })
 
 const mutations = {
-    setId(state, id) {
-        state.id = id
+    setProduct(state, product) {
+        state.product = product
     }
 }
 
 const actions = {
-    async setId({ commit }, id) {
-        commit('setId', id)
+    async setProduct({ commit }, product) {
+        commit('setProduct', product)
     }
 }
 
 const getters = {
-    id: state => state.id
+    product: state => state.product
 }
 
 export default {

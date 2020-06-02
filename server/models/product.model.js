@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const productSchema = new Schema({
     name: {
@@ -29,34 +29,26 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
-    newFields: [
-        {
-            descr: {
-                type: [String],
-                required: true
-            },
-            statusButton: {
-                type: Boolean,
-                required: true
-            },
-            title: {
-                type: String,
-                required: true
-            }
+    newFields: [{
+        descr: {
+            type: [String],
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
         }
-    ],
-    other: [
-        {
-            descr: {
-                type: String,
-                required: true
-            },
-            title: {
-                type: String,
-                required: true
-            }
+    }],
+    other: [{
+        descr: {
+            type: String,
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
         }
-    ],
+    }],
     stock: {
         type: Boolean,
         required: true
@@ -69,36 +61,30 @@ const productSchema = new Schema({
         type: Boolean,
         required: true
     },
-    images: [
-        {
-            previewImg: {
-                type: String,
-                required: true
-            }
+    images: [{
+        previewImg: {
+            type: String,
+            required: true
         }
-    ],
-    otherFieldImage: [
-        {
-            info: [
-                {
-                    image: {
-                        previewImg: {
-                            type: String,
-                            required: true
-                        }
-                    },
-                    title: {
-                        type: String,
-                        required: true
-                    }
+    }],
+    otherFieldImage: [{
+        info: [{
+            image: {
+                previewImg: {
+                    type: String,
+                    required: true
                 }
-            ],
+            },
             title: {
                 type: String,
                 required: true
             }
+        }],
+        title: {
+            type: String,
+            required: true
         }
-    ]
+    }]
 })
 
 productSchema.index({ name: 1 })
@@ -106,4 +92,3 @@ productSchema.index({ categories: 1 })
 productSchema.index({ article: 1 })
 
 module.exports = model('product', productSchema)
-

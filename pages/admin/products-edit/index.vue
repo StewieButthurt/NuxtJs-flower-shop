@@ -66,12 +66,80 @@
 <script>
 
     const getEditStore = () => import('~/store/modules/product/edit.js')
+    const getNameStore = () => import('~/store/modules/product/name.js')
+    const getPriceStore = () => import('~/store/modules/product/price.js')
+    const getDescrStore = () => import('~/store/modules/product/descr.js')
+    const getArticleStore = () => import('~/store/modules/product/article.js')
+    const getCategoriesStore = () => import('~/store/modules/product/categories.js')
+    const getDiscountStore = () => import('~/store/modules/product/discount.js')
+    const getStockStore = () => import('~/store/modules/product/stock.js')
+    const getBestsellerStore = () => import('~/store/modules/product/bestseller.js')
+    const getWeekPriceStore = () => import('~/store/modules/product/weekPrice.js')
+    const getImagesStore = () => import('~/store/modules/product/images.js')
+    const getOtherFieldImagesStore = () => import('~/store/modules/product/otherFieldImages.js')
+    const getNewFieldsStore = () => import('~/store/modules/product/newFields.js')
+    const getOtherStore = () => import('~/store/modules/product/other.js')
 
     export default {
         async mounted() {
-            if(!this.$store.getters['modules/product/edit/id']) {
+            if(!this.$store.getters['modules/product/edit/product']) {
                 await this.$store.registerModule('edit', getEditStore)
             }
+
+            if(!this.$store.getters[`modules/product/name/name`]) {
+                await this.$store.registerModule('name', getNameStore)
+            }
+
+            if(!this.$store.getters['modules/product/price/price']) {
+                await this.$store.registerModule('price', getPriceStore)
+            }
+
+            if(!this.$store.getters['modules/product/descr/descr']) {
+                await this.$store.registerModule('descr', getDescrStore)
+            }
+
+            if(!this.$store.getters['modules/product/article/article']) {
+                await this.$store.registerModule('article', getArticleStore)
+            }
+
+            if(!this.$store.getters['modules/product/categories/categories']) {
+                await this.$store.registerModule('categories', getCategoriesStore)
+            }
+
+            if(!this.$store.getters['modules/product/discount/sizeDiscount']) {
+                await this.$store.registerModule('discount', getDiscountStore)
+            }
+
+            if(!this.$store.getters['modules/product/stock/stock']) {
+                await this.$store.registerModule('stock', getStockStore)
+            }
+
+            if(!this.$store.getters['modules/product/bestseller/bestseller']) {
+                await this.$store.registerModule('bestseller', getBestsellerStore)
+            }
+
+            if(!this.$store.getters['modules/product/weekPrice/weekPrice']) {
+                await this.$store.registerModule('weekPrice', getWeekPriceStore)
+            }
+
+            if(!this.$store.getters[`modules/product/images/images`]) {
+                await this.$store.registerModule('images', getImagesStore)
+            }
+
+            if(!this.$store.getters['modules/product/otherFieldImages/otherFieldImage']) {
+                await this.$store.registerModule('otherFieldImages', getOtherFieldImagesStore)
+            }
+
+            if(!this.$store.getters[`modules/product/newFields/newFields`]) {
+                await this.$store.registerModule('newFields', getNewFieldsStore)
+            }
+
+            if(!this.$store.getters[`modules/product/other/other`]) {
+                await this.$store.registerModule('other', getOtherStore)
+            }
+
+            
+
         },
         layout: 'admin',
         head: {
@@ -97,6 +165,9 @@
                 } else {
                     return false
                 }
+            },
+            product() {
+                return this.$store.getters['modules/product/edit/product']
             }
         },
         watch: {
@@ -156,7 +227,85 @@
                 }
             },
             async select(val) {
-                await this.$store.dispatch('modules/product/edit/setId', val.id)
+                let product = await this.$axios.$get('/api/product/get-product-id', {params: {id: val.id}})
+
+                await this.$store.dispatch('modules/product/edit/setProduct', product)
+
+                await this.$store.dispatch('modules/product/name/set', this.product.name)
+                await this.$store.dispatch('modules/product/price/set', this.product.price)
+                await this.$store.dispatch('modules/product/descr/set', this.product.descr)
+                await this.$store.dispatch('modules/product/article/set', this.product.article)
+                await this.$store.dispatch('modules/product/categories/set', this.product.categories)
+                await this.$store.dispatch('modules/product/discount/setStatus', this.product.discountStatus)
+                await this.$store.dispatch('modules/product/discount/set', this.product.sizeDiscount)
+                await this.$store.dispatch('modules/product/stock/set', this.product.stock)
+                await this.$store.dispatch('modules/product/bestseller/set', this.product.bestseller)
+                await this.$store.dispatch('modules/product/weekPrice/set', this.product.weekPrice)
+                
+                for(let i = 0; i < this.product.images.length; i++) {
+                    let data = {
+                        file: this.product.images[i].previewImg,
+                        previewImg: this.product.images[i].previewImg
+                    }
+
+                    await this.$store.dispatch('modules/product/images/updateDataImage', {data, index: i})
+                }
+
+                for(let i = 0; i < this.product.otherFieldImage.length; i++) {
+
+                    let data = {
+                        title: this.product.otherFieldImage[i].title,
+                        info: [
+                            {
+                                title: '',
+                                image: {
+                                    file: null,
+                                    previewImg: null
+                                },
+                                token: `${Math.random()}`
+                            }
+                        ],
+                        token: `${Math.random()}`
+                    }
+                    
+                    await this.$store.dispatch('modules/product/otherFieldImages/addNewFieldWithImage', data)
+
+                    for(let j = 0; j < this.product.otherFieldImage[i].info.length; j++) {
+                        let dataInfo = {
+                            file: this.product.otherFieldImage[i].info[j].image.previewImg,
+                            previewImg: this.product.otherFieldImage[i].info[j].image.previewImg,
+                            token: `${Math.random()}`
+                        }
+                        await this.$store.dispatch('modules/product/otherFieldImages/updateOtherFieldImage', 
+                        {data: dataInfo, index: j, globalIndex: i})
+
+                        await this.$store.dispatch('modules/product/otherFieldImages/updateOtherFieldImageTitle',
+                        {title: this.product.otherFieldImage[i].info[j].title, globalIndex: i, index: j})
+                    }
+
+                }
+
+                for(let i = 0; i < this.product.newFields.length; i++) {
+
+                    let data = {
+                        title: this.product.newFields[i].title,
+                        descr: this.product.newFields[i].descr,
+                        token: `${Math.random()}`
+                    }
+
+                    this.$store.dispatch(`modules/product/newFields/setNewFields`, data)
+                
+                }
+
+                for(let i = 0; i < this.product.other.length; i++) {
+                    let data = {
+                        title: this.product.other[i].title,
+                        descr: this.product.other[i].descr,
+                        token: `${Math.random()}`
+                    }
+
+                    this.$store.dispatch(`modules/product/other/setField`, data)
+                }
 
                 this.$router.push('/admin/products-edit/edit')
             }
