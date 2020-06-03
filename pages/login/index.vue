@@ -16,7 +16,7 @@
             xl="3"
             lg="4"
             md="5"
-            sm="6"
+            sm="7"
             xs="6"
 
           >
@@ -31,6 +31,16 @@
                         transition="scale-transition"
                         >
                   {{messageInfo}}
+                  </v-alert>
+                </v-fade-transition>
+                <v-fade-transition>
+                  <v-alert class="my-v-alert text-center" 
+                        :dense="true" 
+                        type="error" 
+                        v-if="authStatusError"
+                        transition="scale-transition"
+                        >
+                  {{authStatusError}}
                   </v-alert>
                 </v-fade-transition>
                 <v-fade-transition>
@@ -166,7 +176,7 @@
               return this.$route.query
             },
             messageInfo() {
-              if(this.message.message === 'login') {
+              if(this.message.message === 'login' && this.authStatusError === false) {
                 return 'Авторизуйтесь чтобы начать'
               } else {
                 return false
@@ -189,6 +199,17 @@
             messageLoginAttempts() {
               if(this.message.message === 'loginAttempts') {
                 return 'Слишком много попыток авторизации, попробуйте вновь через 5 мин'
+              } else {
+                return false
+              }
+            },
+            authStatusError() {
+              if(this.$store.getters['modules/auth/authStatusError']) {
+                if(this.$store.getters['modules/auth/authStatusError'] === 429) {
+                  return 'Превышен лимит попыток! Повторите попытку через 5 минут!'
+                } else {
+                  return false
+                }
               } else {
                 return false
               }

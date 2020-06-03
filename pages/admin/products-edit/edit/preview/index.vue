@@ -74,7 +74,7 @@
             AppButtons,
             AppSnackbars
         },
-        middleware: 'checkData',
+        middleware: ['checkProductEdit'],
         async mounted() {
             this.img = this.images[0].previewImg
         },
@@ -142,7 +142,7 @@
                 this.overlay = value
             },
             async redirectAddProduct() {
-                window.location.reload(true)
+                // window.location.reload(true)
             },
             async changeSnackbar(value) {
                 this.snackbar = value

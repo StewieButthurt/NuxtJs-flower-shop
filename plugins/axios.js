@@ -20,10 +20,10 @@ export default function({ $axios, redirect, store }) {
                 redirect('/login?message=login')
             }
 
-            if (error.response.status === 429) {
-                store.dispatch('modules/auth/logout')
-                redirect('/login?message=loginAttempts')
-            }
+            // if (error.response.status === 429) {
+            //     store.dispatch('modules/auth/logout')
+            //     redirect('/login?message=loginAttempts')
+            // }
 
             if (error.response.status === 500) {
                 console.error('Server 500 error')

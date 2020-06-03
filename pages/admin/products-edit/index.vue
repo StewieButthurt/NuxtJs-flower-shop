@@ -60,6 +60,13 @@
 
             </v-row>
         </v-container>
+        <app-snackbars 
+            :snackbar="snackbar"
+            :text="text"
+            :colorBckg="colorBckg"
+            :colorBtn="colorBtn"
+            @changeSnackbar="changeSnackbar"
+        />
     </div>
 </template>
 
@@ -79,6 +86,7 @@
     const getOtherFieldImagesStore = () => import('~/store/modules/product/otherFieldImages.js')
     const getNewFieldsStore = () => import('~/store/modules/product/newFields.js')
     const getOtherStore = () => import('~/store/modules/product/other.js')
+    const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
 
     export default {
         async mounted() {
@@ -141,7 +149,23 @@
             
 
         },
+        components: {
+            AppSnackbars
+        },
         layout: 'admin',
+        async validate({ store, redirect, $axios }) {
+            try {
+
+                if(!store.getters['modules/auth/token']) {
+                    await store.dispatch('modules/auth/autoLogin')
+                }
+                
+                await $axios.$get('/api/auth/admin/token')
+                return true
+            } catch(e) {
+                redirect('/login?message=login')
+            }
+        },
         head: {
             title: 'Панель администратора | Редактирование товара'
         },
@@ -151,7 +175,18 @@
                 searchResult: [],
                 search: null,
                 statusMenu: true,
-                infoProduct: false
+                infoProduct: false,
+                message: false,
+                snackbar: false,
+                text: '',
+                colorBckg: '',
+                colorBtn: ''
+            }
+        },
+        methods: {
+            async changeSnackbar(value) {
+                this.snackbar = value
+                this.message = false
             }
         },
         computed: {
@@ -219,17 +254,36 @@
                                 
                         })
                         .catch(function (error) {
-                            console.log(error);
+                            if(error.response) {
+                                if(error.response.status === 429) {
+                                    vm.text = 'Превышен лимит запросов! Повторите попытку через 5 минут!'
+                                    vm.colorBtn = 'white'
+                                    vm.colorBckg = 'grey darken-4'
+                                    vm.snackbar = true
+                                } else {
+                                    console.log(error);
+                                }
+                            } else {
+                                console.log(error);
                             throw error
+                            }
+                            
                         })
                 } else {
                     this.search = null
                 }
             },
             async select(val) {
+
+                await this.$store.dispatch('modules/product/edit/setProduct', null)
+
+                console.log(this.$store.getters['modules/product/edit/product'])
+
                 let product = await this.$axios.$get('/api/product/get-product-id', {params: {id: val.id}})
 
                 await this.$store.dispatch('modules/product/edit/setProduct', product)
+
+                console.log(this.$store.getters['modules/product/edit/product'])
 
                 await this.$store.dispatch('modules/product/name/set', this.product.name)
                 await this.$store.dispatch('modules/product/price/set', this.product.price)

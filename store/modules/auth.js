@@ -4,15 +4,22 @@ import jwtDecode from 'jwt-decode'
 
 
 const state = () => ({
-    token: null
+    token: null,
+    authStatusError: null
 })
 
 const mutations = {
     setToken(state, token) {
+        if (token) {
+            state.authStatusError = null
+        }
         state.token = token
     },
     clearToken(state) {
         state.token = null
+    },
+    setAuthStatusError(state, error) {
+        state.authStatusError = error
     }
 }
 
@@ -22,29 +29,37 @@ const actions = {
             const { token } = await this.$axios.$post('/api/auth/admin/login', formData)
             dispatch('setToken', token)
         } catch (e) {
-            commit('setError', e, { root: true })
-            throw e
+            if (e.response) {
+                if (e.response.status === 429) {
+                    commit('setAuthStatusError', 429)
+                } else {
+                    commit('setError', e, { root: true })
+                    throw e
+                }
+            } else {
+                commit('setError', e, { root: true })
+                throw e
+            }
         }
     },
     async checkToken({ $axios, redirect }) {
         try {
-            console.log(1)
             return await $axios.$get('/api/auth/admin/token')
         } catch (e) {
             redirect('/login?message=login')
         }
     },
-    setToken({ commit }, token) {
+    async setToken({ commit }, token) {
         this.$axios.setToken(token, 'Bearer')
         commit('setToken', token)
         Cookies.set('jwt-token', token)
     },
-    logout({ commit }) {
+    async logout({ commit }) {
         this.$axios.setToken(false)
         commit('clearToken')
         Cookies.remove('jwt-token')
     },
-    autoLogin({ dispatch }) {
+    async autoLogin({ dispatch }) {
         const cookieStr = process.browser ?
             document.cookie :
             this.app.context.req.headers.cookie
@@ -62,7 +77,8 @@ const actions = {
 
 const getters = {
     isAuthenticated: state => Boolean(state.token),
-    token: state => state.token
+    token: state => state.token,
+    authStatusError: state => state.authStatusError
 }
 
 function isJWTValid(token) {

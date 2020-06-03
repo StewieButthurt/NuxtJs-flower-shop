@@ -125,6 +125,9 @@
                     stock: this.stock,
                     bestseller: this.bestseller,
                     weekPrice: this.weekPrice,
+                    idProduct: this.$store.getters['modules/product/edit/product']._id ? 
+                    this.$store.getters['modules/product/edit/product']._id :
+                    false
                 }
 
                 //send form
@@ -154,6 +157,7 @@
 
                 try {
                    const responseFields = await this.$axios.$post('/api/product/create/fields', fields)
+                   console.log(responseFields)
                    await this.$emit('changeMessageStatus', responseFields.message )
 
                    if(responseFields.error === 'true') {
@@ -193,7 +197,7 @@
                     await this.$emit('changeMessageStatus', `Загрузка картинок ${i + 1} из ${this.images.length}...` )
 
                     if(typeof this.image === 'object') {
-
+                        
                         if(this.image.type === 'image/png' || this.image.type === 'image/jpeg') {
                             var readerPreview = new FileReader();
 
@@ -242,46 +246,45 @@
                             }
 
                             await readerPreview.readAsDataURL(this.image);
-                        } else {
+                        } 
+                    } else {
+                        let data = {
+                            image: vm.image,
+                            index: i,
+                            id: id
+                        }
+                        
+                        try {
+                            const responseImages = await vm.$axios.$post('/api/product/create/images', data)
+                            vm.counterImage++
+                        } catch(e) {
+                            await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
+                            await vm.$emit('changeCheckErrorImage', error)
 
-                                let data = {
-                                    image: vm.image,
-                                    index: i,
-                                    id: id
-                                }
-                                
-                                try {
-                                    const responseImages = await vm.$axios.$post('/api/product/create/images', data)
-                                    vm.counterImage++
-                                } catch(e) {
-                                    await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
-                                    await vm.$emit('changeCheckErrorImage', error)
+                            setTimeout(() => {
+                                vm.$emit('overlayOffError')
+                            }, 1000);
 
-                                    setTimeout(() => {
-                                        vm.$emit('overlayOffError')
-                                    }, 1000);
+                            console.error('Error:', e);
+                        }
+                        
+                        if(vm.counterImage === vm.images.length) {
 
-                                    console.error('Error:', e);
-                                }
-                                
-                                if(vm.counterImage === vm.images.length) {
+                            await vm.$emit('changeProgressValue', 60)
 
-                                    await vm.$emit('changeProgressValue', 60)
+                            if(vm.otherFieldImage.length > 0) {
+                                await vm.sendOtherImage(id)
+                            } else {
+                                await vm.$emit('changeMessageStatus', 'Загрузка завершена' )
 
-                                    if(vm.otherFieldImage.length > 0) {
-                                        await vm.sendOtherImage(id)
-                                    } else {
-                                        await vm.$emit('changeMessageStatus', 'Загрузка завершена' )
+                                await vm.$emit('changeProgressValue', 100)
 
-                                        await vm.$emit('changeProgressValue', 100)
+                                setTimeout(() => {
+                                    vm.$emit('overlayOff')
+                                }, 1000);
 
-                                        setTimeout(() => {
-                                            vm.$emit('overlayOff')
-                                        }, 1000);
-
-                                    }
-                                    
-                                }
+                            }
+                            
                         }
                     }
                     

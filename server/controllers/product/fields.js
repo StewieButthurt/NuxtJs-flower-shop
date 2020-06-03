@@ -15,8 +15,8 @@ const log = SimpleNodeLogger.createSimpleLogger(opts);
 
 
 module.exports.fields = async(req, res) => {
+    console.log('модуль fields')
     if (typeof(req.body.name) === 'string') {
-        const name = await Product.findOne({ name: req.body.name })
 
         if (typeof(req.body.price) === 'number' &&
             typeof(req.body.descr) === 'string' &&
@@ -25,9 +25,10 @@ module.exports.fields = async(req, res) => {
             typeof(req.body.sizeDiscount) === 'string' &&
             typeof(req.body.stock) === 'boolean' &&
             typeof(req.body.bestseller) === 'boolean' &&
-            typeof(req.body.weekPrice) === 'boolean'
+            typeof(req.body.weekPrice) === 'boolean' &&
+            (typeof(req.body.idProduct) === 'string' ||
+                typeof(req.body.idProduct) === 'boolean')
         ) {
-            console.log(1)
             for (let i = 0; i < req.body.categories.length; i++) {
                 if (typeof(req.body.categories[i]) === 'string') {
 
@@ -85,9 +86,23 @@ module.exports.fields = async(req, res) => {
             })
 
             try {
-                if (name) {
-                    console.log(name)
-                    await product.findByIdAndUpdate({ _id: name._id }, { $set: product })
+                if (req.body.idProduct) {
+                    await Product.findByIdAndUpdate({ _id: req.body.idProduct }, {
+                        $set: {
+                            name: req.body.name,
+                            price: req.body.price,
+                            descr: req.body.descr,
+                            article: req.body.article,
+                            categories: req.body.categories,
+                            discountStatus: req.body.discountStatus,
+                            sizeDiscount: req.body.sizeDiscount,
+                            newFields: req.body.newFields,
+                            other: req.body.other,
+                            stock: req.body.stock,
+                            bestseller: req.body.bestseller,
+                            weekPrice: req.body.weekPrice,
+                        }
+                    })
                 } else {
                     await product.save()
                 }

@@ -11,9 +11,12 @@ const log = SimpleNodeLogger.createSimpleLogger(opts);
 
 module.exports.images = async(req, res) => {
 
+    console.log('обработка картинки')
+
     if (typeof(req.body.image) === 'string' &&
         typeof(req.body.id) === 'string' &&
-        typeof(req.body.index) === 'string' || typeof(req.body.index) === 'number'
+        (typeof(req.body.index) === 'string' ||
+            typeof(req.body.index) === 'number')
     ) {
 
         let image = req.body.image
@@ -77,6 +80,7 @@ module.exports.images = async(req, res) => {
             }
         } else {
             try {
+                console.log('Product.updateOne')
                 const product = await Product.updateOne({ _id: req.body.id }, {
                     $push: {
                         images: {

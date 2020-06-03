@@ -7,12 +7,20 @@ const { otherImages } = require('../controllers/product/otherImages')
 const { getProductId } = require('../controllers/product/getProductId')
 const { search } = require('../controllers/product/search')
 const router = Router()
+const rateLimit = require("express-rate-limit");
+
+const AuthLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 min
+    max: 100, // start blocking after 5 requests
+    message: "Too many authorization attempts, try again in an 5 min"
+});
 
 //Admin
 // /api/product
 
 router.get(
     '/get-product-search',
+    AuthLimiter,
     search
 )
 

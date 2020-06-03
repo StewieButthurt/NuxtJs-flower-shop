@@ -70,14 +70,19 @@
             title: 'Панель администратора | Редактирование товара'
         },
         middleware: 'edit',
-        // async validate({ store, redirect, $axios }) {
-        //     try {
-        //         await $axios.$get('/api/auth/admin/token')
-        //         return true
-        //     } catch(e) {
-        //         redirect('/login?message=login')
-        //     }
-        // },
+        async validate({ store, redirect, $axios }) {
+            try {
+                
+                if(!store.getters['modules/auth/token']) {
+                    await store.dispatch('modules/auth/autoLogin')
+                }
+
+                await $axios.$get('/api/auth/admin/token')
+                return true
+            } catch(e) {
+                redirect('/login?message=login')
+            }
+        },
         components: {
             AppNameProduct,
             AppPriceProduct,
@@ -120,11 +125,6 @@
             },
             async changeMessage(value) {
                 this.message = value
-            }
-        },
-        computed: {
-            product() {
-                return this.$store.getters['modules/product/edit/product']
             }
         }
     }
