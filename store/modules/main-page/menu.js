@@ -1,24 +1,35 @@
 const state = () => ({
-    menu: []
+    menuMainPage: [],
+    menuEditPage: null
 })
 
 const mutations = {
     changeStatus(state, { status, index }) {
-        state.menu[index].status = status
+        state.menuMainPage[index].status = status
     },
-    set(state, menu) {
-        state.menu = menu
+    setMenuMainPage(state, menu) {
+        state.menuMainPage = menu
+    },
+    setMenuEditPage(state, data) {
+        state.menuEditPage = data
     }
 }
 
 const actions = {
     async changeStatus({ commit }, { status, index }) {
         commit('changeStatus', { status, index })
+    },
+    async setMenuMainPage({ commit }, menu) {
+        commit('setMenuMainPage', menu)
+    },
+    async menuEditPage({ commit }, data) {
+        commit('setMenuEditPage', data)
     }
 }
 
 const getters = {
-    menu: state => state.menu
+    menuMainPage: state => state.menuMainPage,
+    menuEditPage: state => state.menuEditPage
 }
 
 export default {

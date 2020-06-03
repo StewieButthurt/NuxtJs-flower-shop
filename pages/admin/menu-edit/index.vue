@@ -54,7 +54,7 @@
         layout: 'admin',
         computed: {
             mainLinks() {
-                return this.$store.getters['layouts-links/mainLinks']
+                return this.$store.getters['modules/main-page/menu/menuMainPage']
             }
         },
         methods: {
@@ -65,7 +65,7 @@
                     id: item._id
                 }
 
-                await this.$store.dispatch('localStorage/setMenu', data)
+                await this.$store.dispatch('modules/main-page/menu/setMenuEditPage', data)
 
                 this.$router.push(`/admin/menu-edit/edit`)
             }
@@ -73,7 +73,7 @@
         async fetch ({ store, $axios}) {
 
             let menu = await $axios.$get('/api/menu')
-            store.commit('layouts-links/setMainLinks', menu)
+            store.commit('modules/main-page/menu/setMenuMainPage', menu)
             
         }
     }
