@@ -83,6 +83,7 @@
         head: {
             title: 'Панель администратора | Редактирование меню'
         },
+        middleware: ['checkMenuEditData'],
         components: {
             AppSnackbars,
             AppDialogs
