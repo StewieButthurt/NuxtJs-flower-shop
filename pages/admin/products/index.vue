@@ -69,16 +69,19 @@
         head: {
             title: 'Панель администратора | Добавление товара'
         },
-        // async validate({ store, redirect, $axios }) {
+        async validate({ store, redirect, $axios }) {
+            try {
+                
+                if(!store.getters['modules/auth/token']) {
+                    await store.dispatch('modules/auth/autoLogin')
+                }
 
-        //     try {
-        //         await $axios.$get('/api/auth/admin/token')
-        //         return true
-        //     } catch(e) {
-        //         redirect('/login?message=login')
-        //     }
-            
-        // },
+                await $axios.$get('/api/auth/admin/token')
+                return true
+            } catch(e) {
+                redirect('/login?message=login')
+            }
+        },
         components: {
             AppNameProduct,
             AppPriceProduct,
