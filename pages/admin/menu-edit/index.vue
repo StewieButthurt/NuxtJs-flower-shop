@@ -34,7 +34,14 @@
 
 <script>
 
+    const getMenuStore = () => import('~/store/modules/main-page/menu.js')
+
     export default {
+        async mounted() {
+            if(!this.$store.getters['modules/main-page/menu/menuMainPage']) {
+                await this.$store.registerModule('menu', getMenuStore)
+            }
+        },
         head: {
             title: 'Панель администратора | Редактирование меню'
         },
