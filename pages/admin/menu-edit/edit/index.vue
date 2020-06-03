@@ -103,7 +103,7 @@
         async fetch ({ store, $axios}) {
 
             let menu = await $axios.$get('/api/menu')
-            store.commit('layouts-links/setMainLinks', menu)
+            store.commit('modules/main-page/menu/setMenuMainPage', menu)
             
         },
         layout: 'admin',
@@ -129,7 +129,7 @@
         },
         computed: {
             menu() {
-                return this.$store.getters['localStorage/menu']
+                return this.$store.getters['modules/main-page/menu/menuEditPage']
             },
             title() {
                 return this.menu.title
@@ -199,7 +199,7 @@
                                 vm.message = response.message
                                 vm.loading = false
 
-                                await vm.$store.dispatch('localStorage/setMenu', formData)
+                                await vm.$store.dispatch('modules/main-page/menu/setMenuMainPage', formData)
                         })
                         .catch(function (error) {
                             // handle error

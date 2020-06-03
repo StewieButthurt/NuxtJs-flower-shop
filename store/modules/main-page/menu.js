@@ -22,7 +22,7 @@ const actions = {
     async setMenuMainPage({ commit }, menu) {
         commit('setMenuMainPage', menu)
     },
-    async menuEditPage({ commit }, data) {
+    async setMenuEditPage({ commit }, data) {
         commit('setMenuEditPage', data)
     }
 }
