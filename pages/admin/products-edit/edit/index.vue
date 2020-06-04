@@ -69,7 +69,7 @@
         head: {
             title: 'Панель администратора | Редактирование товара'
         },
-        middleware: 'checkProductEdit',
+        middleware: ['checkProductEdit'],
         async validate({ store, redirect, $axios }) {
             try {
                 
