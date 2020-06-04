@@ -87,7 +87,7 @@
             AppButtons,
             AppSnackbars
         },
-        middleware: 'checkData',
+        middleware: 'checkProductAdd',
         async mounted() {
             this.img = this.images[0].previewImg
         },
