@@ -83,7 +83,7 @@
             </div>
         </v-row>
         <v-row align="center" justify="center">
-            <v-btn nuxt to="/admin/products/preview" class="mx-2 mt-5" color="teal" :disabled="!checkFields">
+            <v-btn nuxt :to="urlStore" class="mx-2 mt-5" color="teal" :disabled="!checkFields">
                 <v-icon class="mr-2">mdi-folder-image</v-icon>
                 Предпросмотр
             </v-btn>
@@ -109,6 +109,9 @@
         components: {
             AppProductCharacteristics
         },
+        props: [
+            'urlStore'
+        ],
         computed: {
             other() {
                 return this.$store.getters[`modules/product/other/other`]
