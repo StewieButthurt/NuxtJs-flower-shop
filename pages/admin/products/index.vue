@@ -35,7 +35,9 @@
 
             <app-other-field-input />
 
-            <app-characteristics-product />
+            <app-characteristics-product 
+                :urlStore="`/admin/products/preview`"
+            />
 
             <app-snackbars 
                 :snackbar="snackbar"
