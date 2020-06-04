@@ -80,6 +80,7 @@
         head: {
             title: 'Панель администратора | Предпросмотр'
         },
+        middleware: ['checkProductEdit'],
         components: {
             AppSwiper,
             AppDescription,
