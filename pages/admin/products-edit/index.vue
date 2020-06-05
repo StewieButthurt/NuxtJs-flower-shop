@@ -277,13 +277,9 @@
 
                 await this.$store.dispatch('modules/product/edit/setProduct', null)
 
-                console.log(this.$store.getters['modules/product/edit/product'])
-
                 let product = await this.$axios.$get('/api/product/get-product-id', {params: {id: val.id}})
 
                 await this.$store.dispatch('modules/product/edit/setProduct', product)
-
-                console.log(this.$store.getters['modules/product/edit/product'])
 
                 await this.$store.dispatch('modules/product/name/set', this.product.name)
                 await this.$store.dispatch('modules/product/price/set', this.product.price)
