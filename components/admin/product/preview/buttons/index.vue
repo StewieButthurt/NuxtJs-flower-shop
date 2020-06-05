@@ -91,9 +91,9 @@
         },
         methods: {
             async sendData() {
-                
-                // reset notifications
 
+                // reset notifications
+                
                 let data = {
                     message: false,
                     snackbar: false,
@@ -102,334 +102,356 @@
                     checkErrorImage: false,
                 }
 
-                this.$emit('resetNotifications', data)
+            }
+            // async sendData() {
+                
+            //     // reset notifications
+
+            //     let data = {
+            //         message: false,
+            //         snackbar: false,
+            //         progressValue: 0,
+            //         checkErrorForm: false,
+            //         checkErrorImage: false,
+            //     }
+
+            //     this.$emit('resetNotifications', data)
 
                 
 
-                // show overlay
+            //     // show overlay
 
-                this.$emit('overlayChange', true)
+            //     this.$emit('overlayChange', true)
 
-                //preparation data
+            //     //preparation data
 
-                let fields = {
-                    name: this.name,
-                    price: this.price,
-                    descr: this.descr,
-                    article: this.article,
-                    categories: this.categories,
-                    discountStatus: this.discountStatus,
-                    sizeDiscount: this.sizeDiscount,
-                    newFields: this.newFields,
-                    other: this.other,
-                    stock: this.stock,
-                    bestseller: this.bestseller,
-                    weekPrice: this.weekPrice,
-                    idProduct: this.$store.getters['modules/product/edit/product']._id ? 
-                    this.$store.getters['modules/product/edit/product']._id :
-                    false
-                }
+            //     let fields = {
+            //         name: this.name,
+            //         price: this.price,
+            //         descr: this.descr,
+            //         article: this.article,
+            //         categories: this.categories,
+            //         discountStatus: this.discountStatus,
+            //         sizeDiscount: this.sizeDiscount,
+            //         newFields: this.newFields,
+            //         other: this.other,
+            //         stock: this.stock,
+            //         bestseller: this.bestseller,
+            //         weekPrice: this.weekPrice,
+            //         idProduct: this.$store.getters['modules/product/edit/product']._id ? 
+            //         this.$store.getters['modules/product/edit/product']._id :
+            //         false
+            //     }
 
-                //send form
+            //     //send form
 
-                let resultForm,
-                    resultImage;
+            //     let resultForm,
+            //         resultImage;
 
-                resultForm = await this.sendForm(fields)
+            //     resultForm = await this.sendForm(fields)
 
-                //send images
+            //     //send images
 
-                if(resultForm) {
-                    resultImage = await this.sendImage(resultForm)
-                }
+            //     if(resultForm) {
+            //         resultImage = await this.sendImage(resultForm)
+            //     }
 
-            },
-            async sendForm(fields) {
+            // },
+            // async sendForm(fields) {
 
-                let vm = this
-                let result;
+            //     let vm = this
+            //     let result;
 
-                // change loading bar
-                await this.$emit('changeProgressValue', 40)
+            //     // change loading bar
+            //     await this.$emit('changeProgressValue', 40)
 
-                //change message status
-                await this.$emit('changeMessageStatus', 'Загрузка основных данных...')
+            //     //change message status
+            //     await this.$emit('changeMessageStatus', 'Загрузка основных данных...')
 
-                try {
-                   const responseFields = await this.$axios.$post('/api/product/create/fields', fields)
-                   console.log(responseFields)
-                   await this.$emit('changeMessageStatus', responseFields.message )
+            //     try {
+            //        const responseFields = await this.$axios.$post('/api/product/create/fields', fields)
+            //        console.log(responseFields)
+            //        await this.$emit('changeMessageStatus', responseFields.message )
 
-                   if(responseFields.error === 'true') {
+            //        if(responseFields.error === 'true') {
 
-                        await this.$emit('changeCheckErrorForm', true)
+            //             await this.$emit('changeCheckErrorForm', true)
 
-                        setTimeout(() => {
-                            vm.$emit('overlayOffError')
-                        }, 1000);
+            //             setTimeout(() => {
+            //                 vm.$emit('overlayOffError')
+            //             }, 1000);
 
-                        return false
-                   } else {
-                        this.$emit('changeCheckErrorForm', false)
-                        let id = responseFields.product._id
-                        return id
-                   }
-                } catch(e) {
-                    console.error('Error: Упс! Что то пошло не так!', e)
+            //             return false
+            //        } else {
+            //             this.$emit('changeCheckErrorForm', false)
+            //             let id = responseFields.product._id
+            //             return id
+            //        }
+            //     } catch(e) {
+            //         console.error('Error: Упс! Что то пошло не так!', e)
 
-                    this.$emit('changeMessageStatus', 'Упс! Что то пошло не так!' )
+            //         this.$emit('changeMessageStatus', 'Упс! Что то пошло не так!' )
 
-                    setTimeout(() => {
-                        vm.$emit('overlayOffError')
-                    }, 1000);
-                }
-            },
-            async sendImage(id) {
-                let vm = this
+            //         setTimeout(() => {
+            //             vm.$emit('overlayOffError')
+            //         }, 1000);
+            //     }
+            // },
+            // async sendImage(id) {
+            //     let vm = this
 
-                await this.$store.dispatch(`modules/product/images/imagesFilter`)
+            //     await this.$store.dispatch(`modules/product/images/imagesFilter`)
 
 
-                for(let i = 0; i < this.images.length; i++) {
+            //     for(let i = 0; i < this.images.length; i++) {
 
-                    this.image = this.images[i].previewImg
+            //         this.image = this.images[i].previewImg
 
-                    await this.$emit('changeMessageStatus', `Загрузка картинок ${i + 1} из ${this.images.length}...` )
+            //         await this.$emit('changeMessageStatus', `Загрузка картинок ${i + 1} из ${this.images.length}...` )
 
-                    if(typeof this.image === 'object') {
+            //         if(typeof this.image === 'object') {
                         
-                        if(this.image.type === 'image/png' || this.image.type === 'image/jpeg') {
-                            var readerPreview = new FileReader();
+            //             if(this.image.type === 'image/png' || this.image.type === 'image/jpeg') {
+            //                 var readerPreview = new FileReader();
 
-                            readerPreview.onload = async function(e) {
-                                let data = {
-                                    image: e.target.result,
-                                    index: i,
-                                    id: id
-                                }
+            //                 readerPreview.onload = async function(e) {
+            //                     let data = {
+            //                         image: e.target.result,
+            //                         index: i,
+            //                         id: id
+            //                     }
 
-                                try {
-                                    const responseImages = await vm.$axios.$post('/api/product/create/images', data)
-                                    vm.counterImage++
-                                } catch(e) {
-                                    await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
+            //                     try {
+            //                         const responseImages = await vm.$axios.$post('/api/product/create/images', data)
+            //                         vm.counterImage++
+            //                     } catch(e) {
+            //                         await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
 
-                                    await vm.$emit('changeCheckErrorImage', e)
+            //                         await vm.$emit('changeCheckErrorImage', e)
 
-                                    setTimeout(() => {
-                                        vm.$emit('overlayOffError')
-                                    }, 1000);
+            //                         setTimeout(() => {
+            //                             vm.$emit('overlayOffError')
+            //                         }, 1000);
 
-                                    console.error(e);
-                                }
+            //                         console.error(e);
+            //                     }
 
 
-                                if(vm.counterImage === vm.images.length) {
+            //                     if(vm.counterImage === vm.images.length) {
 
-                                    await vm.$emit('changeProgressValue', 60)
+            //                         await vm.$emit('changeProgressValue', 60)
 
-                                    if(vm.otherFieldImage.length > 0) {
-                                        await vm.sendOtherImage(id)
-                                    } else {
-                                        await vm.$emit('changeMessageStatus', 'Загрузка завершена' )
+            //                         if(vm.otherFieldImage.length > 0) {
+            //                             await vm.sendOtherImage(id)
+            //                         } else {
+            //                             await vm.$emit('changeMessageStatus', 'Загрузка завершена' )
 
-                                        await vm.$emit('changeProgressValue', 100)
+            //                             await vm.$emit('changeProgressValue', 100)
 
-                                        setTimeout(() => {
-                                            vm.$emit('overlayOff')
-                                        }, 1000);
+            //                             setTimeout(() => {
+            //                                 vm.$emit('overlayOff')
+            //                             }, 1000);
 
-                                    }
+            //                         }
                                     
-                                }
+            //                     }
                                 
-                            }
+            //                 }
 
-                            await readerPreview.readAsDataURL(this.image);
-                        } 
-                    } else {
-                        let data = {
-                            image: vm.image,
-                            index: i,
-                            id: id
-                        }
+            //                 await readerPreview.readAsDataURL(this.image);
+            //             } 
+            //         } else {
+            //             let data = {
+            //                 image: vm.image,
+            //                 index: i,
+            //                 id: id
+            //             }
                         
-                        try {
-                            const responseImages = await vm.$axios.$post('/api/product/create/images', data)
-                            vm.counterImage++
-                        } catch(e) {
-                            await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
-                            await vm.$emit('changeCheckErrorImage', error)
+            //             try {
+            //                 const responseImages = await vm.$axios.$post('/api/product/create/images', data)
+            //                 vm.counterImage++
+            //             } catch(e) {
+            //                 await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка! Попробуйте еще раз!' )
+            //                 await vm.$emit('changeCheckErrorImage', error)
 
-                            setTimeout(() => {
-                                vm.$emit('overlayOffError')
-                            }, 1000);
+            //                 setTimeout(() => {
+            //                     vm.$emit('overlayOffError')
+            //                 }, 1000);
 
-                            console.error('Error:', e);
-                        }
+            //                 console.error('Error:', e);
+            //             }
                         
-                        if(vm.counterImage === vm.images.length) {
+            //             if(vm.counterImage === vm.images.length) {
 
-                            await vm.$emit('changeProgressValue', 60)
+            //                 await vm.$emit('changeProgressValue', 60)
 
-                            if(vm.otherFieldImage.length > 0) {
-                                await vm.sendOtherImage(id)
-                            } else {
-                                await vm.$emit('changeMessageStatus', 'Загрузка завершена' )
+            //                 if(vm.otherFieldImage.length > 0) {
+            //                     await vm.sendOtherImage(id)
+            //                 } else {
+            //                     await vm.$emit('changeMessageStatus', 'Загрузка завершена' )
 
-                                await vm.$emit('changeProgressValue', 100)
+            //                     await vm.$emit('changeProgressValue', 100)
 
-                                setTimeout(() => {
-                                    vm.$emit('overlayOff')
-                                }, 1000);
+            //                     setTimeout(() => {
+            //                         vm.$emit('overlayOff')
+            //                     }, 1000);
 
-                            }
+            //                 }
                             
-                        }
-                    }
+            //             }
+            //         }
                     
-                }
+            //     }
             
-            },
-            async sendOtherImage(id) {
-                let vm = this
-                let checkError = false
-                let newId = false
-                let mainId = id
+            // },
+            // async sendOtherImage(id) {
+            //     let vm = this
+            //     let checkError = false
+            //     let newId = false
+            //     let mainId = id
 
-                console.log(this.filterOtherFieldImage)
+            //     console.log(this.filterOtherFieldImage)
 
-                for(let k = 0; k < this.filterOtherFieldImage.length; k++) {
-                    let counter = 0
-                    let otherImage = this.filterOtherFieldImage[k]
+            //     for(let k = 0; k < this.filterOtherFieldImage.length; k++) {
+            //         let counter = 0
+            //         let otherImage = this.filterOtherFieldImage[k]
 
-                    let data = {
-                        id: id,
-                        title: otherImage.title
-                    }
-                    if(checkError === false) {
-                        try {
-                            const responseImageTitle = await this.$axios.$post('/api/product/create/other-image-title', data)
-                            await this.$emit('changeMessageStatus', 'Подготовка загрузки дополнительных изображений...' )
-                            const responseProductId = await this.$axios.$get('/api/product/get-product-id', {params : { id: mainId }})
-                            newId = responseProductId.otherFieldImage[k]._id
+            //         let data = {
+            //             id: id,
+            //             title: otherImage.title
+            //         }
+            //         if(checkError === false) {
+            //             try {
+            //                 console.log('1')
+            //                 const responseImageTitle = await this.$axios.$post('/api/product/create/other-image-title', data)
+            //                 console.log('2')
+            //                 await this.$emit('changeMessageStatus', 'Подготовка загрузки дополнительных изображений...' )
+            //                 console.log('3')
+            //                 console.log(mainId)
+            //                 const responseProductId = await this.$axios.$get('/api/product/get-product-id', {params : { id: mainId }})
+            //                 console.log('4')
+            //                 console.log(responseProductId)
+            //                 console.log(responseProductId.otherFieldImage[k]._id)
+            //                 newId = responseProductId.otherFieldImage[k]._id
+            //                 console.log('5')
+            //                 for(let i = 0; i < otherImage.info.length; i++) {
+            //                     console.log('6')
+            //                     let image = otherImage.info[i].image.previewImg
+            //                     console.log('7')
+            //                     var readerPreview = new FileReader();
 
-                            for(let i = 0; i < otherImage.info.length; i++) {
-                                let image = otherImage.info[i].image.previewImg
+            //                     if(typeof image === "object") {
+            //                         console.log('image is object')
 
-                                var readerPreview = new FileReader();
+            //                         if(image.type === 'image/png' || image.type === 'image/jpeg') {
 
-                                if(typeof image === "object") {
+            //                             readerPreview.onload = async function(e) {
 
-                                    if(image.type === 'image/png' || image.type === 'image/jpeg') {
+            //                                 if(checkError === false) {
+            //                                     await vm.$emit('changeMessageStatus', `Загрузка картинок из раздела '${otherImage.title}'  ${i + 1} из ${otherImage.info.length}...` )
 
-                                        readerPreview.onload = async function(e) {
-
-                                            if(checkError === false) {
-                                                await vm.$emit('changeMessageStatus', `Загрузка картинок из раздела '${otherImage.title}'  ${i + 1} из ${otherImage.info.length}...` )
-
-                                                data = {
-                                                    image: e.target.result,
-                                                    id: id,
-                                                    newId: newId,
-                                                    title: otherImage.info[i].title,
-                                                    index: i,
-                                                    globalIndex: k
-                                                }
+            //                                     data = {
+            //                                         image: e.target.result,
+            //                                         id: id,
+            //                                         newId: newId,
+            //                                         title: otherImage.info[i].title,
+            //                                         index: i,
+            //                                         globalIndex: k
+            //                                     }
                                                 
-                                                try {
-                                                    const responseOtherImages = await vm.$axios.$post('/api/product/create/other-images', data)
-                                                    counter++
-                                                } catch(e) {
-                                                    await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
-                                                    checkError = e
+            //                                     try {
+            //                                         const responseOtherImages = await vm.$axios.$post('/api/product/create/other-images', data)
+            //                                         counter++
+            //                                     } catch(e) {
+            //                                         await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
+            //                                         checkError = e
 
-                                                    setTimeout(() => {
-                                                        vm.$emit('overlayOffError')
-                                                    }, 1000);
+            //                                         setTimeout(() => {
+            //                                             vm.$emit('overlayOffError')
+            //                                         }, 1000);
 
-                                                    console.error('Error:', e);
-                                                }
-                                            } else {
-                                                return checkError
-                                            }
+            //                                         console.error('Error:', e);
+            //                                     }
+            //                                 } else {
+            //                                     return checkError
+            //                                 }
 
-                                        }
+            //                             }
 
-                                        await readerPreview.readAsDataURL(image);
-                                    } else {
-                                        await vm.$emit('changeMessageStatus', `При загрузке произошла ошибка! Неверный формат у '${image.name}'` )
+            //                             await readerPreview.readAsDataURL(image);
+            //                         } else {
+            //                             await vm.$emit('changeMessageStatus', `При загрузке произошла ошибка! Неверный формат у '${image.name}'` )
 
-                                        checkError = 'При загрузке произошла ошибка!'
+            //                             checkError = 'При загрузке произошла ошибка!'
 
-                                        setTimeout(() => {
-                                            vm.$emit('overlayOffError')
-                                        }, 1000);
+            //                             setTimeout(() => {
+            //                                 vm.$emit('overlayOffError')
+            //                             }, 1000);
 
-                                        console.error('Error:', checkError);
-                                    }
-                                } else {
-                                    if(checkError === false) {
+            //                             console.error('Error:', checkError);
+            //                         }
+            //                     } else {
+            //                         if(checkError === false) {
 
-                                        await vm.$emit('changeMessageStatus', `Загрузка картинок из раздела '${otherImage.title}'  ${i + 1} из ${otherImage.info.length}...` )
+            //                             await vm.$emit('changeMessageStatus', `Загрузка картинок из раздела '${otherImage.title}'  ${i + 1} из ${otherImage.info.length}...` )
                                         
-                                        data = {
-                                            image: image,
-                                            id: id,
-                                            newId: newId,
-                                            title: otherImage.info[i].title,
-                                            index: i,
-                                            globalIndex: k
-                                        }
+            //                             data = {
+            //                                 image: image,
+            //                                 id: id,
+            //                                 newId: newId,
+            //                                 title: otherImage.info[i].title,
+            //                                 index: i,
+            //                                 globalIndex: k
+            //                             }
 
-                                        try {
-                                            const responseOtherImages = await vm.$axios.$post('/api/product/create/other-images', data)
-                                            counter++
-                                        } catch(e) {
-                                            await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
-                                            checkError = e
-                                            setTimeout(() => {
-                                                vm.$emit('overlayOffError')
-                                            }, 1000);
-                                            console.error('Error:', e)
-                                        }
-                                    } else {
-                                        return checkError
-                                    }
+            //                             try {
+            //                                 const responseOtherImages = await vm.$axios.$post('/api/product/create/other-images', data)
+            //                                 counter++
+            //                             } catch(e) {
+            //                                 await vm.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
+            //                                 checkError = e
+            //                                 setTimeout(() => {
+            //                                     vm.$emit('overlayOffError')
+            //                                 }, 1000);
+            //                                 console.error('Error:', e)
+            //                             }
+            //                         } else {
+            //                             return checkError
+            //                         }
 
-                                }
-                            }
-                        } catch(e) {
-                            await this.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
-                            checkError = e
+            //                     }
+            //                 }
+            //             } catch(e) {
+            //                 await this.$emit('changeMessageStatus', 'При загрузке произошла ошибка!' )
+            //                 checkError = e
 
-                            setTimeout(() => {
-                                vm.$emit('overlayOffError')
-                            }, 1000);
+            //                 setTimeout(() => {
+            //                     vm.$emit('overlayOffError')
+            //                 }, 1000);
 
-                            console.error('Error:', e)
-                        }
+            //                 console.error('Error:', e)
+            //             }
                         
-                    } else {
-                        return checkError
-                    }
+            //         } else {
+            //             return checkError
+            //         }
                     
-                    if(k + 1 === this.otherFieldImage.length) {
+            //         if(k + 1 === this.otherFieldImage.length) {
 
-                        await vm.$emit('changeProgressValue', 100)
+            //             await vm.$emit('changeProgressValue', 100)
 
-                        await vm.$emit('changeMessageStatus', 'Загрузка завершена!' )
+            //             await vm.$emit('changeMessageStatus', 'Загрузка завершена!' )
 
-                        setTimeout(() => {
-                            vm.$emit('overlayOff')
-                        }, 1000);
+            //             setTimeout(() => {
+            //                 vm.$emit('overlayOff')
+            //             }, 1000);
                         
-                    }
+            //         }
 
-                }
+            //     }
 
                 
-            },
+            // },
         }
     }
 </script>

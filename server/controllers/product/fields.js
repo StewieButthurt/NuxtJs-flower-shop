@@ -103,13 +103,20 @@ module.exports.fields = async(req, res) => {
                             weekPrice: req.body.weekPrice,
                         }
                     })
+
+                    log.info(`Успешное обновление основной информации о товаре!'${req.body.name}', id - '${req.body.idProduct}'`);
+
+                    res.json({ product: product, message: 'Основные данные загружены!', error: 'false' })
+
                 } else {
                     await product.save()
+
+                    log.info(`Успешное добавление основной информации о товаре!'${req.body.name}'`);
+
+                    res.json({ product: product, message: 'Основные данные загружены!', error: 'false' })
                 }
 
-                log.info(`Успешное добавление основной информации о товаре!'${req.body.name}'`);
 
-                res.json({ product: product, message: 'Основные данные загружены!', error: 'false' })
             } catch (e) {
                 log.warn(`Неудачная попытка добавления основной информации о товаре '${req.body.name}'! Ошибка обращения к базе!`);
                 res.json({ message: 'При загрузке произошла ошибка! Неудалось сохранить данные в базе!', error: 'true' })
