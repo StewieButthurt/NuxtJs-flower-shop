@@ -65,8 +65,14 @@
     const AppOtherFieldInput = () => import('~/components/admin/product/main/other-field-input/index.vue')
     const AppCharacteristicsProduct = () => import('~/components/admin/product/main/characteristics-product/index.vue')
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
+    const getSnackbarStore = () => import('~/store/modules/alert/snackbar.js')
 
     export default {
+        async mounted() {
+            if(!this.$store.getters['modules/alert/snackbar/snackbar']) {
+                await this.$store.registerModule('snackbar', getSnackbarStore)
+            }
+        },
         layout: 'admin',
         head: {
             title: 'Панель администратора | Редактирование товара'
@@ -103,30 +109,43 @@
         },
         data() {
             return {
-                message: false,
-                snackbar: false,
-                text: '',
-                colorBckg: '',
-                colorBtn: ''
+                
+            }
+        },
+        computed: {
+            message() {
+                return this.$store.getters['modules/alert/snackbar/message']
+            },
+            snackbar() {
+                return this.$store.getters['modules/alert/snackbar/snackbar']
+            },
+            text() {
+                return this.$store.getters['modules/alert/snackbar/text']
+            },
+            colorBckg() {
+                return this.$store.getters['modules/alert/snackbar/colorBckg']
+            },
+            colorBtn() {
+                return this.$store.getters['modules/alert/snackbar/colorBtn']
             }
         },
         watch: {
             message(val) {
                 if(this.message === 'error type') {
-                    this.text = 'Картинка должна быть формата png или jpeg!'
-                    this.colorBtn = 'white'
-                    this.colorBckg = 'grey darken-4'
-                    this.snackbar = true
+                    this.$store.dispatch('modules/alert/snackbar/setText', 'Картинка должна быть формата png или jpeg!')
+                    this.$store.dispatch('modules/alert/snackbar/setColorBtn', 'white')
+                    this.$store.dispatch('modules/alert/snackbar/setColorBckg', 'grey darken-4')
+                    this.$store.dispatch('modules/alert/snackbar/setSnackbar', true)
                 }
             }
         },
         methods: {
             async changeSnackbar(value) {
-                this.snackbar = value
-                this.message = false
+                this.$store.dispatch('modules/alert/snackbar/setSnackbar', value)
+                this.$store.dispatch('modules/alert/snackbar/setMessage', false)
             },
             async changeMessage(value) {
-                this.message = value
+                this.$store.dispatch('modules/alert/snackbar/setMessage', value)
             }
         }
     }
