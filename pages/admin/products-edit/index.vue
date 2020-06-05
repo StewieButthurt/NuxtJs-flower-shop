@@ -87,6 +87,7 @@
     const getNewFieldsStore = () => import('~/store/modules/product/newFields.js')
     const getOtherStore = () => import('~/store/modules/product/other.js')
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
+    const getSnackbarStore = () => import('~/store/modules/alert/snackbar.js')
 
     export default {
         async mounted() {
@@ -146,6 +147,10 @@
                 await this.$store.registerModule('other', getOtherStore)
             }
 
+            if(!this.$store.getters['modules/alert/snackbar/snackbar']) {
+                await this.$store.registerModule('snackbar', getSnackbarStore)
+            }
+
             
 
         },
@@ -175,18 +180,13 @@
                 searchResult: [],
                 search: null,
                 statusMenu: true,
-                infoProduct: false,
-                message: false,
-                snackbar: false,
-                text: '',
-                colorBckg: '',
-                colorBtn: ''
+                infoProduct: false
             }
         },
         methods: {
             async changeSnackbar(value) {
-                this.snackbar = value
-                this.message = false
+                this.$store.dispatch('modules/alert/snackbar/setSnackbar', value)
+                this.$store.dispatch('modules/alert/snackbar/setMessage', false)
             }
         },
         computed: {
@@ -203,6 +203,21 @@
             },
             product() {
                 return this.$store.getters['modules/product/edit/product']
+            },
+            message() {
+                return this.$store.getters['modules/alert/snackbar/message']
+            },
+            snackbar() {
+                return this.$store.getters['modules/alert/snackbar/snackbar']
+            },
+            text() {
+                return this.$store.getters['modules/alert/snackbar/text']
+            },
+            colorBckg() {
+                return this.$store.getters['modules/alert/snackbar/colorBckg']
+            },
+            colorBtn() {
+                return this.$store.getters['modules/alert/snackbar/colorBtn']
             }
         },
         watch: {
@@ -256,10 +271,10 @@
                         .catch(function (error) {
                             if(error.response) {
                                 if(error.response.status === 429) {
-                                    vm.text = 'Превышен лимит запросов! Повторите попытку через 5 минут!'
-                                    vm.colorBtn = 'white'
-                                    vm.colorBckg = 'grey darken-4'
-                                    vm.snackbar = true
+                                    vm.$store.dispatch('modules/alert/snackbar/setText', 'Превышен лимит запросов! Повторите попытку через 5 минут!')
+                                    vm.$store.dispatch('modules/alert/snackbar/setColorBtn', 'white')
+                                    vm.$store.dispatch('modules/alert/snackbar/setColorBckg', 'grey darken-4')
+                                    vm.$store.dispatch('modules/alert/snackbar/setSnackbar', true)
                                 } else {
                                     console.log(error);
                                 }
