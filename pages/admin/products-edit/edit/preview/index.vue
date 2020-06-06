@@ -18,8 +18,6 @@
             <app-specifications />
 
             <app-buttons 
-                @resetNotifications="resetNotifications"
-                @overlayChange="overlayChange"
                 @changeProgressValue="changeProgressValue"
                 @changeMessageStatus="changeMessageStatus"
                 @changeCheckErrorForm="changeCheckErrorForm"
@@ -60,6 +58,8 @@
     const AppSpecifications = () => import('~/components/admin/product/preview/specifications/index.vue')
     const AppButtons  = () => import('~/components/admin/product/preview/buttons/index.vue')
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
+    const getSnackbarStore = () => import('~/store/modules/alert/snackbar.js')
+    const getPreviewStore = () => import('~/store/modules/product/preview/index.js')
 
 
     export default {
@@ -89,6 +89,15 @@
         },
         middleware: ['checkProductEdit'],
         async mounted() {
+
+            if(!this.$store.getters['modules/alert/snackbar/snackbar']) {
+                await this.$store.registerModule('snackbar', getSnackbarStore)
+            }
+
+            if(!this.$store.getters['modules/product/preview/progressValue']) {
+                await this.$store.registerModule('product_preview', getPreviewStore)
+            }
+
             this.img = this.images[0].previewImg
         },
         data() {
@@ -96,12 +105,6 @@
                 img: null,
                 x: '',
                 y: '',
-                text: '',
-                colorBtn: '',
-                colorBckg: '',
-                snackbar: false,
-                message: false,
-                overlay: false,
                 messageStatus: 'Начало загрузки...',
                 progressValue: 0,
                 checkErrorForm: false,
@@ -115,6 +118,21 @@
             },
             categories() {
                 return this.$store.getters['modules/product/categories/categories']
+            },
+            message() {
+                return this.$store.getters['modules/alert/snackbar/message']
+            },
+            snackbar() {
+                return this.$store.getters['modules/alert/snackbar/snackbar']
+            },
+            text() {
+                return this.$store.getters['modules/alert/snackbar/text']
+            },
+            colorBckg() {
+                return this.$store.getters['modules/alert/snackbar/colorBckg']
+            },
+            colorBtn() {
+                return this.$store.getters['modules/alert/snackbar/colorBtn']
             }
         },
         methods: {
@@ -123,13 +141,6 @@
             },
             async changeImg(image) {
                 this.img = image
-            },
-            async resetNotifications(data) {
-                this.message = data.message
-                this.snackbar = data.snackbar,
-                this.progressValue = data.progressValue,
-                this.checkErrorForm = data.checkErrorForm,
-                this.checkErrorImage = data.checkErrorImage
             },
             async changeProgressValue(value) {
                 this.progressValue = value
@@ -150,9 +161,6 @@
                 this.overlay = false
                 this.message = 'success'
                 setTimeout(this.redirectAddProduct, 2000)
-            },
-            async overlayChange(value) {
-                this.overlay = value
             },
             async redirectAddProduct() {
                 // window.location.reload(true)

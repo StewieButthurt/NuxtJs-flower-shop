@@ -102,6 +102,34 @@
                     checkErrorImage: false,
                 }
 
+                this.$store.dispatch('modules/preview/resetNotifications', data)
+
+                // show overlay
+
+                this.$store.dispatch('modules/preview/setOverlayChange', true)
+
+                //preparation data
+
+                let fields = {
+                    name: this.name,
+                    price: this.price,
+                    descr: this.descr,
+                    article: this.article,
+                    categories: this.categories,
+                    discountStatus: this.discountStatus,
+                    sizeDiscount: this.sizeDiscount,
+                    newFields: this.newFields,
+                    other: this.other,
+                    stock: this.stock,
+                    bestseller: this.bestseller,
+                    weekPrice: this.weekPrice,
+                    idProduct: this.$store.getters['modules/product/edit/product']._id ? 
+                    this.$store.getters['modules/product/edit/product']._id :
+                    false
+                }
+
+                //send form
+
             }
             // async sendData() {
                 
@@ -115,13 +143,13 @@
             //         checkErrorImage: false,
             //     }
 
-            //     this.$emit('resetNotifications', data)
+            //     this.$store.dispatch('modules/preview/resetNotifications', data)
 
                 
 
             //     // show overlay
 
-            //     this.$emit('overlayChange', true)
+            //     this.$store.dispatch('modules/preview/overlayChange', true)
 
             //     //preparation data
 
