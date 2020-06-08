@@ -107,11 +107,6 @@
             AppCharacteristicsProduct,
             AppSnackbars
         },
-        data() {
-            return {
-                
-            }
-        },
         computed: {
             message() {
                 return this.$store.getters['modules/alert/snackbar/message']

@@ -19,6 +19,11 @@
 </template>
 
 <script>
+    
+    const getSendFormStore = () => import('~/store/modules/product/send/form.js')
+    const getSendImageStore = () => import('~/store/modules/product/send/image.js')
+    const getSendOtherImageStore = () => import('~/store/modules/product/send/sendOtherImage.js')
+
     export default {
         data() {
             return {
@@ -92,21 +97,15 @@
         methods: {
             async sendData() {
 
-                // reset notifications
-                
-                let data = {
-                    message: false,
-                    snackbar: false,
-                    progressValue: 0,
-                    checkErrorForm: false,
-                    checkErrorImage: false,
-                }
+                const vm = this
 
-                this.$store.dispatch('modules/preview/resetNotifications', data)
+                // reset notification
+
+                await this.$store.dispatch('modules/product/preview/main/resetNotifications')
 
                 // show overlay
 
-                this.$store.dispatch('modules/preview/setOverlayChange', true)
+                await this.$store.dispatch('modules/product/preview/main/setOverlayChange', true)
 
                 //preparation data
 
@@ -129,6 +128,63 @@
                 }
 
                 //send form
+
+                if(!this.$store.getters['modules/product/send/form/status']) {
+                    await this.$store.registerModule('product_send_form', getSendFormStore)
+                }
+                console.log('sendForm')
+                await this.$store.dispatch('modules/product/send/form/sendForm', fields)
+                    .then(async function(id) {
+                        if(!vm.$store.getters['modules/product/send/image/status']) {
+                            await vm.$store.registerModule('product_send_image', getSendImageStore)
+                        }
+
+                        if(id) {
+                            console.log('sendImages')
+                            return await vm.$store.dispatch('modules/product/send/image/sendImages',
+                             {id, images: vm.images})
+                        } else {
+                            await vm.$store.dispatch('modules/product/preview/main/setMessageStatus',
+                            'При загрузке произошла ошибка! Попробуйте еще раз!')
+
+                            await vm.$store.dispatch('modules/product/preview/main/setCheckErrorImage',
+                            'ID не найден!')
+
+                            setTimeout(async function() {
+                                await vm.$store.dispatch('modules/product/preview/main/setOverlayChange',
+                                    false)
+                            }, 1000);
+                        }
+
+                    })
+                    .then(async function(id) {
+                        console.log('sendImages проверка')
+                        if(vm.$store.getters['modules/product/send/sendOtherImage/images'].length > 0) {
+                            console.log('sendImages')
+                            if(!vm.$store.getters['modules/product/send/sendOtherImage/status']) {
+                                await vm.$store.registerModule('product_send_other_image', getSendOtherImageStore)
+                            }
+
+                            await vm.$store.dispatch('modules/product/send/sendOtherImage/sendOtherImages', id)
+                        } else {
+                            await vm.$store.dispatch('modules/product/preview/main/setMessageStatus', 
+                            'Загрузка завершена')
+                            
+                            await vm.$store.dispatch('modules/product/preview/main/setProgressValue', 
+                            100)
+
+                            setTimeout(async function() {
+                                await vm.$store.dispatch('modules/product/preview/main/setOverlayChange',
+                                    false)
+                                
+                                await vm.$store.dispatch('modules/alert/snackbar/setMessage', 'success')
+
+                                setTimeout(async function() {
+                                    window.location.reload(true)
+                                }, 2000);
+                            }, 1000);
+                        }
+                    })
 
             }
             // async sendData() {

@@ -1,5 +1,5 @@
 const state = () => ({
-
+    status: true
 })
 
 const mutations = {
@@ -8,41 +8,59 @@ const mutations = {
 
 const actions = {
     async sendForm({ commit, dispatch }, fields) {
-
         // change loading bar value
-        await dispatch('modules/product/preview/setProgressValue', 40)
-
-        //change message status
+        await dispatch('modules/product/preview/main/setProgressValue',
+                40, { root: true })
+            //change message status
         await dispatch('modules/alert/snackbar/setMessage',
-            'Загрузка основных данных...'
+            'Загрузка основных данных...', { root: true }
         )
+        try {
+            const responseFields = await this.$axios
+                .$post('/api/product/create/fields', fields)
 
-        const responseFields = await this.$axios
-            .$post('/api/product/create/fields', fields)
+            await dispatch('modules/alert/snackbar/setMessage',
+                responseFields.message, { root: true }
+            )
 
-        await dispatch('modules/alert/snackbar/setMessage',
-            responseFields.message
-        )
+            if (responseFields.error === 'true') {
 
-        if (responseFields.error === 'true') {
+                await dispatch('modules/product/preview/main/setCheckErrorForm',
+                    true, { root: true })
 
-            await dispatch('modules/product/preview/setCheckErrorForm', true)
+                setTimeout(async function() {
+                    await dispatch('modules/product/preview/main/setOverlayChange',
+                        false, { root: true })
+                }, 1000);
 
-            setTimeout(() => {
-                vm.$emit('overlayOffError')
+                return false
+
+            } else {
+
+                await dispatch('modules/product/preview/main/setCheckErrorForm',
+                    false, { root: true })
+                let id = responseFields.product._id
+                return id
+            }
+        } catch (e) {
+            console.error('Error: Упс! Что то пошло не так!', e)
+
+            await dispatch('modules/alert/snackbar/setMessage',
+                'Упс! Что то пошло не так!', { root: true }
+            )
+
+            setTimeout(async function() {
+                await dispatch('modules/product/preview/main/setOverlayChange',
+                    false, { root: true })
             }, 1000);
-
-            return false
-        } else {
-            this.$emit('changeCheckErrorForm', false)
-            let id = responseFields.product._id
-            return id
         }
+
+
     }
 }
 
 const getters = {
-
+    status: state => state.status
 }
 
 

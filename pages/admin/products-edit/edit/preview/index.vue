@@ -17,14 +17,7 @@
 
             <app-specifications />
 
-            <app-buttons 
-                @changeProgressValue="changeProgressValue"
-                @changeMessageStatus="changeMessageStatus"
-                @changeCheckErrorForm="changeCheckErrorForm"
-                @changeCheckErrorImage="changeCheckErrorImage"
-                @overlayOffError="overlayOffError"
-                @overlayOff="overlayOff"
-            />
+            <app-buttons />
 
             <app-snackbars 
                 :snackbar="snackbar"
@@ -59,7 +52,7 @@
     const AppButtons  = () => import('~/components/admin/product/preview/buttons/index.vue')
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
     const getSnackbarStore = () => import('~/store/modules/alert/snackbar.js')
-    const getPreviewStore = () => import('~/store/modules/product/preview/index.js')
+    const getPreviewStore = () => import('~/store/modules/product/preview/main.js')
 
 
     export default {
@@ -94,7 +87,7 @@
                 await this.$store.registerModule('snackbar', getSnackbarStore)
             }
 
-            if(!this.$store.getters['modules/product/preview/progressValue']) {
+            if(!this.$store.getters['modules/product/preview/main/progressValue']) {
                 await this.$store.registerModule('product_preview', getPreviewStore)
             }
 
@@ -104,12 +97,7 @@
             return {
                 img: null,
                 x: '',
-                y: '',
-                messageStatus: 'Начало загрузки...',
-                progressValue: 0,
-                checkErrorForm: false,
-                checkErrorImage: false,
-
+                y: ''
             }
         },
         computed: {
@@ -133,6 +121,15 @@
             },
             colorBtn() {
                 return this.$store.getters['modules/alert/snackbar/colorBtn']
+            },
+            progressValue() {
+                return this.$store.getters['modules/product/preview/main/progressValue']
+            },
+            messageStatus() {
+                return this.$store.getters['modules/product/preview/main/messageStatus']
+            },
+            overlay() {
+                return this.$store.getters['modules/product/preview/main/overlay']
             }
         },
         methods: {
@@ -142,45 +139,38 @@
             async changeImg(image) {
                 this.img = image
             },
-            async changeProgressValue(value) {
-                this.progressValue = value
-            },
-            async changeMessageStatus(value) {
-                this.messageStatus = value
-            },
-            async changeCheckErrorForm(value) {
-                this.checkErrorForm = value
-            },
-            async changeCheckErrorImage(value) {
-                this.checkErrorImage = value
-            },
-            async overlayOffError() {
-                this.overlay = false
-            },
-            async overlayOff() {
-                this.overlay = false
-                this.message = 'success'
-                setTimeout(this.redirectAddProduct, 2000)
-            },
-            async redirectAddProduct() {
+            // async overlayOff() {
+            //     this.overlay = false
+            //     this.message = 'success'
+            //     setTimeout(this.redirectAddProduct, 2000)
+            // },
+            // async redirectAddProduct() {
                 // window.location.reload(true)
-            },
+            // },
             async changeSnackbar(value) {
-                this.snackbar = value
+                this.$store.dispatch('modules/alert/snackbar/setSnackbar', value)
             },
         },
         watch: {
             message(val) {
                 if(val === 'success') {
-                    this.text = 'Товар добавлен! Переадресация...'
-                    this.colorBtn = 'white'
-                    this.colorBckg = 'grey darken-4'
-                    this.snackbar = true
+                    this.$store.dispatch('modules/alert/snackbar/setText',
+                     'Товар добавлен! Переадресация...')
+                    this.$store.dispatch('modules/alert/snackbar/setColorBtn',
+                     'white')
+                    this.$store.dispatch('modules/alert/snackbar/setColorBckg',
+                     'grey darken-4')
+                    this.$store.dispatch('modules/alert/snackbar/setSnackbar',
+                     true)
                 } else if(val === 'error'){
-                    this.text = 'Упс! Что то пошло не так!'
-                    this.colorBtn = 'white'
-                    this.colorBckg = 'grey darken-4'
-                    this.snackbar = true
+                    this.$store.dispatch('modules/alert/snackbar/setText',
+                     'Упс! Что то пошло не так!')
+                     this.$store.dispatch('modules/alert/snackbar/setColorBtn',
+                     'white')
+                    this.$store.dispatch('modules/alert/snackbar/setColorBckg',
+                     'grey darken-4')
+                    this.$store.dispatch('modules/alert/snackbar/setSnackbar',
+                     true)
                 }
             }
         }

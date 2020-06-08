@@ -17,16 +17,7 @@
 
             <app-specifications />
 
-            <app-buttons 
-                @resetNotifications="resetNotifications"
-                @overlayChange="overlayChange"
-                @changeProgressValue="changeProgressValue"
-                @changeMessageStatus="changeMessageStatus"
-                @changeCheckErrorForm="changeCheckErrorForm"
-                @changeCheckErrorImage="changeCheckErrorImage"
-                @overlayOffError="overlayOffError"
-                @overlayOff="overlayOff"
-            />
+            <app-buttons />
 
             <app-snackbars 
                 :snackbar="snackbar"
@@ -60,6 +51,8 @@
     const AppSpecifications = () => import('~/components/admin/product/preview/specifications/index.vue')
     const AppButtons  = () => import('~/components/admin/product/preview/buttons/index.vue')
     const AppSnackbars = () => import('~/components/alerts/snackbar-http/index.vue')
+    const getSnackbarStore = () => import('~/store/modules/alert/snackbar.js')
+    const getPreviewStore = () => import('~/store/modules/product/preview/main.js')
 
 
     export default {
@@ -89,24 +82,21 @@
         },
         middleware: 'checkProductAdd',
         async mounted() {
+            if(!this.$store.getters['modules/alert/snackbar/snackbar']) {
+                await this.$store.registerModule('snackbar', getSnackbarStore)
+            }
+
+            if(!this.$store.getters['modules/product/preview/main/progressValue']) {
+                await this.$store.registerModule('product_preview', getPreviewStore)
+            }
+
             this.img = this.images[0].previewImg
         },
         data() {
             return {
                 img: null,
                 x: '',
-                y: '',
-                text: '',
-                colorBtn: '',
-                colorBckg: '',
-                snackbar: false,
-                message: false,
-                overlay: false,
-                messageStatus: 'Начало загрузки...',
-                progressValue: 0,
-                checkErrorForm: false,
-                checkErrorImage: false,
-
+                y: ''
             }
         },
         computed: {
@@ -115,6 +105,30 @@
             },
             categories() {
                 return this.$store.getters['modules/product/categories/categories']
+            },
+            message() {
+                return this.$store.getters['modules/alert/snackbar/message']
+            },
+            snackbar() {
+                return this.$store.getters['modules/alert/snackbar/snackbar']
+            },
+            text() {
+                return this.$store.getters['modules/alert/snackbar/text']
+            },
+            colorBckg() {
+                return this.$store.getters['modules/alert/snackbar/colorBckg']
+            },
+            colorBtn() {
+                return this.$store.getters['modules/alert/snackbar/colorBtn']
+            },
+            progressValue() {
+                return this.$store.getters['modules/product/preview/main/progressValue']
+            },
+            messageStatus() {
+                return this.$store.getters['modules/product/preview/main/messageStatus']
+            },
+            overlay() {
+                return this.$store.getters['modules/product/preview/main/overlay']
             }
         },
         methods: {
@@ -124,55 +138,38 @@
             async changeImg(image) {
                 this.img = image
             },
-            async resetNotifications(data) {
-                this.message = data.message
-                this.snackbar = data.snackbar,
-                this.progressValue = data.progressValue,
-                this.checkErrorForm = data.checkErrorForm,
-                this.checkErrorImage = data.checkErrorImage
-            },
-            async changeProgressValue(value) {
-                this.progressValue = value
-            },
-            async changeMessageStatus(value) {
-                this.messageStatus = value
-            },
-            async changeCheckErrorForm(value) {
-                this.checkErrorForm = value
-            },
-            async changeCheckErrorImage(value) {
-                this.checkErrorImage = value
-            },
-            async overlayOffError() {
-                this.overlay = false
-            },
-            async overlayOff() {
-                this.overlay = false
-                this.message = 'success'
-                setTimeout(this.redirectAddProduct, 2000)
-            },
-            async overlayChange(value) {
-                this.overlay = value
-            },
-            async redirectAddProduct() {
-                window.location.reload(true)
-            },
+            // async overlayOff() {
+            //     this.overlay = false
+            //     this.message = 'success'
+            //     setTimeout(this.redirectAddProduct, 2000)
+            // },
+            // async redirectAddProduct() {
+            //     window.location.reload(true)
+            // },
             async changeSnackbar(value) {
-                this.snackbar = value
+                this.$store.dispatch('modules/alert/snackbar/setSnackbar', value)
             },
         },
         watch: {
             message(val) {
                 if(val === 'success') {
-                    this.text = 'Товар добавлен! Переадресация...'
-                    this.colorBtn = 'white'
-                    this.colorBckg = 'grey darken-4'
-                    this.snackbar = true
+                    this.$store.dispatch('modules/alert/snackbar/setText',
+                     'Товар добавлен! Переадресация...')
+                    this.$store.dispatch('modules/alert/snackbar/setColorBtn',
+                     'white')
+                    this.$store.dispatch('modules/alert/snackbar/setColorBckg',
+                     'grey darken-4')
+                    this.$store.dispatch('modules/alert/snackbar/setSnackbar',
+                     true)
                 } else if(val === 'error'){
-                    this.text = 'Упс! Что то пошло не так!'
-                    this.colorBtn = 'white'
-                    this.colorBckg = 'grey darken-4'
-                    this.snackbar = true
+                    this.$store.dispatch('modules/alert/snackbar/setText',
+                     'Упс! Что то пошло не так!')
+                     this.$store.dispatch('modules/alert/snackbar/setColorBtn',
+                     'white')
+                    this.$store.dispatch('modules/alert/snackbar/setColorBckg',
+                     'grey darken-4')
+                    this.$store.dispatch('modules/alert/snackbar/setSnackbar',
+                     true)
                 }
             }
         }
