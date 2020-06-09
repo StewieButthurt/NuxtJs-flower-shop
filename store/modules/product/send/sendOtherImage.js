@@ -54,10 +54,6 @@ const actions = {
                     const responseProductId = await this.$axios.
                     $get('/api/product/get-product-id', { params: { id: id } })
 
-                    console.log(responseProductId)
-                    console.log(responseProductId.otherFieldImage[i])
-                    console.log(responseProductId.otherFieldImage[i]._id)
-
                     await commit('setNewId', responseProductId.otherFieldImage[i]._id)
 
                     for (let k = 0; k < images[i].info.length; k++) {
@@ -67,26 +63,33 @@ const actions = {
 
                             if (image.type === 'image/png' || image.type === 'image/jpeg') {
 
-                                await dispatch('modules/product/preview/toBase64/toBase64',
-                                    image, { root: true })
-
-                                image = await rootGetters['modules/product/preview/toBase64/image']
-
                                 await dispatch('modules/product/preview/main/setMessageStatus',
                                     `Загрузка картинок из раздела '${images[i].title}'  
-                                ${i + 1} из ${images[i].info.length}...`, { root: true })
+                                ${k + 1} из ${images[i].info.length}...`, { root: true })
 
-                                data = {
-                                    image: image,
-                                    id: id,
-                                    newId: await getters['newId'],
-                                    title: images[i].info[k].title,
-                                    index: k,
-                                    globalIndex: i
-                                }
+                                await new Promise(async(resolve, reject) => {
 
-                                const responseOtherImages = await this.$axios
-                                    .$post('/api/product/create/other-images', data)
+                                        const readerPreview = new FileReader();
+
+                                        readerPreview.onload = async(e) => {
+                                            resolve(e.target.result)
+                                        }
+
+                                        readerPreview.readAsDataURL(image);
+                                    })
+                                    .then(async(image) => {
+                                        data = {
+                                            image: image,
+                                            id: id,
+                                            newId: await getters['newId'],
+                                            title: images[i].info[k].title,
+                                            index: k,
+                                            globalIndex: i
+                                        }
+
+                                        const responseOtherImages = await this.$axios
+                                            .$post('/api/product/create/other-images', data)
+                                    })
 
                                 await commit('counterIncrement')
                             }
@@ -95,7 +98,7 @@ const actions = {
                             if (!getters['errors']) {
                                 await dispatch('modules/product/preview/main/setMessageStatus',
                                     `Загрузка картинок из раздела '${images[i].title}'  
-                                ${i + 1} из ${images[i].info.length}...`, { root: true })
+                                ${k + 1} из ${images[i].info.length}...`, { root: true })
 
                                 data = {
                                     image: image,

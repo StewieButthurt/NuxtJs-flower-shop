@@ -21,6 +21,7 @@ const mutations = {
         state.overlay = value
     },
     setMessageStatus(state, value) {
+        console.log(value)
         state.messageStatus = value
     },
     setCounterImage(state, value) {

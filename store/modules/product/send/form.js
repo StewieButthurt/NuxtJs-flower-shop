@@ -8,18 +8,22 @@ const mutations = {
 
 const actions = {
     async sendForm({ commit, dispatch }, fields) {
-        // change loading bar value
-        await dispatch('modules/product/preview/main/setProgressValue',
-                40, { root: true })
-            //change message status
-        await dispatch('modules/alert/snackbar/setMessage',
+
+        //change message status
+        await dispatch('modules/product/preview/main/setMessageStatus',
             'Загрузка основных данных...', { root: true }
         )
+
+        // change loading bar value
+        await dispatch('modules/product/preview/main/setProgressValue',
+            40, { root: true })
+
+
         try {
             const responseFields = await this.$axios
                 .$post('/api/product/create/fields', fields)
 
-            await dispatch('modules/alert/snackbar/setMessage',
+            await dispatch('modules/product/preview/main/setMessageStatus',
                 responseFields.message, { root: true }
             )
 
@@ -45,7 +49,7 @@ const actions = {
         } catch (e) {
             console.error('Error: Упс! Что то пошло не так!', e)
 
-            await dispatch('modules/alert/snackbar/setMessage',
+            await dispatch('modules/product/preview/main/setMessageStatus',
                 'Упс! Что то пошло не так!', { root: true }
             )
 

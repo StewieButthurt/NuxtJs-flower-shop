@@ -122,68 +122,79 @@
                     stock: this.stock,
                     bestseller: this.bestseller,
                     weekPrice: this.weekPrice,
-                    idProduct: this.$store.getters['modules/product/edit/product']._id ? 
+                    idProduct: this.$store.getters['modules/product/edit/product'] ? 
                     this.$store.getters['modules/product/edit/product']._id :
                     false
                 }
 
                 //send form
 
-                if(!this.$store.getters['modules/product/send/form/status']) {
+                if(await !this.$store.getters['modules/product/send/form/status']) {
                     await this.$store.registerModule('product_send_form', getSendFormStore)
                 }
                 console.log('sendForm')
                 await this.$store.dispatch('modules/product/send/form/sendForm', fields)
-                    .then(async function(id) {
-                        if(!vm.$store.getters['modules/product/send/image/status']) {
-                            await vm.$store.registerModule('product_send_image', getSendImageStore)
+                    .then(async (id) => {
+                        if(!this.$store.getters['modules/product/send/image/status']) {
+                            await this.$store.registerModule('product_send_image', getSendImageStore)
                         }
 
+                        return id
+                    }) 
+                    .then(async (id) => {
                         if(id) {
                             console.log('sendImages')
-                            return await vm.$store.dispatch('modules/product/send/image/sendImages',
-                             {id, images: vm.images})
+                            const sendImages = await this.$store.dispatch('modules/product/send/image/sendImages',
+                            id)
+
+                            if(sendImages) {
+                                return sendImages
+                            }
+
                         } else {
-                            await vm.$store.dispatch('modules/product/preview/main/setMessageStatus',
+                            await this.$store.dispatch('modules/product/preview/main/setMessageStatus',
                             'При загрузке произошла ошибка! Попробуйте еще раз!')
 
-                            await vm.$store.dispatch('modules/product/preview/main/setCheckErrorImage',
+                            await this.$store.dispatch('modules/product/preview/main/setCheckErrorImage',
                             'ID не найден!')
 
-                            setTimeout(async function() {
-                                await vm.$store.dispatch('modules/product/preview/main/setOverlayChange',
+                            setTimeout(async () => {
+                                await this.$store.dispatch('modules/product/preview/main/setOverlayChange',
                                     false)
                             }, 1000);
                         }
-
                     })
-                    .then(async function(id) {
+                    .then(async (id) => {
                         console.log('sendImages проверка')
-                        if(vm.$store.getters['modules/product/send/sendOtherImage/images'].length > 0) {
-                            console.log('sendImages')
-                            if(!vm.$store.getters['modules/product/send/sendOtherImage/status']) {
-                                await vm.$store.registerModule('product_send_other_image', getSendOtherImageStore)
+                        console.log(id)
+                        if(this.$store.getters['modules/product/otherFieldImages/otherFieldImage'].length > 0) {
+                            console.log('sendOtherImage')
+                            if(await !this.$store.getters['modules/product/send/sendOtherImage/status']) {
+                                await this.$store.registerModule('product_send_other_image', getSendOtherImageStore)
                             }
 
-                            await vm.$store.dispatch('modules/product/send/sendOtherImage/sendOtherImages', id)
+                            await this.$store.dispatch('modules/product/send/sendOtherImage/sendOtherImages', id)
                         } else {
-                            await vm.$store.dispatch('modules/product/preview/main/setMessageStatus', 
+                            await this.$store.dispatch('modules/product/preview/main/setMessageStatus', 
                             'Загрузка завершена')
                             
-                            await vm.$store.dispatch('modules/product/preview/main/setProgressValue', 
+                            await this.$store.dispatch('modules/product/preview/main/setProgressValue', 
                             100)
 
-                            setTimeout(async function() {
-                                await vm.$store.dispatch('modules/product/preview/main/setOverlayChange',
+                            setTimeout(async () => {
+                                await this.$store.dispatch('modules/product/preview/main/setOverlayChange',
                                     false)
                                 
-                                await vm.$store.dispatch('modules/alert/snackbar/setMessage', 'success')
+                                await this.$store.dispatch('modules/alert/snackbar/setMessage', 'success')
 
-                                setTimeout(async function() {
-                                    window.location.reload(true)
+                                setTimeout(async () => {
+                                    // window.location.reload(true)
                                 }, 2000);
                             }, 1000);
                         }
+                    })
+                    .catch(async (e) => {
+                        console.error(e)
                     })
 
             }
