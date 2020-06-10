@@ -9,22 +9,41 @@ const log = SimpleNodeLogger.createSimpleLogger(opts);
 
 module.exports.otherImagesTitle = async(req, res) => {
     if (typeof(req.body.title) === 'string' &&
-        typeof(req.body.id) === 'string'
+        typeof(req.body.id) === 'string' &&
+        typeof(req.body.index) === 'number'
     ) {
 
         let title = req.body.title
 
         try {
-            const product = await Product.updateOne({ _id: req.body.id }, {
-                $push: {
+            if (req.body.index === 0) {
+
+                const product = await Product.updateOne({ _id: req.body.id }, {
+
                     otherFieldImage: {
                         info: [],
                         title: title
                     }
-                }
-            })
-            log.info(`Успешное добавление раздела с доп.картинками для товара '${req.body.id}'!`);
-            res.json(product)
+                })
+
+                log.info(`Успешное добавление раздела с доп.картинками для товара '${req.body.id}'!`);
+                res.json(product)
+
+            } else {
+                const product = await Product.updateOne({ _id: req.body.id }, {
+                    $push: {
+                        otherFieldImage: {
+                            info: [],
+                            title: title
+                        }
+                    }
+                })
+
+                log.info(`Успешное добавление раздела с доп.картинками для товара '${req.body.id}'!`);
+                res.json(product)
+
+            }
+
 
         } catch (e) {
             log.warn(`Неудачная попытка добавления раздела с доп.картинками для товара '${req.body.id}'!`);

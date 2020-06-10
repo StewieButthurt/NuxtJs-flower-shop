@@ -40,7 +40,8 @@ const actions = {
 
             let data = {
                 id: id,
-                title: images[i].title
+                title: images[i].title,
+                index: i
             }
 
             if (!getters['errors']) {
@@ -51,8 +52,13 @@ const actions = {
                     await dispatch('modules/product/preview/main/setMessageStatus',
                         'Подготовка загрузки дополнительных изображений...', { root: true })
 
+                    console.log('id в sendOtherImages', id)
                     const responseProductId = await this.$axios.
                     $get('/api/product/get-product-id', { params: { id: id } })
+
+                    console.log('возвращаемое id', responseProductId)
+                    console.log(responseProductId.otherFieldImage[i])
+                    console.log(responseProductId.otherFieldImage[i]._id)
 
                     await commit('setNewId', responseProductId.otherFieldImage[i]._id)
 

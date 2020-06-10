@@ -48,24 +48,6 @@
 
                 await this.$store.dispatch('modules/product/images/setImages', index)
 
-                let counter = 0
-
-                for(let i = 0; i < this.images.length; i++) {
-                    if(this.images[i].previewImg) {
-                        counter++
-                    }
-                }
-
-                if(counter === this.images.length) {
-                    
-                    let newData = {
-                        file: false,
-                        previewImg: false
-                    }
-
-                    this.$store.dispatch('modules/product/images/setImageField', newData)
-                
-                }
             },
             async addImageFilePond({file, previewImg, index}) {
 
@@ -76,24 +58,6 @@
 
                 await this.$store.dispatch('modules/product/images/updateDataImage', {data, index})
 
-                let counter = 0
-
-                for(let i = 0; i < this.images.length; i++) {
-                    if(this.images[i].previewImg) {
-                        counter++
-                    }
-                }
-
-                if(this.images.length < 6 && this.images.length === counter) {
-
-                    let newData = {
-                        file: false,
-                        previewImg: false
-                    }
-
-                    this.$store.dispatch('modules/product/images/setImageField', newData)
-
-                }
             }
         }
     }

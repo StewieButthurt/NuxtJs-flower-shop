@@ -26,8 +26,7 @@ module.exports.otherImages = async(req, res) => {
         let index = req.body.index
         let globalIndex = req.body.globalIndex
         let title = req.body.title
-        let mypath = `./assets/${id}/${newId}`
-        let createmyfile = `./assets/${id}/${newId}/img-${index + 1}.png`
+        let mypath = `./assets/${id}/folder-${globalIndex + 1}`
         let url
 
         if (image.indexOf(',', 0) !== -1) {
@@ -56,31 +55,49 @@ module.exports.otherImages = async(req, res) => {
 
 
             async function newWriteFile() {
-                fsExtra.writeFile(`./assets/${id}/${newId}/img-${index + 1}.png`, image, 'base64', async function(err) {
+                fsExtra.writeFile(`./assets/${id}/folder-${globalIndex + 1}/img-${index + 1}.png`, image, 'base64', async function(err) {
                     if (err) {
                         throw err;
                     } else {
-                        url = `${id}/${newId}/img-${index + 1}.png`
-
+                        url = `${id}/folder-${globalIndex + 1}/img-${index + 1}.png`
 
                         try {
-                            const product = await Product.updateOne({
-                                _id: req.body.id,
-                                'otherFieldImage._id': newId
-                            }, {
-                                $push: {
+                            if (index === 0) {
+                                const product = await Product.updateOne({
+                                    _id: req.body.id,
+                                    'otherFieldImage._id': newId
+                                }, {
                                     'otherFieldImage.$.info': {
                                         "image": {
                                             "previewImg": `${url}`
                                         },
                                         "title": `${title}`
                                     }
-                                }
-                            })
+                                })
 
-                            log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
+                                log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
 
-                            res.json(product)
+                                res.json(product)
+                            } else {
+
+                                const product = await Product.updateOne({
+                                    _id: req.body.id,
+                                    'otherFieldImage._id': newId
+                                }, {
+                                    $push: {
+                                        'otherFieldImage.$.info': {
+                                            "image": {
+                                                "previewImg": `${url}`
+                                            },
+                                            "title": `${title}`
+                                        }
+                                    }
+                                })
+
+                                log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
+
+                                res.json(product)
+                            }
 
                         } catch (e) {
                             log.warn(`Неудачная попытка добавления дополнительной картинки для товара '${req.body.id}'!`);
@@ -93,23 +110,45 @@ module.exports.otherImages = async(req, res) => {
         } else {
 
             try {
-                const product = await Product.updateOne({
-                    _id: req.body.id,
-                    'otherFieldImage._id': newId
-                }, {
-                    $push: {
+
+                if (index === 0) {
+
+                    const product = await Product.updateOne({
+                        _id: req.body.id,
+                        'otherFieldImage._id': newId
+                    }, {
                         'otherFieldImage.$.info': {
                             "image": {
                                 "previewImg": `${image}`
                             },
                             "title": `${title}`
                         }
-                    }
-                })
+                    })
 
-                log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
+                    log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
 
-                res.json(product)
+                    res.json(product)
+
+                } else {
+
+                    const product = await Product.updateOne({
+                        _id: req.body.id,
+                        'otherFieldImage._id': newId
+                    }, {
+                        $push: {
+                            'otherFieldImage.$.info': {
+                                "image": {
+                                    "previewImg": `${image}`
+                                },
+                                "title": `${title}`
+                            }
+                        }
+                    })
+
+                    log.info(`Успешное добавление дополнительной картинки для товара '${req.body.id}'!`);
+
+                    res.json(product)
+                }
 
             } catch (e) {
                 log.warn(`Неудачная попытка добавления дополнительной картинки для товара '${req.body.id}'!`);

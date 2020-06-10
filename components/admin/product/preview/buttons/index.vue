@@ -148,7 +148,8 @@
                             id)
 
                             if(sendImages) {
-                                return sendImages
+                                console.log('images arfter request', sendImages)
+                                return id
                             }
 
                         } else {
@@ -182,13 +183,15 @@
                             100)
 
                             setTimeout(async () => {
+                                console.log('set timeout after 1s')
                                 await this.$store.dispatch('modules/product/preview/main/setOverlayChange',
                                     false)
                                 
                                 await this.$store.dispatch('modules/alert/snackbar/setMessage', 'success')
 
-                                setTimeout(async () => {
-                                    // window.location.reload(true)
+                                setTimeout(() => {
+                                    console.log('set timeout after 2s')
+                                    window.location.reload(true)
                                 }, 2000);
                             }, 1000);
                         }

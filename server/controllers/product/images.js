@@ -15,8 +15,7 @@ module.exports.images = async(req, res) => {
 
     if (typeof(req.body.image) === 'string' &&
         typeof(req.body.id) === 'string' &&
-        (typeof(req.body.index) === 'string' ||
-            typeof(req.body.index) === 'number')
+        (typeof(req.body.index) === 'number')
     ) {
 
         let image = req.body.image
@@ -60,15 +59,29 @@ module.exports.images = async(req, res) => {
                         url = `${id}/img-${index + 1}.png`
 
                         try {
-                            const product = await Product.updateOne({ _id: req.body.id }, {
-                                $push: {
+                            if (index === 0) {
+                                const product = await Product.updateOne({ _id: req.body.id }, {
                                     images: {
                                         previewImg: url
                                     }
-                                }
-                            })
-                            log.info(`Успешное добавление картинки для товара '${req.body.id}'!`);
-                            res.json(product)
+                                })
+
+                                log.info(`Успешное добавление картинки для товара '${req.body.id}'!`);
+                                res.json(product)
+                            } else {
+                                const product = await Product.updateOne({ _id: req.body.id }, {
+                                    $push: {
+                                        images: {
+                                            previewImg: url
+                                        }
+                                    }
+                                })
+
+                                log.info(`Успешное добавление картинки для товара '${req.body.id}'!`);
+                                res.json(product)
+                            }
+
+
 
                         } catch (e) {
                             log.warn(`Неудачная попытка добавления картинки для товара '${req.body.id}'!`);
@@ -80,16 +93,27 @@ module.exports.images = async(req, res) => {
             }
         } else {
             try {
-                console.log('Product.updateOne')
-                const product = await Product.updateOne({ _id: req.body.id }, {
-                    $push: {
+                if (index === 0) {
+                    let product = await Product.updateOne({ _id: req.body.id }, {
                         images: {
                             previewImg: image
                         }
-                    }
-                })
-                log.info(`Успешное добавление картинки для товара '${req.body.id}'!`);
-                res.json(product)
+                    })
+
+                    log.info(`Успешное добавление картинки для товара '${req.body.id}'!`);
+                    res.json(product)
+                } else {
+                    const product = await Product.updateOne({ _id: req.body.id }, {
+                        $push: {
+                            images: {
+                                previewImg: image
+                            }
+                        }
+                    })
+                    log.info(`Успешное добавление картинки для товара '${req.body.id}'!`);
+                    res.json(product)
+                }
+
 
             } catch (e) {
                 log.warn(`Неудачная попытка добавления картинки для товара '${req.body.id}'!`);

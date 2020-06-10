@@ -106,7 +106,7 @@ module.exports.fields = async(req, res) => {
 
                     log.info(`Успешное обновление основной информации о товаре!'${req.body.name}', id - '${req.body.idProduct}'`);
 
-                    res.json({ product: product, message: 'Основные данные загружены!', error: 'false' })
+                    res.json({ product: { _id: req.body.idProduct }, message: 'Основные данные загружены!', error: 'false' })
 
                 } else {
                     await product.save()

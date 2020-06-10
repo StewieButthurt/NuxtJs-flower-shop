@@ -44,6 +44,7 @@ const actions = {
                 await dispatch('modules/product/preview/main/setCheckErrorForm',
                     false, { root: true })
                 let id = responseFields.product._id
+                console.log('id after fields request', responseFields.product._id)
                 return id
             }
         } catch (e) {
