@@ -34,17 +34,22 @@ export default {
     ]
   },
   async fetch ({ store, $axios}) {
-    store.registerModule('categories', getCategoriesStore)
-    store.registerModule('menu', getMenuStore)
-
-    if(store.getters['modules/main-page/menu/menu'].length === 0) {
-      let menu = await $axios.$get('/api/menu')
-      store.commit('modules/main-page/menu/set', menu)
+    if(!store.getters['modules/main-page/categories/categories']) {
+       store.registerModule('categories', getCategoriesStore)
     }
 
-    if(store.getters['modules/main-page/categories/categories'].length === 0) {
+    if(!store.getters['modules/main-page/menu/menuMainPage']) {
+      store.registerModule('menu', getMenuStore)
+    }
+
+    if(store.getters['modules/main-page/menu/menuMainPage']) {
+      let menu = await $axios.$get('/api/menu')
+      await store.commit('modules/main-page/menu/setMenuMainPage', menu)
+    }
+
+    if(store.getters['modules/main-page/categories/categories']) {
       let categories = await $axios.$get('/api/categories')
-      store.commit('modules/main-page/categories/set', categories)
+      await store.commit('modules/main-page/categories/setCategories', categories)
     }
   }
 }

@@ -48,6 +48,8 @@ const AppCallBar = () => import('~/components/layouts/default/call-app-bar/index
 const AppLogoBar = () => import('~/components/layouts/default/logo-app-bar/index.vue')
 const AppSearchBar = () => import('~/components/layouts/default/search-app-bar/index.vue')
 const AppLinksCategoriesBar = () => import('~/components/layouts/default/links-categories-bar/index.vue')
+const getCategoriesStore = () => import('~/store/modules/main-page/categories.js')
+const getMenuStore = () => import('~/store/modules/main-page/menu.js')
 
 
 export default {
@@ -80,10 +82,15 @@ export default {
   },
   computed: {
     menu() {
-      return this.$store.getters['modules/main-page/menu/menu']
+      if(this.$store.getters['modules/main-page/menu/menuMainPage']) {
+        return this.$store.getters['modules/main-page/menu/menuMainPage']
+      }
+      
     },
     categories() {
-      return this.$store.getters['modules/main-page/categories/categories']
+      if(this.$store.getters['modules/main-page/categories/categories']) {
+        return this.$store.getters['modules/main-page/categories/categories']
+      }
     }
   }
 }

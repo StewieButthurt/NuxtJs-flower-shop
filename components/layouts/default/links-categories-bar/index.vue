@@ -29,9 +29,6 @@
                 max-height="300px"
             >
                 <template v-slot:activator="{ on }">
-                <!-- <v-btn icon v-on="on">
-                    <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn> -->
                 <div v-on="on" v-show="falseCategoriesLinks.length !== 0" class="links-categories-bar__link-more mt-1"> >> </div>
                 </template>
         

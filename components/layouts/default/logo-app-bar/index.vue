@@ -32,6 +32,7 @@
             transition="slide-y-transition"
             max-height="300px"
             v-show="falseMaimLinks.length !== 0"
+            
           >
             <template v-slot:activator="{ on }">
               <div v-on="on" v-show="falseMaimLinks.length !== 0" class="layout-default__link-more"> >> </div>
@@ -56,35 +57,35 @@
     const AppMainLinks = () => import('~/components/layouts/default/logo-app-bar/main-links.vue')
 
     export default {
-        data() {
-            return {
-                globalIndex: false,
-            }
-        },
-        props: [
-            'menu',
-            'windowSize'
-        ],
-        methods: {
-            async changeIndex(index) {
-                this.globalIndex = index
-            },
-        },
-        computed: {
-            falseMaimLinks() {
-                let arr = [];
-                for(let i = 0; i < this.menu.length; i++) {
-                    if(this.menu[i].status === false) {
-                    arr.push(this.menu[i])
-                    }
-                }
+      data() {
+          return {
+              globalIndex: false,
+          }
+      },
+      props: [
+          'menu',
+          'windowSize'
+      ],
+      methods: {
+          async changeIndex(index) {
+              this.globalIndex = index
+          },
+      },
+      computed: {
+          falseMaimLinks() {
+              let arr = [];
+              for(let i = 0; i < this.menu.length; i++) {
+                  if(this.menu[i].status === false) {
+                  arr.push(this.menu[i])
+                  }
+              }
 
-                return arr
-            }
-        },
-        components: {
-            AppMainLinks
-        }
+              return arr
+          }
+      },
+      components: {
+          AppMainLinks
+      }
     }
 </script>
 

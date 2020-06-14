@@ -6,7 +6,7 @@ const mutations = {
     changeStatus(state, { status, index }) {
         state.categories[index].status = status
     },
-    set(state, categories) {
+    setCategories(state, categories) {
         state.categories = categories
     }
 }
@@ -14,6 +14,9 @@ const mutations = {
 const actions = {
     async changeStatus({ commit }, { status, index }) {
         commit('changeStatus', { status, index })
+    },
+    async setCategories(state, categories) {
+        commit('setCategories', categories)
     }
 }
 
