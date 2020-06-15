@@ -90,7 +90,6 @@ app.use('/api/product', productRoutes)
 app.use('/api/menu', menuRoutes)
 app.use('/api/categories', categoriesRoutes)
 
-
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
 config.dev = process.env.NODE_ENV !== 'production'

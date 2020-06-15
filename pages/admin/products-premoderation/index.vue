@@ -1,6 +1,14 @@
 <template>
-    <div>
-
+    <div class="premoderation-page">
+        <v-container fluid align-center>
+            <v-row>
+                <v-col >
+                    <div class="font-weight-bold title text-center">
+                        Премодерация товаров
+                    </div>
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
 </template>
 

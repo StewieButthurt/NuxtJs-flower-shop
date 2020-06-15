@@ -26,6 +26,7 @@ module.exports.fields = async(req, res) => {
             typeof(req.body.stock) === 'boolean' &&
             typeof(req.body.bestseller) === 'boolean' &&
             typeof(req.body.weekPrice) === 'boolean' &&
+            typeof(req.body.moderationStatus) === 'boolean' &&
             (typeof(req.body.idProduct) === 'string' ||
                 typeof(req.body.idProduct) === 'boolean')
         ) {
@@ -83,6 +84,7 @@ module.exports.fields = async(req, res) => {
                 stock: req.body.stock,
                 bestseller: req.body.bestseller,
                 weekPrice: req.body.weekPrice,
+                moderationStatus: req.body.moderationStatus
             })
 
             try {
@@ -101,6 +103,7 @@ module.exports.fields = async(req, res) => {
                             stock: req.body.stock,
                             bestseller: req.body.bestseller,
                             weekPrice: req.body.weekPrice,
+                            moderationStatus: req.body.moderationStatus
                         }
                     })
 

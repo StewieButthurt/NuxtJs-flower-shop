@@ -122,6 +122,7 @@
                     stock: this.stock,
                     bestseller: this.bestseller,
                     weekPrice: this.weekPrice,
+                    moderationStatus: false,
                     idProduct: this.$store.getters['modules/product/edit/product'] ? 
                     this.$store.getters['modules/product/edit/product']._id :
                     false
