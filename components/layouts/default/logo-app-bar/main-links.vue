@@ -38,7 +38,7 @@
             'x'
         ],
         computed: {
-            absolutePatchStatus() {
+            async absolutePatchStatus() {
 
                 let g = false
 
@@ -56,7 +56,7 @@
                 }
 
             },
-            checkStatus() {
+            async checkStatus() {
                 if(this.index > 11) {
                     this.$store.dispatch('modules/main-page/menu/changeStatus', {
                         index: this.index,
