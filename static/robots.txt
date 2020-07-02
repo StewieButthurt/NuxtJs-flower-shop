@@ -1,0 +1,6 @@
+User-agent: *
+Crawl-delay: 
+Disallow: /admin
+Disallow: /login
+Allow: 
+Sitemap: http://DESKTOP-QCT8A6Q/sitemap.xml

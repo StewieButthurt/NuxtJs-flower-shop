@@ -1,65 +1,65 @@
 {
-  "name": "Flower-Shop",
-  "version": "1.0.0",
-  "description": "My world-class Nuxt.js project",
-  "author": "StewieButthurt",
-  "private": true,
-  "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
-    "build": "nuxt build",
-    "start": "cross-env NODE_ENV=production node server/index.js",
-    "generate": "nuxt generate",
-    "heroku-postbuild": "npm run build"
-  },
-  "engines": {
-    "node": "11.x"
-  },
-  "browserslist": [
-    " >= 0.3%"
-  ],
-  "dependencies": {
-    "@nuxtjs/axios": "^5.9.5",
-    "@nuxtjs/pwa": "^3.0.0-beta.20",
-    "@nuxtjs/recaptcha": "^0.6.2",
-    "@nuxtjs/yandex-metrika": "^1.0.3",
-    "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.19.0",
-    "cookie": "^0.4.0",
-    "cors": "^2.8.5",
-    "cross-env": "^5.2.0",
-    "cyrillic-to-translit-js": "^3.1.0",
-    "express": "^4.16.4",
-    "express-rate-limit": "^5.1.1",
-    "form-data": "^3.0.0",
-    "fs-extra": "^9.0.0",
-    "jimp": "^0.9.3",
-    "js-cookie": "^2.2.1",
-    "jsonwebtoken": "^8.5.1",
-    "jwt-decode": "^2.2.0",
-    "mongoose": "^5.9.1",
-    "node-cron": "^2.0.3",
-    "nodemailer": "^6.4.2",
-    "nuxt": "^2.0.0",
-    "nuxt-compress": "^1.1.0",
-    "nuxt-lazy-load": "^1.0.9",
-    "nuxt-seo-module": "^1.0.0",
-    "nuxt-trailingslash-module": "^1.1.0",
-    "nuxt-vuex-localstorage": "^1.2.6",
-    "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
-    "sharp": "^0.25.2",
-    "simple-node-logger": "^18.12.24",
-    "smart-grid": "^2.1.2",
-    "v-click-outside": "^3.0.1",
-    "validator": "^12.2.0"
-  },
-  "devDependencies": {
-    "@mdi/font": "^4.9.95",
-    "@nuxtjs/style-resources": "^1.0.0",
-    "@nuxtjs/vuetify": "^1.0.0",
-    "node-sass": "^4.14.1",
-    "nodemon": "^2.0.3",
-    "sass": "^1.25.0",
-    "sass-loader": "^8.0.2"
-  }
+    "name": "Flower-Shop",
+    "version": "1.0.0",
+    "description": "My world-class Nuxt.js project",
+    "author": "StewieButthurt",
+    "private": true,
+    "scripts": {
+        "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+        "build": "nuxt build",
+        "start": "cross-env NODE_ENV=production MONGO_URI=mongodb://localhost/flower-shop JWT=dev-flowers-shop-jwt-key-lololo node server/index.js",
+        "generate": "nuxt generate",
+        "heroku-postbuild": "npm run build"
+    },
+    "engines": {
+        "node": "11.x"
+    },
+    "browserslist": [
+        " >= 0.3%"
+    ],
+    "dependencies": {
+        "@nuxtjs/axios": "^5.9.5",
+        "@nuxtjs/recaptcha": "^0.6.2",
+        "@nuxtjs/yandex-metrika": "^1.0.3",
+        "bcrypt-nodejs": "0.0.3",
+        "body-parser": "^1.19.0",
+        "cookie": "^0.4.0",
+        "cors": "^2.8.5",
+        "cyrillic-to-translit-js": "^3.1.0",
+        "express": "^4.16.4",
+        "express-rate-limit": "^5.1.1",
+        "form-data": "^3.0.0",
+        "fs-extra": "^9.0.0",
+        "jimp": "^0.9.3",
+        "js-cookie": "^2.2.1",
+        "jsonwebtoken": "^8.5.1",
+        "jwt-decode": "^2.2.0",
+        "mongoose": "^5.9.1",
+        "node-cron": "^2.0.3",
+        "nodemailer": "^6.4.2",
+        "nuxt": "^2.0.0",
+        "nuxt-compress": "^1.1.0",
+        "nuxt-lazy-load": "^1.0.9",
+        "nuxt-seo-module": "^1.0.0",
+        "nuxt-trailingslash-module": "^1.1.0",
+        "nuxt-vuex-localstorage": "^1.2.6",
+        "passport": "^0.4.1",
+        "passport-jwt": "^4.0.0",
+        "sharp": "^0.25.2",
+        "simple-node-logger": "^18.12.24",
+        "v-click-outside": "^3.0.1",
+        "validator": "^12.2.0"
+    },
+    "devDependencies": {
+        "@mdi/font": "^4.9.95",
+        "@nuxtjs/pwa": "^3.0.0-beta.20",
+        "@nuxtjs/style-resources": "^1.0.0",
+        "@nuxtjs/vuetify": "^1.0.0",
+        "cross-env": "^7.0.2",
+        "node-sass": "^4.14.1",
+        "nodemon": "^2.0.3",
+        "sass": "^1.25.0",
+        "sass-loader": "^8.0.2",
+        "smart-grid": "^2.1.2"
+    }
 }

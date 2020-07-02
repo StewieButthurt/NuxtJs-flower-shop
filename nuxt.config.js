@@ -24,7 +24,6 @@ module.exports = {
      ** Customize the progress-bar color
      */
     loading: { color: '#fff' },
-
     router: {
         prefetchLinks: false
     },
@@ -133,6 +132,7 @@ module.exports = {
      ** Build configuration
      */
     build: {
+
         /*
          ** You can extend webpack config here
          */

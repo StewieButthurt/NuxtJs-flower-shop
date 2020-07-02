@@ -33,7 +33,7 @@
 </template>
 
 <script>
-
+    const getCategoriesStore = () => import('~/store/modules/product/categories.js')
     export default {
         head: {
             title: 'Панель администратора | Редактирование категорий'
@@ -51,10 +51,15 @@
                 redirect('/login?message=login')
             }
         },
+        async mounted() {
+            if(!this.$store.getters['modules/product/categories/categories']) {
+                await this.$store.registerModule('categories', getCategoriesStore)
+            }
+        },
         layout: 'admin',
         computed: {
             categories() {
-                return this.$store.getters['layouts-links/categories']
+                return this.$store.getters['modules/product/categories/categories']
             }
         },
         methods: {
@@ -64,7 +69,7 @@
                     id: item._id
                 }
 
-                await this.$store.dispatch('localStorage/setCategories', data)
+                await this.$store.dispatch('modules/product/categories/set', data)
 
                 this.$router.push(`/admin/categories-edit/edit`)
             }
@@ -72,7 +77,7 @@
         async fetch ({ store, $axios}) {
 
             let categories = await $axios.$get('/api/categories')
-            store.commit('layouts-links/setCategories', categories)
+            store.commit('modules/product/categories/set', categories)
             
         }
     }
