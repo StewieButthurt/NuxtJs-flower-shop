@@ -61,6 +61,10 @@ const productSchema = new Schema({
         type: Boolean,
         required: true
     },
+    moderationStatus: {
+        type: Boolean,
+        required: true
+    },
     images: [{
         previewImg: {
             type: String,
@@ -90,5 +94,6 @@ const productSchema = new Schema({
 productSchema.index({ name: 1 })
 productSchema.index({ categories: 1 })
 productSchema.index({ article: 1 })
+productSchema.index({ moderationStatus: 1 })
 
 module.exports = model('product', productSchema)
