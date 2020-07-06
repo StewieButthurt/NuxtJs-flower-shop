@@ -8,11 +8,14 @@
                     </div>
                 </v-col>
             </v-row>
-            <v-row class="justify-space-around">
+            <v-row>
                 <app-view-product 
                     v-for="(item, index) in products"
                     :key="index"
-                    :product="item"
+                    :image="item.images[0].previewImg"
+                    :categories="item.categories"
+                    :title="item.name"
+
                 />
             </v-row>
         </v-container>
@@ -20,12 +23,9 @@
 </template>
 
 <script>
-    const AppViewProduct = () => import('~/components/admin/product/view/index.vue')
+    const AppViewProduct = () => import('~/components/admin/product/view-premoderation/index.vue')
 
     export default {
-        async mounted() {
-            console.log(this.products)
-        },
         layout: 'admin',
         async validate({ store, redirect, $axios }) {
             try {
