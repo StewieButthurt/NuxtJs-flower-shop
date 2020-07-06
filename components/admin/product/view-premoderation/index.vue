@@ -59,16 +59,26 @@
                 readonly
             ></v-rating>
         </div>
+        <div class="product-view__price">
+            <app-price 
+                :price="price"
+            />
+        </div>
     </div>
 </template>
 
 <script>
+    const AppPrice = () => import('~/components/admin/product/price/index.vue')
     export default {
         props: [
             'image',
             'categories',
-            'title'
+            'title',
+            'price'
         ],
+        components: {
+            AppPrice
+        },
         data() {
             return {
                 rating: 0,
@@ -184,5 +194,6 @@
         color: white
         font-size: 10px
         margin-left: 5px
+    
     
 </style>

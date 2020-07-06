@@ -15,7 +15,7 @@
                     :image="item.images[0].previewImg"
                     :categories="item.categories"
                     :title="item.name"
-
+                    :price="item.price"
                 />
             </v-row>
         </v-container>
