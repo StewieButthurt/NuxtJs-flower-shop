@@ -8,10 +8,12 @@
                     </div>
                 </v-col>
             </v-row>
-            <v-row>
-                <v-col>
-                    <app-view-product />
-                </v-col>
+            <v-row class="justify-space-around">
+                <app-view-product 
+                    v-for="(item, index) in products"
+                    :key="index"
+                    :product="item"
+                />
             </v-row>
         </v-container>
     </div>
@@ -21,6 +23,9 @@
     const AppViewProduct = () => import('~/components/admin/product/view/index.vue')
 
     export default {
+        async mounted() {
+            console.log(this.products)
+        },
         layout: 'admin',
         async validate({ store, redirect, $axios }) {
             try {
@@ -38,8 +43,16 @@
         head: {
             title: 'Панель администратора | Премодерация товаров'
         },
-        async fetch({store, $axios}) {
+        data() {
+            return {
+                products: []
+            }
+        },
+        async asyncData({store, $axios}) {
             const products = await $axios.$get('/api/product/premoderation')
+            return {
+                products: products.products
+            }
         },
         components: {
             AppViewProduct
