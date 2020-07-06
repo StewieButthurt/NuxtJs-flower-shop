@@ -17,7 +17,9 @@
 
             <app-specifications />
 
-            <app-buttons />
+            <app-buttons 
+            @overlayOff="overlayOff"
+            />
 
             <app-snackbars 
                 :snackbar="snackbar"
@@ -138,14 +140,16 @@
             async changeImg(image) {
                 this.img = image
             },
-            // async overlayOff() {
-            //     this.overlay = false
-            //     this.message = 'success'
-            //     setTimeout(this.redirectAddProduct, 2000)
-            // },
-            // async redirectAddProduct() {
-            //     window.location.reload(true)
-            // },
+            async overlayOff() {
+                await this.$store.dispatch('modules/product/preview/main/setOverlayChange',
+                    false)
+                
+                await this.$store.dispatch('modules/alert/snackbar/setMessage', 'success')
+                setTimeout(this.redirectAddProduct, 2000)
+            },
+            async redirectAddProduct() {
+                window.location.reload(true)
+            },
             async changeSnackbar(value) {
                 this.$store.dispatch('modules/alert/snackbar/setSnackbar', value)
             },
