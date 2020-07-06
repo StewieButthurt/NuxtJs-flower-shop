@@ -16,16 +16,18 @@
                     :categories="item.categories"
                     :title="item.name"
                     :price="item.price"
+                    :discountStatus="item.discountStatus"
+                    :sizeDiscount="item.sizeDiscount"
                 />
             </v-row>
         </v-container>
 
-        <!-- компонент превью продукта -->
+        <!-- компонент превью продукта
         <app-view-product 
             v-for="(item, index) in premoderationProducts"
             :key="item.name"
             :index="index"
-        />
+        /> -->
     </div>
 </template>
 

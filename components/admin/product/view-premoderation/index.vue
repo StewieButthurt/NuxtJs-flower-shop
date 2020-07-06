@@ -59,9 +59,13 @@
                 readonly
             ></v-rating>
         </div>
-        <div class="product-view__price">
+        <div class="product-view__price"
+            id="product-view__price"
+        >
             <app-price 
                 :price="price"
+                :discountStatus="discountStatus"
+                :sizeDiscount="sizeDiscount"
             />
         </div>
     </div>
@@ -74,7 +78,9 @@
             'image',
             'categories',
             'title',
-            'price'
+            'price',
+            'discountStatus',
+            'sizeDiscount'
         ],
         components: {
             AppPrice
@@ -194,6 +200,13 @@
         color: white
         font-size: 10px
         margin-left: 5px
+    
+    #product-view__price .product-price
+        font-size: 15px
+        color: #000000
+
+    #product-view__price .product-price__price-old
+        font-size: 15px
     
     
 </style>
