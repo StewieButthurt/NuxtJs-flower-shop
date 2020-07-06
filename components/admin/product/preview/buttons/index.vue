@@ -133,7 +133,6 @@
                 if(await !this.$store.getters['modules/product/send/form/status']) {
                     await this.$store.registerModule('product_send_form', getSendFormStore)
                 }
-                console.log('sendForm')
                 await this.$store.dispatch('modules/product/send/form/sendForm', fields)
                     .then(async (id) => {
                         if(!this.$store.getters['modules/product/send/image/status']) {
@@ -144,12 +143,10 @@
                     }) 
                     .then(async (id) => {
                         if(id) {
-                            console.log('sendImages')
                             const sendImages = await this.$store.dispatch('modules/product/send/image/sendImages',
                             id)
 
                             if(sendImages) {
-                                console.log('images arfter request', sendImages)
                                 return id
                             }
 
@@ -167,15 +164,15 @@
                         }
                     })
                     .then(async (id) => {
-                        console.log('sendImages проверка')
-                        console.log(id)
                         if(this.$store.getters['modules/product/otherFieldImages/otherFieldImage'].length > 0) {
-                            console.log('sendOtherImage')
                             if(await !this.$store.getters['modules/product/send/sendOtherImage/status']) {
                                 await this.$store.registerModule('product_send_other_image', getSendOtherImageStore)
                             }
 
                             await this.$store.dispatch('modules/product/send/sendOtherImage/sendOtherImages', id)
+
+                            this.$emit('overlayOff')
+
                         } else {
                             await this.$store.dispatch('modules/product/preview/main/setMessageStatus', 
                             'Загрузка завершена')
@@ -183,18 +180,8 @@
                             await this.$store.dispatch('modules/product/preview/main/setProgressValue', 
                             100)
 
-                            setTimeout(async () => {
-                                console.log('set timeout after 1s')
-                                await this.$store.dispatch('modules/product/preview/main/setOverlayChange',
-                                    false)
-                                
-                                await this.$store.dispatch('modules/alert/snackbar/setMessage', 'success')
+                            this.$emit('overlayOff')
 
-                                setTimeout(() => {
-                                    console.log('set timeout after 2s')
-                                    window.location.reload(true)
-                                }, 2000);
-                            }, 1000);
                         }
                     })
                     .catch(async (e) => {
