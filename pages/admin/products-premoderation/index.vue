@@ -8,6 +8,16 @@
                     </div>
                 </v-col>
             </v-row>
+            <v-row>
+                <app-view-product 
+                    v-for="(item, index) in products"
+                    :key="index"
+                    :image="item.images[0].previewImg"
+                    :categories="item.categories"
+                    :title="item.name"
+                    :price="item.price"
+                />
+            </v-row>
         </v-container>
 
         <!-- компонент превью продукта -->
@@ -20,7 +30,8 @@
 </template>
 
 <script>
-    const AppViewProduct = () => import('~/components/admin/product/view/index.vue')
+    const AppViewProduct = () => import('~/components/admin/product/view-premoderation/index.vue')
+
     export default {
         layout: 'admin',
         async validate({ store, redirect, $axios }) {
@@ -40,6 +51,7 @@
         head: {
             title: 'Панель администратора | Премодерация товаров'
         },
+<<<<<<< HEAD
         components: {
             AppViewProduct
         },
@@ -52,6 +64,21 @@
             products() {
                 // return this.$store.getters['modules/']
             }
+=======
+        data() {
+            return {
+                products: []
+            }
+        },
+        async asyncData({store, $axios}) {
+            const products = await $axios.$get('/api/product/premoderation')
+            return {
+                products: products.products
+            }
+        },
+        components: {
+            AppViewProduct
+>>>>>>> price-component
         }
     }
 </script>

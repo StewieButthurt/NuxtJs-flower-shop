@@ -1,5 +1,6 @@
 const passport = require('passport')
 const { Router } = require('express')
+const { getPremoderationProduct } = require('../controllers/product/premoderation')
 const { fields } = require('../controllers/product/fields')
 const { images } = require('../controllers/product/images')
 const { otherImagesTitle } = require('../controllers/product/otherImagesTitle')
@@ -17,6 +18,12 @@ const AuthLimiter = rateLimit({
 
 //Admin
 // /api/product
+
+router.get(
+    '/premoderation',
+    passport.authenticate('jwt', { session: false }),
+    getPremoderationProduct,
+)
 
 router.get(
     '/get-product-search',

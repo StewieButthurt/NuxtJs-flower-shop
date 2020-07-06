@@ -19,7 +19,10 @@
 <script>
     export default {
         props: [
-            'price'
+            'price',
+            'discountStatus',
+            'sizeDiscount'
+
         ],
         methods: {
             formatPrice(value) {
@@ -33,14 +36,8 @@
             }
         },
         computed: {
-            discountStatus() {
-                return this.$store.getters[`modules/product/discount/discountStatus`]
-            },
             localPrice() {
                 return this.formatPrice(this.price)
-            },
-            sizeDiscount() {
-                return this.$store.getters[`modules/product/discount/sizeDiscount`]
             },
             discountPrice() {
                 let newPrice = this.price - (this.price / 100 * this.sizeDiscount)

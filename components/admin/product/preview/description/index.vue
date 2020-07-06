@@ -19,6 +19,8 @@
         <div class="preview__descr-price">
             <app-product-price 
                 :price="price"
+                :discountStatus="discountStatus"
+                :sizeDiscount="sizeDiscount"
             />
         </div>
         <div class="preview__descr-text">
@@ -90,6 +92,12 @@
             },
             price() {
                 return this.$store.getters[`modules/product/price/price`]
+            },
+            discountStatus() {
+                return this.$store.getters[`modules/product/discount/discountStatus`]
+            },
+            sizeDiscount() {
+                return this.$store.getters[`modules/product/discount/sizeDiscount`]
             },
             descr() {
                 return this.$store.getters[`modules/product/descr/descr`]
