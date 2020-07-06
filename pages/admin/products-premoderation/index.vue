@@ -51,20 +51,6 @@
         head: {
             title: 'Панель администратора | Премодерация товаров'
         },
-<<<<<<< HEAD
-        components: {
-            AppViewProduct
-        },
-        data() {
-            return {
-                premoderationProducts: []
-            }
-        },
-        computed: {
-            products() {
-                // return this.$store.getters['modules/']
-            }
-=======
         data() {
             return {
                 products: []
@@ -78,7 +64,6 @@
         },
         components: {
             AppViewProduct
->>>>>>> price-component
         }
     }
 </script>
