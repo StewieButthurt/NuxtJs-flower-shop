@@ -7,6 +7,17 @@
             <div class="product-view__image" :style="{ backgroundImage: `url(${mainImage})`, backgroundPosition: 'center center', backgroundSize: 'cover' }">
                 
             </div>
+            <div class="product-view__info-stock-container">
+                <div class="product-view__info-stock" v-if="stock">
+                    Акция
+                </div>
+                <div class="product-view__info-stock product-view__info-bestseller" v-if="bestseller">
+                    Хит продаж
+                </div>
+                <div class="product-view__info-stock product-view__info-week-price" v-if="weekPrice">
+                    Цена недели
+                </div>
+            </div>
             <div class="product-view__hover"
                 :class="{
                     'product-view__hover-enter' : hover === true,
@@ -85,7 +96,10 @@
             'price',
             'discountStatus',
             'sizeDiscount',
-            'id'
+            'id',
+            'stock',
+            'bestseller',
+            'weekPrice'
         ],
         components: {
             AppPrice
@@ -145,10 +159,41 @@
         overflow: hidden
         display: flex
         position: relative
+        border: 1px solid rgba(200, 200, 200, 0.3)
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
     
     .product-view__image
         width: 100%
         padding-top: 100%
+    
+    .product-view__info-stock-container
+        display: flex
+        flex-direction: column
+        position: absolute
+        top: 0px
+        left: 0px
+        padding-left: 10px
+        padding-right: 10px
+        cursor: pointer
+        z-index: 7
+    
+    .product-view__info-stock
+        width: 106px
+        height: 18px
+        margin-top: 10px
+        color: white
+        display: flex
+        justify-content: center
+        align-items: center
+        text-transform: uppercase
+        background-color: rgba(255, 0, 0, 0.7)
+        font-size: 10px
+    
+    .product-view__info-bestseller
+        background-color: rgba(255, 168, 0, 0.7)
+    
+    .product-view__info-week-price
+        background-color: rgba(0, 194, 255, 0.7)
     
     .product-view__categories
         font-size: 12px
@@ -212,7 +257,7 @@
     
     .product-view__button-save:hover,
     .product-view__button-delete:hover
-        transform: scale(.95)
+        transform: scale(.98)
         transition-duration: .1s
     
     .product-view__button-line
