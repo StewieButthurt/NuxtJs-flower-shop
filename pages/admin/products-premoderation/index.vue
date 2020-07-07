@@ -19,8 +19,10 @@
                     :discountStatus="item.discountStatus"
                     :sizeDiscount="item.sizeDiscount"
                     :id="item._id"
-                    @updateData="updateData"
-                    @updateDataError="updateDataError"
+                    @remove="remove"
+                    @removeError="removeError"
+                    @publication="publication"
+                    @publicationError="publicationError"
                 />
             </v-row>
         </v-container>
@@ -87,7 +89,7 @@
             AppSnackbars
         },
         methods: {
-            async updateData() {
+            async remove() {
                 const products = await this.$axios.$get('/api/product/premoderation')
                 this.products = products.products
 
@@ -103,13 +105,43 @@
                 this.$store.dispatch('modules/alert/snackbar/setSnackbar',
                     true)
             },
-            async updateDataError() {
+            async removeError() {
 
                 await this.$store.dispatch('modules/alert/snackbar/setSnackbar',
                     false)
-                    
+
                 this.$store.dispatch('modules/alert/snackbar/setText',
                     'При удалении продукта произошла ошибка!')
+                this.$store.dispatch('modules/alert/snackbar/setColorBtn',
+                    'white')
+                this.$store.dispatch('modules/alert/snackbar/setColorBckg',
+                    'grey darken-4')
+                this.$store.dispatch('modules/alert/snackbar/setSnackbar',
+                    true)
+            },
+            async publication() {
+                const products = await this.$axios.$get('/api/product/premoderation')
+                this.products = products.products
+
+                await this.$store.dispatch('modules/alert/snackbar/setSnackbar',
+                    false)
+
+                this.$store.dispatch('modules/alert/snackbar/setText',
+                    'Продукт успешно опубликован!')
+                this.$store.dispatch('modules/alert/snackbar/setColorBtn',
+                    'white')
+                this.$store.dispatch('modules/alert/snackbar/setColorBckg',
+                    'grey darken-4')
+                this.$store.dispatch('modules/alert/snackbar/setSnackbar',
+                    true)
+            },
+            async publicationError() {
+
+                await this.$store.dispatch('modules/alert/snackbar/setSnackbar',
+                    false)
+
+                this.$store.dispatch('modules/alert/snackbar/setText',
+                    'При публикации продукта произошла ошибка!')
                 this.$store.dispatch('modules/alert/snackbar/setColorBtn',
                     'white')
                 this.$store.dispatch('modules/alert/snackbar/setColorBckg',

@@ -110,15 +110,21 @@
             async clickRemove() {
                 try {
                     await this.$axios.$delete('/api/product/remove', { data: { id: this.id }})
-                    await this.$emit('updateData')
+                    await this.$emit('remove')
                 } catch(e) {
-                    await this.$emit('updateDataError')
+                    await this.$emit('removeError')
                     console.error(e)
                 }
                 
             },
             async clickSave() {
-
+                try {
+                    await this.$axios.$post('api/product/publication', { id: this.id })
+                    await this.$emit('publication')
+                } catch(e) {
+                    await this.$emit('publicationError')
+                    console.error(e)
+                }
             }
         }
     }

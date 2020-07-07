@@ -13,13 +13,14 @@ module.exports.remove = async(req, res) => {
 
         const dir = `./assets/${req.body.id}`;
 
-        // delete directory recursively
         fs.rmdir(dir, { recursive: true }, (err) => {
             if (err) {
-                throw err;
+                log.warn(`Неудачная попытка удаления изображений 
+                у продукта '${req.body.id}'! Ошибка ${err}!`);
             }
 
-            log.info(`Успешное удаление изображений у продукта '${req.body.id}'!`);
+            log.info(`Успешное удаление изображений 
+            у продукта '${req.body.id}'!`);
         });
 
 
