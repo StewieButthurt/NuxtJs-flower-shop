@@ -14,7 +14,9 @@
                 }"
             >
                 <div class="product-view__buttons">
-                    <div class="product-view__button-save">
+                    <div class="product-view__button-save" 
+                        @click="clickSave()"
+                    >
                         <v-icon
                             color="white"
                             size="20px"
@@ -28,7 +30,9 @@
                     <div class="product-view__button-line">
 
                     </div>
-                    <div class="product-view__button-delete">
+                    <div class="product-view__button-delete"
+                        @click="clickRemove()"
+                    >
                         <v-icon
                             color="white"
                             size="20px"
@@ -59,9 +63,13 @@
                 readonly
             ></v-rating>
         </div>
-        <div class="product-view__price">
+        <div class="product-view__price"
+            id="product-view__price"
+        >
             <app-price 
                 :price="price"
+                :discountStatus="discountStatus"
+                :sizeDiscount="sizeDiscount"
             />
         </div>
     </div>
@@ -74,7 +82,10 @@
             'image',
             'categories',
             'title',
-            'price'
+            'price',
+            'discountStatus',
+            'sizeDiscount',
+            'id'
         ],
         components: {
             AppPrice
@@ -93,6 +104,27 @@
                     throw e
                 }
                 
+            }
+        },
+        methods: {
+            async clickRemove() {
+                try {
+                    await this.$axios.$delete('/api/product/remove', { data: { id: this.id }})
+                    await this.$emit('remove')
+                } catch(e) {
+                    await this.$emit('removeError')
+                    console.error(e)
+                }
+                
+            },
+            async clickSave() {
+                try {
+                    await this.$axios.$post('api/product/publication', { id: this.id })
+                    await this.$emit('publication')
+                } catch(e) {
+                    await this.$emit('publicationError')
+                    console.error(e)
+                }
             }
         }
     }
@@ -194,6 +226,13 @@
         color: white
         font-size: 10px
         margin-left: 5px
+    
+    #product-view__price .product-price
+        font-size: 15px
+        color: #000000
+
+    #product-view__price .product-price__price-old
+        font-size: 15px
     
     
 </style>
