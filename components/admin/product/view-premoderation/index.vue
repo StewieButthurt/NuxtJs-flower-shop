@@ -14,7 +14,9 @@
                 }"
             >
                 <div class="product-view__buttons">
-                    <div class="product-view__button-save">
+                    <div class="product-view__button-save" 
+                        @click="clickSave()"
+                    >
                         <v-icon
                             color="white"
                             size="20px"
@@ -28,7 +30,9 @@
                     <div class="product-view__button-line">
 
                     </div>
-                    <div class="product-view__button-delete">
+                    <div class="product-view__button-delete"
+                        @click="clickRemove()"
+                    >
                         <v-icon
                             color="white"
                             size="20px"
@@ -80,7 +84,8 @@
             'title',
             'price',
             'discountStatus',
-            'sizeDiscount'
+            'sizeDiscount',
+            'id'
         ],
         components: {
             AppPrice
@@ -99,6 +104,21 @@
                     throw e
                 }
                 
+            }
+        },
+        methods: {
+            async clickRemove() {
+                try {
+                    await this.$axios.$delete('/api/product/remove', { data: { id: this.id }})
+                    await this.$emit('updateData')
+                } catch(e) {
+                    await this.$emit('updateDataError')
+                    console.error(e)
+                }
+                
+            },
+            async clickSave() {
+
             }
         }
     }
